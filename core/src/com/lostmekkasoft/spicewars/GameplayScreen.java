@@ -77,13 +77,17 @@ public class GameplayScreen implements Screen {
 
 		// The first two planets have already been set, we can now place random
 		// planets until the screen is filled.
-		Planet randomPlanet = placeRandomPlanet();
+		int randomRadius = SpiceWars.random.nextInt(80) + 50;
+		int posX = SpiceWars.random.nextInt(game.WIDTH - randomRadius*2) + randomRadius;
+		int posY = SpiceWars.random.nextInt(game.HEIGHT - randomRadius*2) + randomRadius;
+		Point randomPoint = new Point(posX, posY);
+
 		int minDistance = 100;
 		int distance;
 		int isGood = 0; // behaves like a boolean, anything below planets.size is false
 		for (Planet planet : planets) {
-			distance = planet.radius + randomPlanet.radius + minDistance;
-			if ((planet.position.squaredDistanceTo(randomPlanet.position) >= (distance * distance))) {
+			distance = planet.radius + randomRadius + minDistance;
+			if ((planet.position.squaredDistanceTo(randomPoint) >= (distance * distance))) {
 				isGood++;
 			}
 		}
@@ -93,17 +97,8 @@ public class GameplayScreen implements Screen {
 			//TODO: generate sensible random values for the slots
 			int maxNormalSlots = 5;
 			int maxMineSlots = 5;
-			planets.add(new Planet(randomPlanet.radius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPlanet.position));
+			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint));
 		}
-	}
-
-	private Planet placeRandomPlanet() {
-		int radius = SpiceWars.random.nextInt(80) + 50;
-		int posX = SpiceWars.random.nextInt(game.WIDTH - radius*2) + radius;
-		int posY = SpiceWars.random.nextInt(game.HEIGHT - radius*2) + radius;
-		Point point = new Point(posX, posY);
-
-		return new Planet(radius, point);
 	}
 
 	public void update(float delta) {
@@ -124,11 +119,13 @@ public class GameplayScreen implements Screen {
 			game.shapes.circle((float)planet.position.x, (float)planet.position.y, planet.radius);
 		}
 
-		//DEBUG: Press R to generate a new playing field
+		//DEBUG: Press R to generate a new playing field or ESC to exit the game
 		timeForInput += delta;
 		if (Gdx.input.isKeyPressed(Input.Keys.R) && timeForInput > 0.1) {
 			newLevel();
 			timeForInput = 0;
+		} else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			Gdx.app.exit();
 		}
 
 		game.shapes.end();

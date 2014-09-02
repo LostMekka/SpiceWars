@@ -35,17 +35,6 @@ public class Planet {
 		mineSlots = new LinkedList<>();
 	}
 
-	// this is only for random dummy planets, please don't hate me
-	public Planet(int radius, Point position) {
-		this.radius = radius;
-		this.position = position;
-		this.team = new Team(1, new Color(Color.CYAN));
-		this.maxNormalSlots = 0;
-		this.maxMineSlots = 0;
-		this.normalSlots = null;
-		this.mineSlots = null;
-	}
-
 	public static enum PlanetType {
 		normal, station
 	}
