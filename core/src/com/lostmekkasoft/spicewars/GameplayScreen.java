@@ -21,19 +21,33 @@ public class GameplayScreen implements Screen {
 
 	SpiceWars game;
 
+	public int numPlanets;
 	public ArrayList<Planet> planets = new ArrayList<>();
 	public ArrayList<Army> armies = new ArrayList<>();
 
 	public GameplayScreen(final SpiceWars game) {
 		this.game = game;
+		newLevel();
+	}
+
+	public void newLevel() {
+		// Place planets as long as placePlanets returns true meaning it placed a planet
+		numPlanets = game.random.nextInt(10) + 10;
+		for (int i = 0; i < numPlanets; i++) {
+			placePlanet();
+		}
 	}
 
 	public void newLevel(){
 		
+
+	public void update(float delta) {
+
 	}
 
 	@Override
 	public void render(float delta) {
+		update(delta);
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
