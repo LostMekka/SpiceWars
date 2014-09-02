@@ -23,4 +23,8 @@ public class Building {
 		this.type = type;
 	}
 	
+	public boolean isMine(){
+		return type == BuildingType.spiceMine;
+	}
+	
 }
