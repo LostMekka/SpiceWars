@@ -9,6 +9,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.lostmekkasoft.spicewars.data.Army;
 import com.lostmekkasoft.spicewars.data.Planet;
@@ -110,13 +113,17 @@ public class GameplayScreen implements Screen {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		game.shapes.begin(ShapeRenderer.ShapeType.Filled);
-
-		// Render all planets as simple shapes
+		Texture ellipse = new Texture("ellipse.png");
+		TextureRegion ellipseRegion = new TextureRegion(ellipse);
+		ellipseRegion.setTexture(ellipse);
+		game.batch.begin();
 		for (Planet planet : planets) {
-			game.shapes.setColor(planet.team.color);
-			game.shapes.circle((float)planet.position.x, (float)planet.position.y, planet.radius);
+//			game.batch.draw(ellipse, (float)planet.position.x, (float)planet.position.y, planet.radius, planet.radius);
+			float posX = (float)planet.position.x;
+			float posY = (float)planet.position.y;
+			game.batch.draw(ellipseRegion, posX, posY, posX, posY, planet.radius, planet.radius, planet.radius, planet.radius, planet.rotationSpeed);
 		}
+		game.batch.end();
 
 		//DEBUG: Press R to generate a new playing field or ESC to exit the game
 		timeForInput += delta;
@@ -126,8 +133,6 @@ public class GameplayScreen implements Screen {
 		} else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
-
-		game.shapes.end();
 
 		//DEBUG: Write the amount of slots on each planet
 		game.batch.begin();

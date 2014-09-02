@@ -24,6 +24,7 @@ public class Planet {
 	public double hp = 100;
 	public Point position;
 	private boolean hasHQ = false;
+	public int rotationSpeed;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
 		this.radius = radius;
@@ -33,6 +34,7 @@ public class Planet {
 		this.position = position;
 		normalSlots = new LinkedList<>();
 		mineSlots = new LinkedList<>();
+		rotationSpeed = SpiceWars.random.nextInt(10);
 	}
 
 	public static enum PlanetType {
