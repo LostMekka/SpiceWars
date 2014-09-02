@@ -11,6 +11,9 @@ package com.lostmekkasoft.spicewars.data;
 public class Army {
 	
 	// order in arrays: worker, fighter, frigate, destroyer
+	public static final double[] accuricy = new double[]{
+		0.0, 0.8, 0.5, 0.2
+	};
 	public static final double[] cost = new double[]{
 		20.0, 5.0, 40.0, 100.0
 	};
@@ -35,7 +38,7 @@ public class Army {
 	public void fight(Army a, double time){
 		double[] own = new double[4];
 		double[] enemy = new double[4];
-		for(int srcI=1; srcI<3; srcI++){
+		for(int srcI=1; srcI<4; srcI++){
 			double dmg1 = Math.ceil(ships[srcI]) * dps[srcI] * time;
 			double dmg2 = Math.ceil(ships[srcI]) * dps[srcI] * time;
 			for(int trgtI : priorities[srcI]){
@@ -57,6 +60,12 @@ public class Army {
 		}
 		ships = own;
 		a.ships = enemy;
+	}
+	
+	public void bombardPlanet(Planet p, double time){
+		for(int i=1; i<4; i++) if(!p.team.isNeutral()){
+			p.damageRandomBuilding(Math.ceil(ships[i]) * dps[i] * time, time);
+		}
 	}
 	
 }

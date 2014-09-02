@@ -103,6 +103,14 @@ public class Planet {
 			if(b.type == Building.BuildingType.hq){
 				hasHQ = false;
 				team = SpiceWars.teamNeutral;
+			} else {
+				if(b.type == Building.BuildingType.spiceMine){
+					mineSlots.remove(b);
+				} else {
+					normalSlots.remove(b);
+				}
+				// deal overdamage to additional building
+				if(b.hp < 0) damageRandomBuilding(-b.hp, accuracy);
 			}
 		}
 	}

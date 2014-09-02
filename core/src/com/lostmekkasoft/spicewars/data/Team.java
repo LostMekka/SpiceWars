@@ -26,4 +26,8 @@ public class Team {
 		this.color = color;
 	}
 	
+	public boolean isNeutral(){
+		return id < 0;
+	}
+	
 }
