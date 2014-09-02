@@ -10,7 +10,7 @@ package com.lostmekkasoft.spicewars.data;
  */
 public class Army {
 	
-	// worker, fighter, frigate, destroyer
+	// order in arrays: worker, fighter, frigate, destroyer
 	public static final double[] cost = new double[]{
 		20.0, 5.0, 40.0, 100.0
 	};
