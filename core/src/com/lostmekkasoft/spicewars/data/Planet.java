@@ -5,8 +5,9 @@
 package com.lostmekkasoft.spicewars.data;
 
 import com.badlogic.gdx.graphics.Color;
-
-import java.util.ArrayList;
+import com.lostmekkasoft.spicewars.SpiceWars;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  *
@@ -18,8 +19,8 @@ public class Planet {
 	public Team team;
 	public int maxNormalSlots;
 	public int maxMineSlots;
-	public ArrayList<Building> normalSlots;
-	public ArrayList<Building> mineSlots;
+	public LinkedList<Building> normalSlots;
+	public LinkedList<Building> mineSlots;
 	public double hp = 100;
 	public Point position;
 	private boolean hasHQ = false;
@@ -30,8 +31,8 @@ public class Planet {
 		this.maxNormalSlots = maxNormalSlots;
 		this.maxMineSlots = maxMineSlots;
 		this.position = position;
-		this.normalSlots = new ArrayList<>(this.maxNormalSlots);
-		this.mineSlots = new ArrayList<>(this.maxMineSlots);
+		normalSlots = new LinkedList<>();
+		mineSlots = new LinkedList<>();
 	}
 
 	// this is only for random dummy planets, please don't hate me
@@ -50,43 +51,71 @@ public class Planet {
 	}
 
 	public boolean canAddBuilding(Building.BuildingType t) {
-		if (t != Building.BuildingType.spiceMine) {
-			return (!hasHQ || t != Building.BuildingType.hq)
-					&& (this.maxNormalSlots > this.normalSlots.size());
+		if (t == Building.BuildingType.spiceMine) {
+			return maxMineSlots > mineSlots.size();
 		} else {
-			if (this.maxMineSlots > this.mineSlots.size()) {
-				return true;
-			}
-			return false;
+			return (!hasHQ || t != Building.BuildingType.hq) &&
+					maxNormalSlots > normalSlots.size();
 		}
 	}
 
 	public boolean addBuilding(Building.BuildingType t) {
-		if (t != Building.BuildingType.spiceMine) {
-			if (this.canAddBuilding(t)) {
-				if (t == Building.BuildingType.hq) {
-					hasHQ = true;
-				}
-				Building build = new Building(t);
-				this.normalSlots.add(build);
-				return true;
-			}
-			return false;
+		if(!canAddBuilding(t)) return false;
+		if (t == Building.BuildingType.spiceMine) {
+			addBuildingInternal(new Building(t), mineSlots);
 		} else {
-			if (this.canAddBuilding(Building.BuildingType.spiceMine)) {
-				Building mine = new Building(Building.BuildingType.spiceMine);
-				this.mineSlots.add(mine);
-				return true;
-			}
-			return false;
+			if (t == Building.BuildingType.hq) hasHQ = true;
+			addBuildingInternal(new Building(t), normalSlots);
 		}
-	}
-
-	public boolean canRemoveBuilding(Building.BuildingType t){
 		return true;
 	}
 	
-	public boolean removeBuilding(Building.BuildingType t){
-		return true;
+	private void addBuildingInternal(Building b, LinkedList<Building> l){
+		ListIterator<Building> i = l.listIterator();
+		while(i.hasNext()){
+			Building b2 = i.next();
+			if(b.type.ordinal() > b2.type.ordinal()) continue;
+			i.previous();
+			i.add(b);
+			return;
+		}
+		l.addLast(b);
 	}
+
+	public void damageRandomBuilding(double damage, double accuracy){
+		if(!hasHQ) return; // do not damage neutral planets
+		Building b;
+		if(accuracy >= 1){
+			b = normalSlots.getFirst();
+		} else if(accuracy <= 0){
+			int r = SpiceWars.random.nextInt(normalSlots.size() + mineSlots.size());
+			if(r < normalSlots.size()){
+				b = normalSlots.get(r);
+			} else {
+				b = mineSlots.get(r - normalSlots.size());
+			}
+		} else {
+			double r = accuracy + (1-accuracy)*(normalSlots.size() - 1 + mineSlots.size());
+			r *= SpiceWars.random.nextDouble();
+			if(r < accuracy){
+				b = normalSlots.getFirst();
+			} else {
+				r -= accuracy;
+				int i = (int)(r/(1 - accuracy)) + 1;
+				if(i < normalSlots.size()){
+					b = normalSlots.get(i);
+				} else {
+					b = mineSlots.get(i - normalSlots.size());
+				}
+			}
+		}
+		b.hp -= damage;
+		if(b.hp <= 0){
+			if(b.type == Building.BuildingType.hq){
+				hasHQ = false;
+				team = SpiceWars.teamNeutral;
+			}
+		}
+	}
+	
 }
