@@ -10,4 +10,17 @@ package com.lostmekkasoft.spicewars.data;
  */
 public class Building {
 	
+	public static enum BuildingType{ hq, 
+		fabberFactory, fighterFactory, frigateFactory, destroyerFactory,
+		spiceMine, spiceSilo, generator, battery, 
+		artillery, 
+	}
+	
+	public BuildingType type;
+	public double hp = 100;
+
+	public Building(BuildingType type) {
+		this.type = type;
+	}
+	
 }
