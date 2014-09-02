@@ -21,11 +21,21 @@ public class GameplayScreen implements Screen {
 
 	SpiceWars game;
 
+	public int numPlanets;
 	public ArrayList<Planet> planets = new ArrayList<>();
 	public ArrayList<Army> armies = new ArrayList<>();
 
 	public GameplayScreen(final SpiceWars game) {
 		this.game = game;
+		newLevel();
+	}
+
+	public void newLevel() {
+		// Place planets as long as placePlanets returns true meaning it placed a planet
+		numPlanets = game.random.nextInt(10) + 10;
+		for (int i = 0; i < numPlanets; i++) {
+			placePlanet();
+		}
 	}
 
 	public void newLevel(){
