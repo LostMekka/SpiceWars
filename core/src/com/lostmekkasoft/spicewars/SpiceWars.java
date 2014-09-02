@@ -1,4 +1,4 @@
-package com.lostmekkasoft.spice-wars;
+package com.lostmekkasoft.spicewars;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
