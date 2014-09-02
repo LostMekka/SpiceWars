@@ -4,6 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,7 @@ public class Planet {
 	public Point position;
 	private boolean hasHQ = false;
 
-	public void Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
+	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
 		this.radius = radius;
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
@@ -30,6 +32,17 @@ public class Planet {
 		this.position = position;
 		this.normalSlots = new ArrayList<>(this.maxNormalSlots);
 		this.mineSlots = new ArrayList<>(this.maxMineSlots);
+	}
+
+	// this is only for random dummy planets, please don't hate me
+	public Planet(int radius, Point position) {
+		this.radius = radius;
+		this.position = position;
+		this.team = new Team(1, new Color(Color.CYAN));
+		this.maxNormalSlots = 0;
+		this.maxMineSlots = 0;
+		this.normalSlots = null;
+		this.mineSlots = null;
 	}
 
 	public static enum PlanetType {
@@ -70,10 +83,10 @@ public class Planet {
 	}
 
 	public boolean canRemoveBuilding(Building.BuildingType t){
-		
+		return true;
 	}
 	
 	public boolean removeBuilding(Building.BuildingType t){
-		
+		return true;
 	}
 }

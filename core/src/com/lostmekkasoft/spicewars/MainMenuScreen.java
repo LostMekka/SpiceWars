@@ -17,13 +17,11 @@ public class MainMenuScreen implements Screen {
 	final SpiceWars game;
 
 	OrthographicCamera camera;
-	int WIDTH = Gdx.graphics.getWidth();
-	int HEIGHT = Gdx.graphics.getHeight();
 
 	public MainMenuScreen(final SpiceWars game) {
 		this.game = game;
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, WIDTH, HEIGHT);
+		camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 	}
 
 	@Override
@@ -36,9 +34,9 @@ public class MainMenuScreen implements Screen {
 		game.batch.begin();
 		game.font.setColor(Color.WHITE);
 		game.font.setScale(4f);
-		game.font.draw(game.batch, "SpiceWars", WIDTH/2 - 160, HEIGHT/2 + 40);
+		game.font.draw(game.batch, "SpiceWars", game.WIDTH/2 - 160, game.HEIGHT/2 + 40);
 		game.font.setScale(2f);
-		game.font.draw(game.batch, "(Press any key to continue)", WIDTH/2 - 190, HEIGHT/2 - 200);
+		game.font.draw(game.batch, "(Press any key to continue)", game.WIDTH/2 - 190, game.HEIGHT/2 - 200);
 		game.batch.end();
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched()) {
