@@ -50,7 +50,7 @@ public class Planet {
 
 	public boolean addBuilding(Building.BuildingType t) {
 		if (t != Building.BuildingType.spiceMine) {
-			if (this.canAdd(t)) {
+			if (this.canAddBuilding(t)) {
 				if (t == Building.BuildingType.hq) {
 					hasHQ = true;
 				}
@@ -60,7 +60,7 @@ public class Planet {
 			}
 			return false;
 		} else {
-			if (this.canAdd(Building.BuildingType.spiceMine)) {
+			if (this.canAddBuilding(Building.BuildingType.spiceMine)) {
 				Building mine = new Building(Building.BuildingType.spiceMine);
 				this.mineSlots.add(mine);
 				return true;
@@ -68,7 +68,7 @@ public class Planet {
 			return false;
 		}
 	}
-	/*
+
 	public boolean canRemoveBuilding(Building.BuildingType t){
 		
 	}
@@ -77,4 +77,3 @@ public class Planet {
 		
 	}
 }
-*/
