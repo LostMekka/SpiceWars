@@ -15,7 +15,7 @@ public class Army {
 		20.0, 5.0, 40.0, 100.0
 	};
 	public static final double[] dps = new double[]{
-		0.0, cost[1]*1.0, cost[1]*1.0, cost[1]*1.0
+		0.0, cost[1]*1.0, cost[2]*1.2, cost[3]*1.4
 	};
 	public static final double[][] dpsMods = new double[][]{
 		{0.0, 0.0, 0.0, 0.0},
