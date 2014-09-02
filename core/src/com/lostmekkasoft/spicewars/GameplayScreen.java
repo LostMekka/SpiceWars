@@ -43,7 +43,6 @@ public class GameplayScreen implements Screen {
 	}
 
 	public void newLevel() {
-		// Place planets as long as placePlanets returns true meaning it placed a planet
 		planets.clear();
 		numPlanets = SpiceWars.random.nextInt(10) + 10;
 		int counter = 0;
@@ -94,9 +93,9 @@ public class GameplayScreen implements Screen {
 
 		// Only instantiate and add the new planet if the position is found to be valid
 		if (isGood == planets.size()) {
-			//TODO: generate sensible random values for the slots
-			int maxNormalSlots = 5;
-			int maxMineSlots = 5;
+			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
+			int maxNormalSlots = randomRadius / 8 + jitter*2;
+			int maxMineSlots = randomRadius / 8 + jitter;
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint));
 		}
 	}
@@ -129,6 +128,16 @@ public class GameplayScreen implements Screen {
 		}
 
 		game.shapes.end();
+
+		//DEBUG: Write the amount of slots on each planet
+		game.batch.begin();
+		game.font.setColor(Color.GREEN);
+		game.font.setScale(1f);
+		for (Planet planet : planets) {
+			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
+			game.font.draw(game.batch, planetSlots, (float)planet.position.x-55, (float)planet.position.y+5);
+		}
+		game.batch.end();
 	}
 
 	@Override
