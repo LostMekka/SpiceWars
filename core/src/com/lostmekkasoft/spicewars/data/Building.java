@@ -65,9 +65,17 @@ public final class Building {
 	public void update(double time){
 		if(type == BuildingType.artillery && isFinishedBuilding){
 			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
+			if(progress >= 1 && parent.superWeaponTarget != null){
+				getParentScreen().addArtilleryShot(parent, parent.superWeaponTarget);
+				progress = 0;
+			}
 		}
 		if(type == BuildingType.deathlaser && isFinishedBuilding){
 			progress = Math.min(1, progress + time/DEATHLASER_SHOTDELAY);
+			if(progress >= 1 && parent.superWeaponTarget != null){
+				getParentScreen().addDeathLaserShot(parent, parent.superWeaponTarget);
+				progress = 0;
+			}
 		}
 	}
 	
