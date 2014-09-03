@@ -16,10 +16,13 @@ public class Building {
 		artillery, 
 	}
 	
+	public static final int MAX_WORKERS_PER_BUILDING = 5;
 	public static final double MINE_INCOME = 5;
 	public static final double GENERATOR_INCOME = 10;
 	public static final double FACTORY_SPICE_USAGE = 2;
 	public static final double FACTORY_ENERGY_USAGE = 6;
+	public static final double WORKER_SPICE_USAGE = 1;
+	public static final double WORKER_ENERGY_USAGE = 8;
 	public static final double SILO_STORAGE = 100;
 	public static final double BATTERY_STORAGE = 500;
 	public static final double DEFAULT_SPICE_STORAGE = 50;
