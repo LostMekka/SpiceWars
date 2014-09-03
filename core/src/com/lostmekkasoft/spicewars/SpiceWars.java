@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.lostmekkasoft.spicewars.data.Team;
 
 import java.util.Random;
@@ -13,8 +13,9 @@ import java.util.Random;
 public class SpiceWars extends Game {
 
 	SpriteBatch batch;
-	ShapeRenderer shapes;
+	FreeTypeFontGenerator fontGenerator;
 	BitmapFont font;
+	BitmapFont fontLarge;
 	public static Random random = new Random();
 
 	int WIDTH;
@@ -25,8 +26,13 @@ public class SpiceWars extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		font = new BitmapFont();
-		shapes = new ShapeRenderer();
+
+		FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		fontParameter.size = 14;
+		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
+		font = fontGenerator.generateFont(fontParameter);
+		fontParameter.size = 48;
+		fontLarge = fontGenerator.generateFont(fontParameter);
 
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
@@ -43,6 +49,9 @@ public class SpiceWars extends Game {
 
 	@Override
 	public void dispose() {
+		batch.dispose();
+		fontGenerator.dispose();
+
 		super.dispose();
 	}
 }

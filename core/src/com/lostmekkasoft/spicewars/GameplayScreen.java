@@ -9,6 +9,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.lostmekkasoft.spicewars.data.Army;
 import com.lostmekkasoft.spicewars.data.Planet;
@@ -35,10 +39,13 @@ public final class GameplayScreen implements Screen {
 	public Team teamPlayer;
 	public Team teamAI;
 
+	private TextureAtlas planetAtlas;
+
 	public GameplayScreen(final SpiceWars game) {
 		this.game = game;
-		teamPlayer = new Team(1, Color.CYAN);
+		teamPlayer = new Team(1, Color.GREEN);
 		teamAI = new Team(2, Color.RED);
+		planetAtlas = new TextureAtlas("sprites/planets.txt");
 		newLevel();
 	}
 
@@ -110,13 +117,30 @@ public final class GameplayScreen implements Screen {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		game.shapes.begin(ShapeRenderer.ShapeType.Filled);
+		TextureRegion planetPlayer  = planetAtlas.findRegion("green");
+		TextureRegion planetAI      = planetAtlas.findRegion("red");
+		TextureRegion planetNeutral = planetAtlas.findRegion("grey");
 
-		// Render all planets as simple shapes
+		game.batch.begin();
 		for (Planet planet : planets) {
-			game.shapes.setColor(planet.team.color);
-			game.shapes.circle((float)planet.position.x, (float)planet.position.y, planet.radius);
+			// The texture for a planet has its 0,0 coordinates in the lower left corner.
+			// The planet position is however the middlepoint of a planet, that's why this has to be transformed.
+			float posX = (float)planet.position.x - planet.radius;
+			float posY = (float)planet.position.y - planet.radius;
+
+			switch (planet.team.id) {
+				case -1:
+					game.batch.draw(planetNeutral, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+				case 1:
+					game.batch.draw(planetPlayer, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+				case 2:
+					game.batch.draw(planetAI, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+			}
 		}
+		game.batch.end();
 
 		//DEBUG: Press R to generate a new playing field or ESC to exit the game
 		timeForInput += delta;
@@ -127,15 +151,13 @@ public final class GameplayScreen implements Screen {
 			Gdx.app.exit();
 		}
 
-		game.shapes.end();
-
 		//DEBUG: Write the amount of slots on each planet
 		game.batch.begin();
 		game.font.setColor(Color.GREEN);
 		game.font.setScale(1f);
 		for (Planet planet : planets) {
 			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			game.font.draw(game.batch, planetSlots, (float)planet.position.x-55, (float)planet.position.y+5);
+			game.font.draw(game.batch, planetSlots, (float)planet.position.x - game.font.getBounds(planetSlots).width, (float)planet.position.y+5);
 		}
 		game.batch.end();
 	}

@@ -32,11 +32,9 @@ public class MainMenuScreen implements Screen {
 		camera.update();
 
 		game.batch.begin();
-		game.font.setColor(Color.WHITE);
-		game.font.setScale(4f);
-		game.font.draw(game.batch, "SpiceWars", game.WIDTH/2 - 160, game.HEIGHT/2 + 40);
-		game.font.setScale(2f);
-		game.font.draw(game.batch, "(Press any key to continue)", game.WIDTH/2 - 190, game.HEIGHT/2 - 200);
+		game.fontLarge.setColor(Color.WHITE);
+		game.fontLarge.draw(game.batch, "SpiceWars", game.WIDTH/2 - game.fontLarge.getBounds("SpiceWars").width/2, game.HEIGHT/2 - game.fontLarge.getBounds("SpiceWars").height/2);
+		game.font.draw(game.batch, "(Press any key to continue)", game.WIDTH/2 - game.font.getBounds("(Press any key to continue)").width/2, game.HEIGHT/2 - game.font.getBounds("(Press any key to continue)").height/2 - 50);
 		game.batch.end();
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched()) {
