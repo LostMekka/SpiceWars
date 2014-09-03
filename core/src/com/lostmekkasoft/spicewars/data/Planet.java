@@ -77,9 +77,9 @@ public class Planet {
 		}
 		if (t == Building.BuildingType.spiceMine) {
 			addBuildingInternal(new Building(t), mineSlots);
-			team.spiceIncome += Building.singleMineIncome;
+			team.spiceIncome += Building.MINE_INCOME;
 		} else if(t == Building.BuildingType.generator){
-			team.energyIncome += Building.singleGeneratorIncome;
+			team.energyIncome += Building.GENERATOR_INCOME;
 		} else {
 			if (t == Building.BuildingType.hq) {
 				hasHQ = true;
@@ -149,11 +149,11 @@ public class Planet {
 		} else {
 			if(b.type == Building.BuildingType.spiceMine){
 				mineSlots.remove(b);
-				team.spiceIncome -= Building.singleMineIncome;
+				team.spiceIncome -= Building.MINE_INCOME;
 			} 
 			else if(b.type == Building.BuildingType.generator){
 				normalSlots.remove(b);
-				team.energyIncome -= Building.singleGeneratorIncome;
+				team.energyIncome -= Building.GENERATOR_INCOME;
 			} else {
 				normalSlots.remove(b);
 			}

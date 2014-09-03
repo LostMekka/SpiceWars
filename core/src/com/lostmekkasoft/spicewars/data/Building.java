@@ -16,11 +16,18 @@ public class Building {
 		artillery, 
 	}
 	
+	public static final double MINE_INCOME = 5;
+	public static final double GENERATOR_INCOME = 10;
+	public static final double FACTORY_SPICE_USAGE = 2;
+	public static final double FACTORY_ENERGY_USAGE = 6;
+	public static final double SILO_STORAGE = 100;
+	public static final double BATTERY_STORAGE = 500;
+	public static final double DEFAULT_SPICE_STORAGE = 50;
+	public static final double DEFAULT_ENERGY_STORAGE = 200;
+
 	public BuildingType type;
 	public double hp = 100;
 	public double buildState = 0;
-	public static final double singleMineIncome = 15;
-	public static final double singleGeneratorIncome = 10; 
 
 	public Building(BuildingType type) {
 		this.type = type;
