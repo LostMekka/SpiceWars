@@ -24,19 +24,21 @@ public class Planet {
 	public double hp = 100;
 	public Point position;
 	private boolean hasHQ = false;
+	public PlanetType type;
+	public static enum PlanetType {
+		normal, station
+	}
 
-	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
+	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type) {
 		this.radius = radius;
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
 		this.maxMineSlots = maxMineSlots;
 		this.position = position;
+		this.type = type;
 		normalSlots = new LinkedList<>();
 		mineSlots = new LinkedList<>();
-	}
-
-	public static enum PlanetType {
-		normal, station
+		if(type == PlanetType.station)this.maxMineSlots = 0;
 	}
 
 	public boolean canAddBuilding(Building.BuildingType t) {
