@@ -4,6 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author LostMekka
@@ -34,6 +36,35 @@ public class Army {
 	};
 	
 	public double[] ships = new double[4];
+	
+	public static void fight(LinkedList<Army> armies, double time){
+		int s = armies.size();
+		if(s <= 1) return;
+		Army[] oldArmies = new Army[s];
+		oldArmies = armies.toArray(oldArmies);
+		double[][] newArmies = new double[s][4];
+		for(int i=0; i<s; i++) System.arraycopy(oldArmies[i].ships, 0, newArmies[i], 0, 4);
+		for(int srcI=1; srcI<4; srcI++){
+			for(int army=0; army<s; army++){
+				double dmg = Math.ceil(oldArmies[army].ships[srcI]) * dps[srcI] * time;
+				for(int trgtI : priorities[srcI]){
+					double modDmg = dmg * dpsMods[srcI][trgtI];
+					double totalhp = 0;
+					for(int i=0; i<s; i++) if(i != army) totalhp = oldArmies[i].ships[trgtI];
+					if(modDmg > totalhp){
+						for(int i=0; i<s; i++) if(i != army) newArmies[i][trgtI] = 0;
+						dmg -= totalhp / dpsMods[srcI][trgtI];
+					} else {
+						for(int i=0; i<s; i++) if(i != army){
+							newArmies[i][trgtI] -= modDmg * newArmies[i][trgtI] / totalhp;
+						}
+						dmg = 0;
+					}
+				}
+			}
+		}
+		for(int i=0; i<s; i++) oldArmies[i].ships = newArmies[i];
+	}
 	
 	public void fight(Army a, double time){
 		double[] own = new double[4];
