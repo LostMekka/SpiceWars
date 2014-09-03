@@ -4,6 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.lostmekkasoft.spicewars.GameplayScreen;
+
 /**
  *
  * @author LostMekka
@@ -42,6 +44,14 @@ public final class Building {
 		this.team = team;
 		parent = parentPlanet;
 		hp = 1; // hp is low at the beginning of construction
+	}
+
+	public Planet getParent() {
+		return parent;
+	}
+	
+	public GameplayScreen getParentScreen() {
+		return parent.getParent();
 	}
 	
 	public int getMaxHp(){

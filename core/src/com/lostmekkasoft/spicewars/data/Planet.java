@@ -33,8 +33,8 @@ public class Planet extends Location {
 	private boolean hasHQ = false;
 	public PlanetType type;
 
-	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type) {
-		super(position, radius);
+	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
+		super(position, radius, parentScreen);
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
 		this.maxMineSlots = maxMineSlots;

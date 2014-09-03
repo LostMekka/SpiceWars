@@ -4,6 +4,7 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.lostmekkasoft.spicewars.GameplayScreen;
 import java.util.LinkedList;
 
 /**
@@ -15,10 +16,16 @@ public class Location {
 	public Point position;
 	public int radius;
 	public LinkedList<Army> armies = new LinkedList<>();
+	private GameplayScreen parent;
 
-	public Location(Point position, int radius) {
+	public Location(Point position, int radius, GameplayScreen parentScreen) {
 		this.position = position;
 		this.radius = radius;
+		parent = parentScreen;
+	}
+
+	public GameplayScreen getParent() {
+		return parent;
 	}
 	
 	public void update(double time){
