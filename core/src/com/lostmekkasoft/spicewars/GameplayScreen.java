@@ -157,7 +157,7 @@ public class GameplayScreen implements Screen {
 		game.font.setScale(1f);
 		for (Planet planet : planets) {
 			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			game.font.draw(game.batch, planetSlots, (float)planet.position.x-55, (float)planet.position.y+5);
+			game.font.draw(game.batch, planetSlots, (float)planet.position.x - game.font.getBounds(planetSlots).width, (float)planet.position.y+5);
 		}
 		game.batch.end();
 	}
