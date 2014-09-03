@@ -78,7 +78,7 @@ public class Planet {
 		return i;
 	}
 	
-	public void buildBuildings(double efficiency, double time){
+	public void buildStuff(Team t, double efficiency, double time){
 		
 	}
 	

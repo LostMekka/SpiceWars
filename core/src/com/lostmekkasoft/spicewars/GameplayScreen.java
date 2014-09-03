@@ -128,7 +128,7 @@ public final class GameplayScreen implements Screen {
 			double effEn = Math.min(1, (t.energyStored + t.energyIncome * time) / energyUsage);
 			double efficiency = Math.min(effSp, effEn);
 			t.lastEfficiency = efficiency;
-			for(Planet p : planets) p.buildBuildings(t, efficiency, time);
+			for(Planet p : planets) p.buildStuff(t, efficiency, time);
 			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
 			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
 		}
