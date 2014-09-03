@@ -17,6 +17,9 @@ public class Planet {
 	public static enum PlanetType {
 		normal, station
 	}
+	
+	public static double MAX_HP = 1000;
+	public static double HP_REGENERATION = 0.5;
 
 	public int radius;
 	public Team team;
@@ -24,7 +27,7 @@ public class Planet {
 	public int maxMineSlots;
 	public LinkedList<Building> normalSlots;
 	public LinkedList<Building> mineSlots;
-	public double hp = 100;
+	public double hp = MAX_HP;
 	public Point position;
 	public LinkedList<Army> armies = new LinkedList<>();
 	private boolean hasHQ = false;
@@ -43,7 +46,20 @@ public class Planet {
 	}
 
 	public void update(float time){
-		
+		// let armies fight/bombard
+		if(armies.size() >= 2){
+			// there are more than 1 army on this planet. let them fight!
+			Army.fight(armies, time);
+		} else {
+			// there is one or no army here. bombard planet?
+			if(!armies.isEmpty()){
+				Army a = armies.getFirst();
+				if(a.team != team) a.bombardPlanet(this, time);
+			}
+		}
+		// regenerate planet hp
+		hp = Math.min(hp + HP_REGENERATION*time, MAX_HP);
+		// TODO: update buildings
 	}
 	
 	public boolean canAddBuilding(Building.BuildingType t) {
