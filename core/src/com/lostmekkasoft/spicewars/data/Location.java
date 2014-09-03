@@ -46,18 +46,11 @@ public class Location {
 		return a == null ? null : a.split(ratios);
 	}
 	
-	public Army sendArmy(Team team, double[] ratios, Point target){
-		Army a = split(team, ratios);
-		if(a == null) return null;
-		a.targetPoint = target;
-		return a;
-	}
-	
-	public Army sendArmy(Team team, double[] ratios, Planet target){
+	public Army sendArmy(Team team, double[] ratios, Location target){
 		if(target == this) return null;
 		Army a = split(team, ratios);
 		if(a == null) return null;
-		a.targetPlanet = target;
+		a.target = target;
 		return a;
 	}
 	

@@ -45,8 +45,8 @@ public class Army {
 	
 	public double[] ships = new double[4];
 	public Team team;
-	public Point position = null, targetPoint = null;
-	public Planet targetPlanet = null;
+	public Point position = null;
+	public Location target = null;
 	
 	public static void fight(LinkedList<Army> armies, double time){
 		int s = armies.size();
@@ -78,32 +78,22 @@ public class Army {
 	}
 	
 	public void update(double time){
-		if(targetPoint == null && targetPlanet != null) return; // nothing to do here
+		if(target == null) return; // nothing to do here
 		// get length traveled (army moves at speed of slowest ship)
 		double len = speedMod[1];
 		if(ships[0] > 0) len = speedMod[0];
 		if(ships[2] > 0) len = speedMod[2];
 		if(ships[3] > 0) len = speedMod[3];
 		len *= speedBase * time;
-		double d1 = len;
-		Point tp = targetPoint;
-		if(targetPlanet != null){
-			tp = targetPlanet.position;
-			len += targetPlanet.radius;
-		}
-		double dd2 = position.squaredDistanceTo(tp);
+		double d1 = len + target.radius;
+		double dd2 = position.squaredDistanceTo(target.position);
 		if(dd2 <= d1*d1){
 			// arrived, add to destination
-			if(targetPlanet != null){
-				targetPlanet.receiveArmy(this);
-			} else {
-				position = targetPoint;
-			}
-			targetPoint = null;
-			targetPlanet = null;
+			target.receiveArmy(this);
+			target = null;
 		} else {
 			// not arrived, move
-			Point p = tp.clone();
+			Point p = target.position.clone();
 			p.subtract(position);
 			p.multiply(len / p.length());
 			position.add(p);
