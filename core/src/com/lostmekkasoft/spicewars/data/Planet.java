@@ -169,7 +169,7 @@ public class Planet extends Location {
 
 	public boolean addBuilding(Building.BuildingType t) {
 		if (!canAddBuilding(t)) return false;
-		addBuildingInternal(new Building(t, team), t == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
+		addBuildingInternal(new Building(t, team, this), t == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
 		return true;
 	}
 

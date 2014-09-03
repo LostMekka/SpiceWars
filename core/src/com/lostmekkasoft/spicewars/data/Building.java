@@ -35,11 +35,13 @@ public final class Building {
 	public double progress = 0;
 	public boolean isActive = false, isFinishedBuilding;
 	public Team team;
+	private Planet parent;
 
-	public Building(BuildingType type, Team team) {
+	public Building(BuildingType type, Team team, Planet parentPlanet) {
 		this.type = type;
 		this.team = team;
-		hp = getMaxHp();
+		parent = parentPlanet;
+		hp = 1; // hp is low at the beginning of construction
 	}
 	
 	public int getMaxHp(){
@@ -53,6 +55,9 @@ public final class Building {
 	public void update(double time){
 		if(type == BuildingType.artillery && isFinishedBuilding){
 			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
+		}
+		if(type == BuildingType.deathlaser && isFinishedBuilding){
+			progress = Math.min(1, progress + time/DEATHLASER_SHOTDELAY);
 		}
 	}
 	
@@ -97,7 +102,7 @@ public final class Building {
 	}
 	
 	public void onDestroy(){
-		removeTeamEffect(team);
+		if(isFinishedBuilding) removeTeamEffect(team);
 	}
 	
 	public void onFinishBuilding(){
@@ -107,9 +112,9 @@ public final class Building {
 	}
 	
 	public void changeTeam(Team t){
-		removeTeamEffect(team);
+		if(isFinishedBuilding) removeTeamEffect(team);
 		team = t;
-		addTeamEffect(team);
+		if(isFinishedBuilding) addTeamEffect(team);
 	}
 	
 }
