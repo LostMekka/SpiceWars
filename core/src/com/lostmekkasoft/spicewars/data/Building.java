@@ -8,7 +8,7 @@ package com.lostmekkasoft.spicewars.data;
  *
  * @author LostMekka
  */
-public class Building {
+public final class Building {
 	
 	public static enum BuildingType{ hq, 
 		workerFactory, fighterFactory, frigateFactory, destroyerFactory,
@@ -29,7 +29,7 @@ public class Building {
 	public static final int DEFAULT_ENERGY_STORAGE = 200;
 
 	public BuildingType type;
-	public double hp = 100;
+	public double hp;
 	public double buildProgress = 0, factoryProgress = 0;
 	public boolean isActive = false;
 	public Team team;
@@ -37,6 +37,15 @@ public class Building {
 	public Building(BuildingType type, Team team) {
 		this.type = type;
 		this.team = team;
+		hp = getMaxHp();
+	}
+	
+	public int getMaxHp(){
+		return 100;
+	}
+	
+	public int getCost(){
+		return 100;
 	}
 	
 	public void update(double time){

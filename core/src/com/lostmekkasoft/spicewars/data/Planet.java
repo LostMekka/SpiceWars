@@ -68,18 +68,18 @@ public class Planet {
 	
 	public int getWorkingWorkers(Team t){
 		int workers=0;
-		int underConstruction=0;
+		int buildings=0;
 		for(Army a:armies){
 			if(a.team == t) workers = (int)Math.ceil(a.ships[0]);	
 		}
 		if(workers == 0) return 0;
 		for(Building b:normalSlots){
-			if(b.team == t && b.buildProgress < 1) underConstruction++;
+			if(b.team == t && (b.buildProgress < 1 || b.hp < b.getMaxHp())) buildings++;
 		}
 		for(Building b:mineSlots){
-			if(b.team == t && b.buildProgress < 1) underConstruction++;
+			if(b.team == t && (b.buildProgress < 1 || b.hp < b.getMaxHp())) buildings++;
 		}
-		return Math.min(underConstruction*Building.MAX_WORKERS_PER_BUILDING, workers);
+		return Math.min(buildings*Building.MAX_WORKERS_PER_BUILDING, workers);
 	}
 	
 	public int getWorkingFactories(Team t){
@@ -122,11 +122,20 @@ public class Planet {
 			if(workerCount <= 0) break;
 			int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
 			workerCount -= w;
-			b.buildProgress += w * Building.WORKER_SPICE_USAGE * efficiency * time;
-			if(b.buildProgress >= 1){
-				b.buildProgress = 1;
-				buildingFinished(b);
-			}
+			double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
+			if(rate + b.buildProgress > 1) rate = 1 - b.buildProgress;
+			b.buildProgress += rate;
+			b.hp += rate * b.getMaxHp();
+			if(b.buildProgress >= 1) buildingFinished(b);
+		}
+		// repair buildings with the remaining workers
+		for(Building b : l) if(b.team == t && b.buildProgress >= 1 && b.hp < b.getMaxHp()){
+			if(workerCount <= 0) break;
+			int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
+			workerCount -= w;
+			int max = b.getMaxHp();
+			double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
+			b.hp = Math.min(hp + rate * max, max);
 		}
 	}
 	
@@ -136,7 +145,35 @@ public class Planet {
 	}
 	
 	private void buildingFinished(Building b){
-		
+		switch(b.type){
+			case spiceMine:
+				b.team.spiceIncome += Building.MINE_INCOME;
+				break;
+			case generator:
+				b.team.energyIncome += Building.GENERATOR_INCOME;
+				break;
+			case spiceSilo:
+				b.team.maxSpiceStorage += Building.SILO_STORAGE;
+				break;
+			case battery:
+				b.team.maxEnergyStorage += Building.BATTERY_STORAGE;
+				break;
+			case hq:
+				hasHQ = true;
+				// remove all hqs that are not of this team (any unfinished buildings)
+				ListIterator<Building> iter = normalSlots.listIterator();
+				while(iter.hasNext()){
+					Building b2 = iter.next();
+					if(b2.type == Building.BuildingType.hq && b2.team != b.team){
+						iter.remove();
+					}
+				}
+				// reset team of planet and all buildings
+				team = b.team;
+				for(Building b2 : normalSlots) b2.team = team;
+				for(Building b2 : mineSlots) b2.team = team;
+				break;
+		}
 	}
 	
 	public boolean canAddBuilding(Building.BuildingType t) {
@@ -149,20 +186,8 @@ public class Planet {
 	}
 
 	public boolean addBuilding(Building.BuildingType t) {
-		if (!canAddBuilding(t)) {
-			return false;
-		}
-		if (t == Building.BuildingType.spiceMine) {
-			addBuildingInternal(new Building(t, team), mineSlots);
-			team.spiceIncome += Building.MINE_INCOME;
-		} else if(t == Building.BuildingType.generator){
-			team.energyIncome += Building.GENERATOR_INCOME;
-		} else {
-			if (t == Building.BuildingType.hq) {
-				hasHQ = true;
-			}
-			addBuildingInternal(new Building(t, team), normalSlots);
-		}
+		if (!canAddBuilding(t)) return false;
+		addBuildingInternal(new Building(t, team), t == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
 		return true;
 	}
 
