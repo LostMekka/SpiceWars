@@ -41,6 +41,8 @@ public class Army {
 	
 	public double[] ships = new double[4];
 	public Team team;
+	public Point targetPoint = null;
+	public Planet targetPlanet = null;
 	
 	public static void fight(LinkedList<Army> armies, double time){
 		int s = armies.size();
