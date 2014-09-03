@@ -5,28 +5,28 @@ repeat: none
 cyan
   rotate: false
   xy: 2, 2
-  size: 380, 380
+  size: 368, 368
   orig: 380, 380
-  offset: 0, 0
+  offset: 0, 12
   index: -1
 green
   rotate: false
-  xy: 384, 2
-  size: 380, 380
+  xy: 372, 2
+  size: 368, 368
   orig: 380, 380
-  offset: 0, 0
+  offset: 0, 12
   index: -1
 grey
   rotate: false
-  xy: 766, 2
-  size: 380, 380
+  xy: 742, 2
+  size: 368, 368
   orig: 380, 380
-  offset: 0, 0
+  offset: 0, 12
   index: -1
 red
   rotate: false
-  xy: 1148, 2
-  size: 380, 380
+  xy: 1112, 2
+  size: 368, 368
   orig: 380, 380
-  offset: 0, 0
+  offset: 0, 12
   index: -1

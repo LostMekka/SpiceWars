@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.lostmekkasoft.spicewars.data.Army;
@@ -38,10 +39,13 @@ public class GameplayScreen implements Screen {
 	public Team teamPlayer;
 	public Team teamAI;
 
+	private TextureAtlas planetAtlas;
+
 	public GameplayScreen(final SpiceWars game) {
 		this.game = game;
 		teamPlayer = new Team(1, Color.CYAN);
 		teamAI = new Team(2, Color.RED);
+		planetAtlas = new TextureAtlas("sprites/planets.txt");
 		newLevel();
 	}
 
@@ -113,15 +117,28 @@ public class GameplayScreen implements Screen {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		Texture ellipse = new Texture("ellipse.png");
-		TextureRegion ellipseRegion = new TextureRegion(ellipse);
-		ellipseRegion.setTexture(ellipse);
+		TextureRegion planetPlayer  = planetAtlas.findRegion("green");
+		TextureRegion planetAI      = planetAtlas.findRegion("red");
+		TextureRegion planetNeutral = planetAtlas.findRegion("grey");
+
 		game.batch.begin();
 		for (Planet planet : planets) {
-//			game.batch.draw(ellipse, (float)planet.position.x, (float)planet.position.y, planet.radius, planet.radius);
-			float posX = (float)planet.position.x;
-			float posY = (float)planet.position.y;
-			game.batch.draw(ellipseRegion, posX, posY, posX, posY, planet.radius, planet.radius, planet.radius, planet.radius, planet.rotationSpeed);
+			// The texture for a planet has its 0,0 coordinates in the lower left corner.
+			// The planet position is however the middlepoint of a planet, that's why this has to be transformed.
+			float posX = (float)planet.position.x - planet.radius;
+			float posY = (float)planet.position.y - planet.radius;
+
+			switch (planet.team.id) {
+				case -1:
+					game.batch.draw(planetNeutral, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+				case 1:
+					game.batch.draw(planetPlayer, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+				case 2:
+					game.batch.draw(planetAI, posX, posY, planet.radius*2, planet.radius*2);
+					break;
+			}
 		}
 		game.batch.end();
 
