@@ -62,14 +62,14 @@ public class GameplayScreen implements Screen {
 			// Place the first planet in the lower left corner.
 			// It's always the same for a new game.
 			Point point = new Point(100, 100);
-			Planet planet = new Planet(firstRadius, teamPlayer, firstNormalSlots, firstMineSlots, point);
+			Planet planet = new Planet(firstRadius, teamPlayer, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal);
 			planets.add(planet);
 			return;
 		} else if (planets.size() == 1) {
 			// Place the second planet in the upper right corner.
 			// This one is identical to the first one and the same for every game.
 			Point point = new Point(game.WIDTH - 100, game.HEIGHT - 100);
-			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point);
+			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal);
 			planets.add(planet);
 			return;
 		}
@@ -96,7 +96,7 @@ public class GameplayScreen implements Screen {
 			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
 			int maxNormalSlots = randomRadius / 8 + jitter*2;
 			int maxMineSlots = randomRadius / 8 + jitter;
-			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint));
+			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal));
 		}
 	}
 
