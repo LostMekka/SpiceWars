@@ -18,6 +18,7 @@ import com.lostmekkasoft.spicewars.data.Army;
 import com.lostmekkasoft.spicewars.data.Building;
 import com.lostmekkasoft.spicewars.data.Planet;
 import com.lostmekkasoft.spicewars.data.Point;
+import com.lostmekkasoft.spicewars.data.Projectile;
 import com.lostmekkasoft.spicewars.data.Team;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public final class GameplayScreen implements Screen {
 	public LinkedList<Planet> planets = new LinkedList<>();
 	public LinkedList<Army> armies = new LinkedList<>();
 	public LinkedList<Team> teams = new LinkedList<>();
+	public LinkedList<Projectile> projectiles = new LinkedList<>();
 
 	public Team teamPlayer;
 	public Team teamAI;
@@ -134,12 +136,8 @@ public final class GameplayScreen implements Screen {
 		}
 	}
 	
-	public void addArtilleryShot(Planet source, Planet target){
-		
-	}
-
-	public void addDeathLaserShot(Planet source, Planet target){
-		
+	public void addProjectile(Projectile p){
+		projectiles.add(p);
 	}
 
 	@Override
