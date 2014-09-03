@@ -13,7 +13,7 @@ public final class Building {
 	public static enum BuildingType{ hq, 
 		workerFactory, fighterFactory, frigateFactory, destroyerFactory,
 		spiceMine, spiceSilo, generator, battery, 
-		artillery, 
+		artillery, deathlaser
 	}
 	
 	public static final int MAX_WORKERS_PER_BUILDING = 5;
@@ -27,11 +27,13 @@ public final class Building {
 	public static final int BATTERY_STORAGE = 500;
 	public static final int DEFAULT_SPICE_STORAGE = 50;
 	public static final int DEFAULT_ENERGY_STORAGE = 200;
+	public static final double ARTILLERY_SHOTDELAY = 10;
+	public static final double DEATHLASER_SHOTDELAY = 30;
 
 	public BuildingType type;
 	public double hp;
-	public double buildProgress = 0, factoryProgress = 0;
-	public boolean isActive = false;
+	public double progress = 0;
+	public boolean isActive = false, isFinishedBuilding;
 	public Team team;
 
 	public Building(BuildingType type, Team team) {
@@ -49,11 +51,65 @@ public final class Building {
 	}
 	
 	public void update(double time){
-		
+		if(type == BuildingType.artillery && isFinishedBuilding){
+			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
+		}
 	}
 	
 	public boolean isMine(){
 		return type == BuildingType.spiceMine;
+	}
+	
+	private void addTeamEffect(Team t){
+		switch(type){
+			case spiceMine:
+				t.spiceIncome += Building.MINE_INCOME;
+				break;
+			case spiceSilo:
+				t.maxSpiceStorage += Building.SILO_STORAGE;
+				break;
+			case generator:
+				t.energyIncome += Building.GENERATOR_INCOME;
+				break;
+			case battery:
+				t.maxEnergyStorage += Building.BATTERY_STORAGE;
+				break;
+		}
+	}
+	
+	private void removeTeamEffect(Team t){
+		switch(type){
+			case spiceMine:
+				t.spiceIncome -= Building.MINE_INCOME;
+				break;
+			case spiceSilo:
+				t.maxSpiceStorage -= Building.SILO_STORAGE;
+				if(t.spiceStored > t.maxSpiceStorage) t.spiceStored = t.maxSpiceStorage;
+				break;
+			case generator:
+				t.energyIncome -= Building.GENERATOR_INCOME;
+				break;
+			case battery:
+				t.maxEnergyStorage -= Building.BATTERY_STORAGE;
+				if(t.energyStored > t.maxEnergyStorage) t.energyStored = t.maxEnergyStorage;
+				break;
+		}
+	}
+	
+	public void onDestroy(){
+		removeTeamEffect(team);
+	}
+	
+	public void onFinishBuilding(){
+		progress = 0;
+		isFinishedBuilding = true;
+		addTeamEffect(team);
+	}
+	
+	public void changeTeam(Team t){
+		removeTeamEffect(team);
+		team = t;
+		addTeamEffect(team);
 	}
 	
 }
