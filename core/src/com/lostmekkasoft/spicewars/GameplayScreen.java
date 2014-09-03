@@ -43,7 +43,7 @@ public class GameplayScreen implements Screen {
 
 	public GameplayScreen(final SpiceWars game) {
 		this.game = game;
-		teamPlayer = new Team(1, Color.CYAN);
+		teamPlayer = new Team(1, Color.GREEN);
 		teamAI = new Team(2, Color.RED);
 		planetAtlas = new TextureAtlas("sprites/planets.txt");
 		newLevel();
