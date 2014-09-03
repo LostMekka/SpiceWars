@@ -7,7 +7,6 @@ package com.lostmekkasoft.spicewars.data;
 import com.badlogic.gdx.Game;
 import com.lostmekkasoft.spicewars.GameplayScreen;
 import com.lostmekkasoft.spicewars.SpiceWars;
-import static com.lostmekkasoft.spicewars.data.Building.BuildingType.workerFactory;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -68,7 +67,20 @@ public class Planet {
 	}
 	
 	public int getWorkingWorkers(Team t){
-		
+		double worker=0;
+		int underConstruction=0;
+		for(Army a:armies){
+			if(a.team == t) worker = a.ships[0];	
+		}
+		for(Building b:normalSlots){
+			if(b.buildState != 1) underConstruction++;
+		}
+		for(Building b:mineSlots){
+			if(b.buildState != 1) underConstruction++;
+		}
+		if(worker == 0) return 0;
+		else if (underConstruction*Building.MAX_WORKERS_PER_BUILDING >= worker) return (int) Math.ceil(worker);
+		else return (int) Math.ceil(underConstruction*Building.MAX_WORKERS_PER_BUILDING);
 	}
 	
 	public int getWorkingFactories(Team t){
@@ -80,51 +92,6 @@ public class Planet {
 	}
 	
 	public void buildStuff(Team t, double efficiency, double time){
-		if(t == SpiceWars.teamNeutral) return;
-		// build units out of factories (only when this planet belongs to the team)
-		if(t == team) for(Building b : normalSlots){
-			int i;
-			switch(b.type){
-				case workerFactory : i = 0; break;
-				case fighterFactory : i = 1; break;
-				case frigateFactory : i = 2; break;
-				case destroyerFactory : i = 3; break;
-				default: continue;
-			}
-			b.factoryProgress += Building.FACTORY_SPICE_USAGE / Army.cost[i] * efficiency * time;
-			int n = (int)b.factoryProgress;
-			if(n >= 0){
-				Army a = getArmy(t);
-				if(a == null){
-					a = new Army(t);
-					a.ships[i] += n;
-					armies.add(a);
-				}
-				b.factoryProgress -= n;
-			}
-		}
-		// build buildings with workers
-		int workerCount = getWorkingWorkers(t);
-		LinkedList<Building> l = (LinkedList<Building>)normalSlots.clone();
-		l.addAll(mineSlots);
-		for(Building b : l) if(b.team == t && b.buildProgress < 1){
-			if(workerCount <= 0) break;
-			int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
-			workerCount -= w;
-			b.buildProgress += w * Building.WORKER_SPICE_USAGE * efficiency * time;
-			if(b.buildProgress >= 1){
-				b.buildProgress = 1;
-				buildingFinished(b);
-			}
-		}
-	}
-	
-	private Army getArmy(Team t){
-		for(Army a : armies) if(a.team == t) return a;
-		return null;
-	}
-	
-	private void buildingFinished(Building b){
 		
 	}
 	
@@ -137,12 +104,12 @@ public class Planet {
 		}
 	}
 
-	public boolean addBuilding(Building.BuildingType t, Team team) {
+	public boolean addBuilding(Building.BuildingType t) {
 		if (!canAddBuilding(t)) {
 			return false;
 		}
 		if (t == Building.BuildingType.spiceMine) {
-			addBuildingInternal(new Building(t, team), mineSlots);
+			addBuildingInternal(new Building(t), mineSlots);
 			team.spiceIncome += Building.MINE_INCOME;
 		} else if(t == Building.BuildingType.generator){
 			team.energyIncome += Building.GENERATOR_INCOME;
@@ -150,7 +117,7 @@ public class Planet {
 			if (t == Building.BuildingType.hq) {
 				hasHQ = true;
 			}
-			addBuildingInternal(new Building(t, team), normalSlots);
+			addBuildingInternal(new Building(t), normalSlots);
 		}
 		return true;
 	}
