@@ -34,8 +34,13 @@ public class Army {
 		{1, 2, 3, 0},
 		{2, 3, 1, 0}
 	};
+
+	public Army(Team team) {
+		this.team = team;
+	}
 	
 	public double[] ships = new double[4];
+	public Team team;
 	
 	public static void fight(LinkedList<Army> armies, double time){
 		int s = armies.size();
