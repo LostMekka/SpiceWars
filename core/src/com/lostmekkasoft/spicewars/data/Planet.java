@@ -67,7 +67,20 @@ public class Planet {
 	}
 	
 	public int getWorkingWorkers(Team t){
-		
+		double worker=0;
+		int underConstruction=0;
+		for(Army a:armies){
+			if(a.team == t) worker = a.ships[0];	
+		}
+		for(Building b:normalSlots){
+			if(b.buildState != 1) underConstruction++;
+		}
+		for(Building b:mineSlots){
+			if(b.buildState != 1) underConstruction++;
+		}
+		if(worker == 0) return 0;
+		else if (underConstruction*Building.MAX_WORKERS_PER_BUILDING >= worker) return (int) Math.ceil(worker);
+		else return (int) Math.ceil(underConstruction*Building.MAX_WORKERS_PER_BUILDING);
 	}
 	
 	public int getWorkingFactories(Team t){
