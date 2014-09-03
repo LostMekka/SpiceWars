@@ -14,7 +14,7 @@ import java.util.ListIterator;
  *
  * @author LostMekka
  */
-public class Planet {
+public class Planet extends Location {
 
 	public static enum PlanetType {
 		normal, station
@@ -23,7 +23,6 @@ public class Planet {
 	public static double MAX_HP = 1000;
 	public static double HP_REGENERATION = 0.5;
 
-	public int radius;
 	public Team team;
 	public String name;
 	public int maxNormalSlots;
@@ -31,73 +30,34 @@ public class Planet {
 	public LinkedList<Building> normalSlots;
 	public LinkedList<Building> mineSlots;
 	public double hp = MAX_HP;
-	public Point position;
-	public LinkedList<Army> armies = new LinkedList<>();
 	private boolean hasHQ = false;
 	public PlanetType type;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type) {
-		this.radius = radius;
+		super(position, radius);
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
 		this.maxMineSlots = maxMineSlots;
-		this.position = position;
 		this.type = type;
 		normalSlots = new LinkedList<>();
 		mineSlots = new LinkedList<>();
 		if(type == PlanetType.station)this.maxMineSlots = 0;
 	}
 
-	public void update(double time){
-		// let armies fight/bombard
-		if(armies.size() >= 2){
-			// there are more than 1 army on this planet. let them fight!
-			Army.fight(armies, time);
-		} else {
-			// there is one or no army here. bombard planet?
-			if(!armies.isEmpty()){
-				Army a = armies.getFirst();
-				if(a.team != team) a.bombardPlanet(this, time);
-			}
+	@Override
+	public void update(double time) {
+		super.update(time);
+		if(armies.size() == 1){
+			// there is one army here. bombard planet?
+			Army a = armies.getFirst();
+			if(a.team != team) a.bombardPlanet(this, time);
 		}
 		// regenerate planet hp
 		hp = Math.min(hp + HP_REGENERATION*time, MAX_HP);
 		// update buildings
 		for(Building b : normalSlots) b.update(time);
 	}
-	
-	public void receiveArmy(Army a){
-		for(Army a2 : armies) if(a.team == a2.team){
-			a2.add(a);
-			return;
-		}
-		armies.add(a);
-	}
-	
-	private Army split(Team team, double[] ratios){
-		Army a = null;
-		for(Army a2 : armies) if(a2.team == team){
-			a = a2;
-			break;
-		}
-		return a == null ? null : a.split(ratios);
-	}
-	
-	public Army sendArmy(Team team, double[] ratios, Point target){
-		Army a = split(team, ratios);
-		if(a == null) return null;
-		a.targetPoint = target;
-		return a;
-	}
-	
-	public Army sendArmy(Team team, double[] ratios, Planet target){
-		if(target == this) return null;
-		Army a = split(team, ratios);
-		if(a == null) return null;
-		a.targetPlanet = target;
-		return a;
-	}
-	
+
 	public int getWorkingWorkers(Team t){
 		int workers=0;
 		int buildings=0;
@@ -294,13 +254,13 @@ public class Planet {
 		}
 	}
 	
-	public void onDelete( ){
-			//destroy planet
-			for(Building b : mineSlots) destroyBuilding(b); 
-			for(Building b : normalSlots){
-				if(b.type == Building.BuildingType.generator || b.type == Building.BuildingType.spiceMine){
-					destroyBuilding(b);
-				}
+	public void onDelete(){
+		//destroy planet
+		for(Building b : mineSlots) destroyBuilding(b); 
+		for(Building b : normalSlots){
+			if(b.type == Building.BuildingType.generator || b.type == Building.BuildingType.spiceMine){
+				destroyBuilding(b);
 			}
+		}
 	}
 }
