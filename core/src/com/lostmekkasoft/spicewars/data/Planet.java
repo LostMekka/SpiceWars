@@ -4,7 +4,6 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
-import com.badlogic.gdx.graphics.Color;
 import com.lostmekkasoft.spicewars.SpiceWars;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -15,6 +14,10 @@ import java.util.ListIterator;
  */
 public class Planet {
 
+	public static enum PlanetType {
+		normal, station
+	}
+
 	public int radius;
 	public Team team;
 	public int maxNormalSlots;
@@ -23,7 +26,7 @@ public class Planet {
 	public LinkedList<Building> mineSlots;
 	public double hp = 100;
 	public Point position;
-	public Army defendingArmy = null, attackingArmy = null;
+	public LinkedList<Army> armies = new LinkedList<>();
 	private boolean hasHQ = false;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
@@ -36,10 +39,10 @@ public class Planet {
 		mineSlots = new LinkedList<>();
 	}
 
-	public static enum PlanetType {
-		normal, station
+	public void update(float time){
+		
 	}
-
+	
 	public boolean canAddBuilding(Building.BuildingType t) {
 		if (t == Building.BuildingType.spiceMine) {
 			return maxMineSlots > mineSlots.size();
