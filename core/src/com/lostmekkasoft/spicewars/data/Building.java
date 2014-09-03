@@ -18,6 +18,9 @@ public class Building {
 	
 	public BuildingType type;
 	public double hp = 100;
+	public double buildState = 0;
+	public static final double singleMineIncome = 15;
+	public static final double singleGeneratorIncome = 10; 
 
 	public Building(BuildingType type) {
 		this.type = type;
