@@ -66,12 +66,16 @@ public class Planet {
 		for(Building b : normalSlots) b.update(time);
 	}
 	
-	public int getWorkingWorkers(){
+	public int getWorkingWorkers(Team t){
 		
 	}
 	
-	public int getWorkingFactories(){
-		
+	public int getWorkingFactories(Team t){
+		int i = 0;
+		for(Building b : normalSlots){
+			if(b.isActive == true) i++;
+		}
+		return i;
 	}
 	
 	public void buildBuildings(double efficiency, double time){
