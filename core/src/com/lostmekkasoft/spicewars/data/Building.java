@@ -31,6 +31,7 @@ public class Building {
 	public BuildingType type;
 	public double hp = 100;
 	public double buildState = 0;
+	public boolean isActive = false;
 
 	public Building(BuildingType type) {
 		this.type = type;
