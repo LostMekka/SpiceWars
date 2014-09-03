@@ -1,0 +1,32 @@
+planets.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cyan
+  rotate: false
+  xy: 2, 2
+  size: 380, 380
+  orig: 380, 380
+  offset: 0, 0
+  index: -1
+green
+  rotate: false
+  xy: 384, 2
+  size: 380, 380
+  orig: 380, 380
+  offset: 0, 0
+  index: -1
+grey
+  rotate: false
+  xy: 766, 2
+  size: 380, 380
+  orig: 380, 380
+  offset: 0, 0
+  index: -1
+red
+  rotate: false
+  xy: 1148, 2
+  size: 380, 380
+  orig: 380, 380
+  offset: 0, 0
+  index: -1
