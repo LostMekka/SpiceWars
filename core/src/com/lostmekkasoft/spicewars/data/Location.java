@@ -6,6 +6,7 @@ package com.lostmekkasoft.spicewars.data;
 
 import com.lostmekkasoft.spicewars.GameplayScreen;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  *
@@ -14,13 +15,12 @@ import java.util.LinkedList;
 public class Location {
 
 	public Point position;
-	public int radius;
+	public int radius = 20;
 	public LinkedList<Army> armies = new LinkedList<>();
 	private GameplayScreen parent;
 
-	public Location(Point position, int radius, GameplayScreen parentScreen) {
+	public Location(Point position, GameplayScreen parentScreen) {
 		this.position = position;
-		this.radius = radius;
 		parent = parentScreen;
 	}
 
@@ -33,6 +33,10 @@ public class Location {
 		if(armies.size() >= 2){
 			// there are more than 1 army on this planet. let them fight!
 			Army.fight(armies, time);
+			ListIterator<Army> i = armies.listIterator();
+			while(i.hasNext()){
+				if(i.next().isEmpty()) i.remove();
+			}
 		}
 	}
 	
@@ -53,12 +57,22 @@ public class Location {
 		return a == null ? null : a.split(ratios);
 	}
 	
-	public Army sendArmy(Team team, double[] ratios, Location target){
-		if(target == this) return null;
+	public boolean sendArmy(Team team, double[] ratios, Point targetPoint){
+		Location l = new Location(position, parent);
+		if(sendArmy(team, ratios, l)){
+			parent.addLocation(l);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean sendArmy(Team team, double[] ratios, Location target){
+		if(target == this) return false;
 		Army a = split(team, ratios);
-		if(a == null) return null;
+		if(a == null) return false;
 		a.target = target;
-		return a;
+		parent.addMovingArmy(a);
+		return true;
 	}
 	
 	public boolean hasArmies(){
@@ -69,6 +83,11 @@ public class Location {
 		double dd1 = position.squaredDistanceTo(l.position);
 		double d2 = radius + l.radius;
 		return dd1 <= d2*d2;
+	}
+	
+	public void transferAllArmiesTo(Location l){
+		for(Army a : armies) l.receiveArmy(a);
+		armies.clear();
 	}
 	
 }

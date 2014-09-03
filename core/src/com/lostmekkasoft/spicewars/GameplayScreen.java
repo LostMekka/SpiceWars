@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.lostmekkasoft.spicewars.data.Army;
 import com.lostmekkasoft.spicewars.data.Building;
+import com.lostmekkasoft.spicewars.data.Location;
 import com.lostmekkasoft.spicewars.data.Planet;
 import com.lostmekkasoft.spicewars.data.Point;
 import com.lostmekkasoft.spicewars.data.Projectile;
@@ -23,6 +24,7 @@ import com.lostmekkasoft.spicewars.data.Team;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * SpiceWars - com.lostmekkasoft.spicewars
@@ -40,6 +42,7 @@ public final class GameplayScreen implements Screen {
 	public LinkedList<Army> armies = new LinkedList<>();
 	public LinkedList<Team> teams = new LinkedList<>();
 	public LinkedList<Projectile> projectiles = new LinkedList<>();
+	public LinkedList<Location> locations = new LinkedList<>();
 
 	public Team teamPlayer;
 	public Team teamAI;
@@ -114,6 +117,7 @@ public final class GameplayScreen implements Screen {
 
 	public void update(float delta) {
 		double time = delta;
+		// manage economy: build and repair buildings
 		for(Team t : teams){
 			double spiceUsage = 0, energyUsage = 0;
 			for(Planet p : planets){
@@ -134,10 +138,65 @@ public final class GameplayScreen implements Screen {
 			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
 			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
 		}
+		// move armies and projectiles
+		ListIterator<Army> armyIter = armies.listIterator();
+		while(armyIter.hasNext()){
+			if(armyIter.next().update(time)) armyIter.remove();
+		}
+		ListIterator<Projectile> projectileIter = projectiles.listIterator();
+		while(projectileIter.hasNext()){
+			if(projectileIter.next().update(time)) projectileIter.remove();
+		}
+		// update planets and remove destroyed ones
+		ListIterator<Planet> planetIter = planets.listIterator();
+		while(planetIter.hasNext()){
+			Planet p = planetIter.next();
+			p.update(time);
+			if(p.hp <= 0){
+				planetIter.remove();
+				p.onDestroy();
+				Location l = null;
+				if(p.hasArmies()){
+					l = new Location(p.position, this);
+					p.transferAllArmiesTo(l);
+				}
+				for(Army a : armies) if(a.target == p){
+					if(l == null) l = new Location(p.position, this);
+					a.target = l;
+				}
+				if(l != null) addLocation(l);
+			}
+		}
 	}
 	
 	public void addProjectile(Projectile p){
 		projectiles.add(p);
+	}
+
+	public void addLocation(Location l){
+		if(l instanceof Planet) throw new IllegalArgumentException();
+		locations.add(l);
+	}
+
+	public void addMovingArmy(Army a){
+		armies.add(a);
+	}
+
+	public void addPlanet(Planet p){
+		planets.add(p);
+		ListIterator<Location> i = locations.listIterator();
+		while(i.hasNext()){
+			Location l = i.next();
+			if(l.overlapsWith(p)){
+				// planet overlaps with a previously set location!
+				// transfer all standing armies of that location to the planet
+				l.transferAllArmiesTo(p);
+				// redirect all armies on route to the location to the planet
+				for(Army a : armies) if(a.target == l) a.target = p;
+				// remove location
+				i.remove();
+			}
+		}
 	}
 
 	@Override

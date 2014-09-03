@@ -32,17 +32,27 @@ public class Planet extends Location {
 	public double hp = MAX_HP;
 	private boolean hasHQ = false;
 	public PlanetType type;
-	public Planet superWeaponTarget = null;
+	private Planet superWeaponTarget = null;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
-		super(position, radius, parentScreen);
+		super(position, parentScreen);
+		if(type == PlanetType.station) maxMineSlots = 0;
+		this.radius = radius;
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
 		this.maxMineSlots = maxMineSlots;
 		this.type = type;
 		normalSlots = new LinkedList<>();
 		mineSlots = new LinkedList<>();
-		if(type == PlanetType.station)this.maxMineSlots = 0;
+	}
+
+	public Planet getSuperWeaponTarget() {
+		return superWeaponTarget;
+	}
+
+	public void setSuperWeaponTarget(Planet superWeaponTarget) {
+		if(superWeaponTarget == this) return;
+		this.superWeaponTarget = superWeaponTarget;
 	}
 
 	@Override

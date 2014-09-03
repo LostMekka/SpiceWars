@@ -63,18 +63,19 @@ public final class Building {
 	}
 	
 	public void update(double time){
+		Planet target = parent.getSuperWeaponTarget();
 		if(type == BuildingType.artillery && isFinishedBuilding){
 			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
-			if(progress >= 1 && parent.superWeaponTarget != null){
-				Projectile p = new Projectile(parent, parent.superWeaponTarget, Projectile.ProjectileType.artilleryShell);
+			if(progress >= 1 && target != null){
+				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.artilleryShell);
 				getParentScreen().addProjectile(p);
 				progress = 0;
 			}
 		}
 		if(type == BuildingType.deathlaser && isFinishedBuilding){
 			progress = Math.min(1, progress + time/DEATHLASER_SHOTDELAY);
-			if(progress >= 1 && parent.superWeaponTarget != null){
-				Projectile p = new Projectile(parent, parent.superWeaponTarget, Projectile.ProjectileType.deathLaser);
+			if(progress >= 1 && target != null){
+				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.deathLaser);
 				getParentScreen().addProjectile(p);
 				progress = 0;
 			}

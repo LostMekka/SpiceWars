@@ -48,8 +48,8 @@ public class Projectile {
 		throw new RuntimeException("projectile type not recognized!");
 	}
 	
-	public void update(double time){
-		if(arrived) return;
+	public boolean update(double time){
+		if(arrived) return true;
 		double len = getSpeed() * time;
 		double d1 = len + target.radius;
 		double dd2 = position.squaredDistanceTo(target.position);
@@ -58,12 +58,14 @@ public class Projectile {
 			arrived = true;
 			target.hp -= getPlanetDamage();
 			target.damageRandomBuilding(getBuildingDamage(), 0);
+			return true;
 		} else {
 			// not arrived, move
 			Point p = target.position.clone();
 			p.subtract(position);
 			p.multiply(len / p.length());
 			position.add(p);
+			return false;
 		}
 	}
 	

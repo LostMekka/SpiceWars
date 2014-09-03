@@ -77,8 +77,8 @@ public class Army {
 		for(int i=0; i<s; i++) oldArmies[i].ships = newArmies[i];
 	}
 	
-	public void update(double time){
-		if(target == null) return; // nothing to do here
+	public boolean update(double time){
+		if(target == null) return false; // nothing to do here
 		// get length traveled (army moves at speed of slowest ship)
 		double len = speedMod[1];
 		if(ships[0] > 0) len = speedMod[0];
@@ -91,12 +91,14 @@ public class Army {
 			// arrived, add to destination
 			target.receiveArmy(this);
 			target = null;
+			return true;
 		} else {
 			// not arrived, move
 			Point p = target.position.clone();
 			p.subtract(position);
 			p.multiply(len / p.length());
 			position.add(p);
+			return false;
 		}
 	}
 	
@@ -128,6 +130,10 @@ public class Army {
 			if(s > 0) b = true;
 		}
 		return b ? a : null;
+	}
+	
+	public boolean isEmpty(){
+		return ships[0] <= 0 && ships[1] <= 0 && ships[2] <= 0 && ships[3] <= 0;
 	}
 	
 }
