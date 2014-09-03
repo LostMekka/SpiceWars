@@ -4,6 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.badlogic.gdx.Game;
+import com.lostmekkasoft.spicewars.GameplayScreen;
 import com.lostmekkasoft.spicewars.SpiceWars;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -23,6 +25,7 @@ public class Planet {
 
 	public int radius;
 	public Team team;
+	public String name;
 	public int maxNormalSlots;
 	public int maxMineSlots;
 	public LinkedList<Building> normalSlots;
@@ -171,5 +174,15 @@ public class Planet {
 				normalSlots.remove(b);
 			}
 		}
+	}
+	
+	public void onDelete( ){
+			//destroy planet
+			for(Building b : mineSlots) destroyBuilding(b); 
+			for(Building b : normalSlots){
+				if(b.type == Building.BuildingType.generator || b.type == Building.BuildingType.spiceMine){
+					destroyBuilding(b);
+				}
+			}
 	}
 }
