@@ -15,11 +15,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.lostmekkasoft.spicewars.data.Army;
+import com.lostmekkasoft.spicewars.data.Building;
 import com.lostmekkasoft.spicewars.data.Planet;
 import com.lostmekkasoft.spicewars.data.Point;
 import com.lostmekkasoft.spicewars.data.Team;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * SpiceWars - com.lostmekkasoft.spicewars
@@ -33,8 +35,9 @@ public final class GameplayScreen implements Screen {
 	float timeForInput = 0;
 
 	public int numPlanets;
-	public ArrayList<Planet> planets = new ArrayList<>();
-	public ArrayList<Army> armies = new ArrayList<>();
+	public LinkedList<Planet> planets = new LinkedList<>();
+	public LinkedList<Army> armies = new LinkedList<>();
+	public LinkedList<Team> teams = new LinkedList<>();
 
 	public Team teamPlayer;
 	public Team teamAI;
@@ -108,7 +111,27 @@ public final class GameplayScreen implements Screen {
 	}
 
 	public void update(float delta) {
-
+		double time = delta;
+		for(Team t : teams){
+			double spiceUsage = 0, energyUsage = 0;
+			for(Planet p : planets){
+				int w = p.getWorkingWorkers(t);
+				int f = p.getWorkingFactories(t);
+				spiceUsage += f * Building.FACTORY_SPICE_USAGE * time;
+				spiceUsage += w * Building.WORKER_SPICE_USAGE * time;
+				energyUsage += f * Building.FACTORY_ENERGY_USAGE * time;
+				energyUsage += w * Building.WORKER_ENERGY_USAGE * time;
+			}
+			double spiceDelta = t.spiceIncome * time - spiceUsage;
+			double energyDelta = t.energyIncome * time - energyUsage;
+			double effSp = Math.min(1, (t.spiceStored + t.spiceIncome * time) / spiceUsage);
+			double effEn = Math.min(1, (t.energyStored + t.energyIncome * time) / energyUsage);
+			double efficiency = Math.min(effSp, effEn);
+			t.lastEfficiency = efficiency;
+			for(Planet p : planets) p.buildBuildings(t, efficiency, time);
+			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
+			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
+		}
 	}
 
 	@Override
