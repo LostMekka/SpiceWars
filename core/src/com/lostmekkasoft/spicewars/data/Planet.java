@@ -23,6 +23,7 @@ public class Planet {
 	public LinkedList<Building> mineSlots;
 	public double hp = 100;
 	public Point position;
+	public Army defendingArmy = null, attackingArmy = null;
 	private boolean hasHQ = false;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position) {
