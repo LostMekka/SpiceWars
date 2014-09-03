@@ -64,11 +64,11 @@ public class Planet {
 	}
 	
 	public int getWorkingWorkers(){
-		
+		return 1;
 	}
 	
 	public int getWorkingFactories(){
-		
+		return 1;
 	}
 	
 	public void buildBuildings(double efficiency, double time){
