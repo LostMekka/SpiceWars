@@ -11,7 +11,7 @@ package com.lostmekkasoft.spicewars.data;
 public class Building {
 	
 	public static enum BuildingType{ hq, 
-		fabberFactory, fighterFactory, frigateFactory, destroyerFactory,
+		workerFactory, fighterFactory, frigateFactory, destroyerFactory,
 		spiceMine, spiceSilo, generator, battery, 
 		artillery, 
 	}
@@ -30,11 +30,13 @@ public class Building {
 
 	public BuildingType type;
 	public double hp = 100;
-	public double buildState = 0;
+	public double buildProgress = 0, factoryProgress = 0;
 	public boolean isActive = false;
+	public Team team;
 
-	public Building(BuildingType type) {
+	public Building(BuildingType type, Team team) {
 		this.type = type;
+		this.team = team;
 	}
 	
 	public void update(double time){
