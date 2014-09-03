@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * @author LostMekka
  */
 
-public class GameplayScreen implements Screen {
+public final class GameplayScreen implements Screen {
 
 	SpiceWars game;
 
@@ -58,7 +58,7 @@ public class GameplayScreen implements Screen {
 		int firstNormalSlots = 5;
 		int firstMineSlots = 5;
 
-		if (planets.size() == 0) {
+		if (planets.isEmpty()) {
 			// Place the first planet in the lower left corner.
 			// It's always the same for a new game.
 			Point point = new Point(100, 100);
