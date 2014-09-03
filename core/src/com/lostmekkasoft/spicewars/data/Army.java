@@ -77,4 +77,28 @@ public class Army {
 		}
 	}
 	
+	public boolean add(Army a){
+		if(team != a.team) return false;
+		for(int i=0; i<4; i++){
+			double s1 = Math.ceil(ships[i]);
+			double s2 = Math.ceil(a.ships[i]);
+			ships[i] += a.ships[i];
+			if(Math.ceil(ships[i]) < s1+s2) ships[i] = Math.ceil(ships[i])+0.01;
+			a.ships[i] = 0;
+		}
+		return true;
+	}
+	
+	public Army split(double[] ratio){
+		Army a = new Army(team);
+		boolean b = false;
+		for(int i=0; i<4; i++){
+			double s = Math.ceil(ships[i] * ratio[i]);
+			a.ships[i] = s;
+			ships[i] -= s;
+			if(s > 0) b = true;
+		}
+		return b ? a : null;
+	}
+	
 }
