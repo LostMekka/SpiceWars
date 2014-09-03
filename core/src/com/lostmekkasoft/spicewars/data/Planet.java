@@ -32,6 +32,7 @@ public class Planet extends Location {
 	public double hp = MAX_HP;
 	private boolean hasHQ = false;
 	public PlanetType type;
+	public Planet superWeaponTarget = null;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
 		super(position, radius, parentScreen);

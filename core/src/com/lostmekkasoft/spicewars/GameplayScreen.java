@@ -133,6 +133,14 @@ public final class GameplayScreen implements Screen {
 			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
 		}
 	}
+	
+	public void addArtilleryShot(Planet source, Planet target){
+		
+	}
+
+	public void addDeathLaserShot(Planet source, Planet target){
+		
+	}
 
 	@Override
 	public void render(float delta) {
