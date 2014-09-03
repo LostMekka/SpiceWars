@@ -61,9 +61,18 @@ public class Planet {
 		hp = Math.min(hp + HP_REGENERATION*time, MAX_HP);
 		// update buildings
 		for(Building b : normalSlots) b.update(time);
-		for(Building b : mineSlots) b.update(time);
-		// TODO: let workers build buildings,
-		//       add resources from finished buildings to team resources
+	}
+	
+	public int getWorkingWorkers(){
+		
+	}
+	
+	public int getWorkingFactories(){
+		
+	}
+	
+	public void buildBuildings(double efficiency, double time){
+		
 	}
 	
 	public boolean canAddBuilding(Building.BuildingType t) {
