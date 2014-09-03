@@ -45,7 +45,7 @@ public class Planet {
 		if(type == PlanetType.station)this.maxMineSlots = 0;
 	}
 
-	public void update(float time){
+	public void update(double time){
 		// let armies fight/bombard
 		if(armies.size() >= 2){
 			// there are more than 1 army on this planet. let them fight!
@@ -59,7 +59,11 @@ public class Planet {
 		}
 		// regenerate planet hp
 		hp = Math.min(hp + HP_REGENERATION*time, MAX_HP);
-		// TODO: update buildings
+		// update buildings
+		for(Building b : normalSlots) b.update(time);
+		for(Building b : mineSlots) b.update(time);
+		// TODO: let workers build buildings,
+		//       add resources from finished buildings to team resources
 	}
 	
 	public boolean canAddBuilding(Building.BuildingType t) {

@@ -33,6 +33,10 @@ public class Building {
 		this.type = type;
 	}
 	
+	public void update(double time){
+		
+	}
+	
 	public boolean isMine(){
 		return type == BuildingType.spiceMine;
 	}
