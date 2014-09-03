@@ -23,10 +23,10 @@ public class Building {
 	public static final double FACTORY_ENERGY_USAGE = 6;
 	public static final double WORKER_SPICE_USAGE = 1;
 	public static final double WORKER_ENERGY_USAGE = 8;
-	public static final double SILO_STORAGE = 100;
-	public static final double BATTERY_STORAGE = 500;
-	public static final double DEFAULT_SPICE_STORAGE = 50;
-	public static final double DEFAULT_ENERGY_STORAGE = 200;
+	public static final int SILO_STORAGE = 100;
+	public static final int BATTERY_STORAGE = 500;
+	public static final int DEFAULT_SPICE_STORAGE = 50;
+	public static final int DEFAULT_ENERGY_STORAGE = 200;
 
 	public BuildingType type;
 	public double hp = 100;

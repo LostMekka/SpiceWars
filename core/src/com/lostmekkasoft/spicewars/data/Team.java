@@ -13,13 +13,13 @@ import com.badlogic.gdx.graphics.Color;
 public class Team {
 	public int id;
 	public Color color;
-	public int maxStorage;
-	public int maxEnergy;
-	public float spiceStored = 0;
-	public float spiceIncome = 0;
-	public float energyStored = 0;
-	public float energyIncome = 0;
-	
+	public int maxSpiceStorage = Building.DEFAULT_SPICE_STORAGE;
+	public int maxEnergyStorage = Building.DEFAULT_ENERGY_STORAGE;
+	public double spiceStored = 0;
+	public double spiceIncome = 0;
+	public double energyStored = 0;
+	public double energyIncome = 0;
+	public double lastEfficiency = 1;
 	
 	public Team(int id, Color color) {
 		this.id = id;
