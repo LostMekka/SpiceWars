@@ -59,11 +59,7 @@ public class Location {
 	
 	public boolean sendArmy(Team team, double[] ratios, Point targetPoint){
 		Location l = new Location(position, parent);
-		if(sendArmy(team, ratios, l)){
-			parent.addLocation(l);
-			return true;
-		}
-		return false;
+		return sendArmy(team, ratios, l);
 	}
 	
 	public boolean sendArmy(Team team, double[] ratios, Location target){

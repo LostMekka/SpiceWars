@@ -167,6 +167,14 @@ public final class GameplayScreen implements Screen {
 				if(l != null) addLocation(l);
 			}
 		}
+		// remove orphan locations
+		ListIterator<Location> locIter = locations.listIterator();
+		while(locIter.hasNext()){
+			Location l = locIter.next();
+			if(l.hasArmies()) continue;
+			for(Army a : armies) if(a.target == l) continue;
+			locIter.remove();
+		}
 	}
 	
 	public Location getCollidingLocation(Location l){
@@ -186,6 +194,12 @@ public final class GameplayScreen implements Screen {
 
 	public void addMovingArmy(Army a){
 		armies.add(a);
+		Location l = getCollidingLocation(a.target);
+		if(l != null && l instanceof Planet){
+			a.target = l;
+		} else {
+			if(!(a.target instanceof Planet)) addLocation(a.target);
+		}
 	}
 
 	public void addPlanet(Planet p){
