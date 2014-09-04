@@ -20,6 +20,7 @@ public class Planet extends Location {
 		normal, station
 	}
 	
+	public static double SUPER_WEAPON_RANGE = 400;
 	public static double MAX_PLANET_HP = 4000;
 	public static double MAX_STATION_HP = 2000;
 	public static double HP_REGENERATION = 0.5;
