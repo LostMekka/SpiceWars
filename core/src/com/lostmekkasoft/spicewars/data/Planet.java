@@ -158,11 +158,6 @@ public class Planet extends Location {
 		}
 	}
 	
-	private Army getArmy(Team t){
-		for(Army a : armies) if(a.team == t) return a;
-		return null;
-	}
-	
 	private void changeTeam(Team t){
 		// reset team of planet and all buildings
 		team = t;
