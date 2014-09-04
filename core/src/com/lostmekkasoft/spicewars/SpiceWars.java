@@ -44,6 +44,12 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamPlayer;
 	public Team teamAI;
 
+	TextureAtlas planetAtlas;
+	// Get and assign all three possible planet textures
+	TextureRegion planetPlayerTexture;
+	TextureRegion planetAITexture;
+	TextureRegion planetNeutralTexture;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -63,45 +69,16 @@ public class SpiceWars implements ApplicationListener {
 		teamPlayer = new Team(1, Color.GREEN);
 		teamAI = new Team(2, Color.RED);
 
-		TextureAtlas planetAtlas = new TextureAtlas("sprites/planets.txt");
-
 		// Set up stage and prepare for inputs
 		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		Gdx.input.setInputProcessor(stage);
 
-		// Get and assign all three possible planet textures
-		TextureRegion planetPlayerTexture  = planetAtlas.findRegion("green");
-		TextureRegion planetAITexture      = planetAtlas.findRegion("red");
-		TextureRegion planetNeutralTexture = planetAtlas.findRegion("grey");
+		planetAtlas = new TextureAtlas("sprites/planets.txt");
+		planetPlayerTexture  = planetAtlas.findRegion("green");
+		planetAITexture      = planetAtlas.findRegion("red");
+		planetNeutralTexture = planetAtlas.findRegion("grey");
 
 		newLevel();
-
-		// Cycle through planets, assign teams, create actors, add them to the stage
-		for (Planet planet : planets) {
-			// The texture for a planet has its 0,0 coordinates in the lower left corner.
-			// The planet position is however the middlepoint of a planet, that's why this has to be transformed.
-			float posX = (float)planet.position.x - planet.radius;
-			float posY = (float)planet.position.y - planet.radius;
-
-			SWActor planetActor = null;
-
-			switch (planet.team.id) {
-				case -1:
-					planetActor = new SWActor(planetNeutralTexture, posX, posY);
-					break;
-				case 1:
-					planetActor = new SWActor(planetPlayerTexture, posX, posY);
-					break;
-				case 2:
-					planetActor = new SWActor(planetAITexture, posX, posY);
-					break;
-			}
-
-			if (planetActor != null) {
-				stage.addActor(planetActor);
-				planetActor.setTouchable(Touchable.enabled);
-			}
-		}
 	}
 
 	public void update(float delta) {
@@ -140,12 +117,40 @@ public class SpiceWars implements ApplicationListener {
 
 	public void newLevel() {
 		planets.clear();
+		stage.clear();
 		numPlanets = SpiceWars.random.nextInt(10) + 10;
 		int counter = 0;
 		while (planets.size() < numPlanets) {
 			placePlanet();
 			if (counter > 10000) break;
 			counter++;
+		}
+
+		// Cycle through planets, assign teams, create actors, add them to the stage
+		for (Planet planet : planets) {
+			// The texture for a planet has its 0,0 coordinates in the lower left corner.
+			// The planet position is however the middlepoint of a planet, that's why this has to be transformed.
+			float posX = (float)planet.position.x - planet.radius;
+			float posY = (float)planet.position.y - planet.radius;
+
+			SWActor planetActor = null;
+
+			switch (planet.team.id) {
+				case -1:
+					planetActor = new SWActor(planetNeutralTexture, posX, posY);
+					break;
+				case 1:
+					planetActor = new SWActor(planetPlayerTexture, posX, posY);
+					break;
+				case 2:
+					planetActor = new SWActor(planetAITexture, posX, posY);
+					break;
+			}
+
+			if (planetActor != null) {
+				stage.addActor(planetActor);
+				planetActor.setTouchable(Touchable.enabled);
+			}
 		}
 	}
 
