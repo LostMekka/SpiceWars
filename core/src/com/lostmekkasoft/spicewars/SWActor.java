@@ -15,7 +15,10 @@ public class SWActor extends Actor {
 	float actorX;
 	float actorY;
 
-	public SWActor(TextureRegion texture, float actorX, float actorY) {
+	public Object actee;
+
+	public SWActor(Object actee, TextureRegion texture, float actorX, float actorY) {
+		this.actee = actee;
 		this.texture = texture.getTexture();
 		this.actorX = actorX;
 		this.actorY = actorY;

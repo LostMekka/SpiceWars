@@ -4,6 +4,7 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.lostmekkasoft.spicewars.SWActor;
 import com.lostmekkasoft.spicewars.SpiceWars;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -13,6 +14,8 @@ import java.util.ListIterator;
  * @author LostMekka
  */
 public class Planet {
+
+	public SWActor actor;
 
 	public static enum PlanetType {
 		normal, station

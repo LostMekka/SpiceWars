@@ -45,7 +45,6 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamAI;
 
 	TextureAtlas planetAtlas;
-	// Get and assign all three possible planet textures
 	TextureRegion planetPlayerTexture;
 	TextureRegion planetAITexture;
 	TextureRegion planetNeutralTexture;
@@ -73,6 +72,7 @@ public class SpiceWars implements ApplicationListener {
 		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		Gdx.input.setInputProcessor(stage);
 
+		// Get and assign all three possible planet textures
 		planetAtlas = new TextureAtlas("sprites/planets.txt");
 		planetPlayerTexture  = planetAtlas.findRegion("green");
 		planetAITexture      = planetAtlas.findRegion("red");
@@ -137,15 +137,18 @@ public class SpiceWars implements ApplicationListener {
 
 			switch (planet.team.id) {
 				case -1:
-					planetActor = new SWActor(planetNeutralTexture, posX, posY);
+					planetActor = new SWActor(planet, planetNeutralTexture, posX, posY);
 					break;
 				case 1:
-					planetActor = new SWActor(planetPlayerTexture, posX, posY);
+					planetActor = new SWActor(planet, planetPlayerTexture, posX, posY);
 					break;
 				case 2:
-					planetActor = new SWActor(planetAITexture, posX, posY);
+					planetActor = new SWActor(planet, planetAITexture, posX, posY);
 					break;
 			}
+
+			// Don't know if having this is necessary or not, but it might be helpful
+			planet.actor = planetActor;
 
 			if (planetActor != null) {
 				stage.addActor(planetActor);
@@ -220,5 +223,6 @@ public class SpiceWars implements ApplicationListener {
 	public void dispose() {
 		batch.dispose();
 		fontGenerator.dispose();
+		planetAtlas.dispose();
 	}
 }
