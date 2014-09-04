@@ -4,6 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
+import com.lostmekkasoft.spicewars.actors.ArmyActor;
+
 import java.util.LinkedList;
 
 /**
@@ -11,6 +13,8 @@ import java.util.LinkedList;
  * @author LostMekka
  */
 public class Army {
+
+	public ArmyActor actor;
 	
 	// order in arrays: worker, fighter, frigate, destroyer
 	public static final double speedBase = 50;
