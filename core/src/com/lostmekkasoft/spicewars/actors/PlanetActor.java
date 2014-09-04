@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.lostmekkasoft.spicewars.SpiceWars;
 import com.lostmekkasoft.spicewars.data.Planet;
 
 
@@ -16,9 +17,10 @@ import com.lostmekkasoft.spicewars.data.Planet;
 public class PlanetActor extends Actor {
 
 	TextureRegion textureRegion;
-	float actorX;
-	float actorY;
-	float textureFactor = 2f;
+	public float actorX;
+	public float actorY;
+
+	public float planetSize;
 
 	public Planet planet;
 	public boolean selected = false;
@@ -26,8 +28,10 @@ public class PlanetActor extends Actor {
 	public PlanetActor(Planet planet, TextureRegion textureRegion, float actorX, float actorY) {
 		this.planet = planet;
 		this.textureRegion = textureRegion;
-		this.actorX = actorX;
-		this.actorY = actorY;
+		this.actorX = actorX - planet.radius / SpiceWars.planetTextureFactor;
+		this.actorY = actorY - planet.radius / SpiceWars.planetTextureFactor;
+
+		planetSize = (planet.radius * 2) / SpiceWars.planetTextureFactor;
 
 		setBounds(actorX, actorY, planet.radius*2, planet.radius*2);
 		addListener(new InputListener() {
@@ -41,7 +45,7 @@ public class PlanetActor extends Actor {
 	@Override
 	public void draw(Batch batch, float alpha) {
 		batch.setColor(planet.team.color);
-		batch.draw(textureRegion, actorX, actorY, planet.radius * textureFactor, planet.radius * textureFactor);
+		batch.draw(textureRegion, actorX, actorY, planetSize, planetSize);
 	}
 
 	@Override

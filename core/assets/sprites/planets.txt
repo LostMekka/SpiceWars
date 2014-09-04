@@ -5,14 +5,14 @@ repeat: none
 planet
   rotate: false
   xy: 2, 2
-  size: 494, 496
+  size: 512, 512
   orig: 512, 512
-  offset: 0, 16
+  offset: 0, 0
   index: -1
 planetSelection
   rotate: false
-  xy: 2, 500
-  size: 398, 398
+  xy: 516, 2
+  size: 512, 512
   orig: 512, 512
-  offset: 56, 55
+  offset: 0, 0
   index: -1

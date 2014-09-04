@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -17,7 +18,6 @@ import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.actors.SelectionActor;
 import com.lostmekkasoft.spicewars.data.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
@@ -25,6 +25,7 @@ import java.util.Random;
 public class SpiceWars implements ApplicationListener {
 
 	SpriteBatch batch;
+	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
 	BitmapFont font14;
 	BitmapFont font48;
@@ -32,14 +33,15 @@ public class SpiceWars implements ApplicationListener {
 
 	int WIDTH;
 	int HEIGHT;
+	public static float planetTextureFactor = 0.595703125f;
 
 	private Stage stage;
 
 	float timeForInput = 0;
 
 	public int numPlanets;
-	public ArrayList<Planet> planets = new ArrayList<>();
-	public ArrayList<Army> armies = new ArrayList<>();
+	public LinkedList<Planet> planets = new LinkedList<>();
+	public LinkedList<Army> armies = new LinkedList<>();
 	public LinkedList<Team> teams = new LinkedList<>();
 	public LinkedList<Projectile> projectiles = new LinkedList<>();
 	public LinkedList<Location> locations = new LinkedList<>();
@@ -57,6 +59,7 @@ public class SpiceWars implements ApplicationListener {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		shapes = new ShapeRenderer();
 
 		FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
@@ -226,10 +229,22 @@ public class SpiceWars implements ApplicationListener {
 		batch.end();
 
 		//DEBUG: Visualize certain points on the map
-		batch.begin();
-		drawCenteredString14("X", Color.MAGENTA, 100, 100); // middle point of the player's starting planet
-		drawCenteredString14("X", Color.CYAN, 120, 120);    // edge point of the player's starting planet
-		batch.end();
+//		batch.begin();
+//		drawCenteredString14("X", Color.MAGENTA, 100, 100); // middle point of the player's starting planet
+//		drawCenteredString14("X", Color.CYAN, 120, 120);    // edge point of the player's starting planet
+//		batch.end();
+
+		//DEBUG: Draw rectamgles to visualize the planet bounds
+//		float x = planets.getLast().actor.actorX;
+//		float y = planets.getLast().actor.actorY;
+//		float s = planets.getLast().actor.planetSize;
+//		shapes.begin(ShapeRenderer.ShapeType.Line);
+//		shapes.setColor(Color.WHITE);
+//		shapes.box(x, y, 0, s, s, 0);
+//		shapes.line(x, y, x+s, y+s);
+//		shapes.line(x+s, y, x, y+s);
+//		shapes.circle((float)planets.getLast().position.x, (float)planets.getLast().position.y, planets.getLast().radius);
+//		shapes.end();
 	}
 
 	public void newLevel() {
@@ -247,34 +262,20 @@ public class SpiceWars implements ApplicationListener {
 		for (Planet planet : planets) {
 			// The texture for a planet has its 0,0 coordinates in the lower left corner.
 			// The planet position is however the middlepoint of a planet, that's why this has to be transformed.
-			float posX = (float)planet.position.x - planet.radius;
-			float posY = (float)planet.position.y - planet.radius;
+			float posX = (float)planet.position.x;
+			float posY = (float)planet.position.y;
 
-			PlanetActor planetActor = null;
-
-			switch (planet.team.id) {
-				case -1:
-					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
-					break;
-				case 1:
-					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
-					break;
-				case 2:
-					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
-					break;
-			}
+			PlanetActor planetActor = new PlanetActor(planet, planetTexture, posX, posY);
 
 			// Don't know if having this is necessary or not, but it might be helpful
 			planet.actor = planetActor;
 
-			if (planetActor != null) {
-				stage.addActor(planetActor);
-				planetActor.setTouchable(Touchable.enabled);
-			}
+			stage.addActor(planetActor);
+			planetActor.setTouchable(Touchable.enabled);
 		}
 
 		// Set the players planet to be select per default
-		selectionActor = new SelectionActor(planetSelection, planets.get(0));
+		selectionActor = new SelectionActor(planetSelection, planets.getLast());
 		stage.addActor(selectionActor);
 	}
 
