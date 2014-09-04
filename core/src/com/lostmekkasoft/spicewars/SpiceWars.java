@@ -309,6 +309,10 @@ public class SpiceWars implements ApplicationListener {
 
 	public void newLevel() {
 		planets.clear();
+		locations.clear();
+		armies.clear();
+		projectiles.clear();
+		teams.clear();
 		stage.clear();
 		numPlanets = SpiceWars.random.nextInt(10) + 10;
 		int counter = 0;
