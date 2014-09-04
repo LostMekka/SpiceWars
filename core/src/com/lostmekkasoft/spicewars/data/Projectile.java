@@ -17,10 +17,13 @@ public class Projectile {
 	public Point position;
 	public Planet target;
 	public ProjectileType type;
+	public Team team;
 
-	public Projectile(Planet source, Planet target, ProjectileType type) {
+	public Projectile(Planet source, Planet target, ProjectileType type, Team team) {
 		this.target = target;
 		this.type = type;
+		this.position = source.position.clone();
+		this.team = team;
 	}
 	
 	public double getSpeed(){
@@ -49,21 +52,13 @@ public class Projectile {
 	
 	public boolean update(double time){
 		double len = getSpeed() * time;
-		double d1 = len + target.radius;
-		double dd2 = position.squaredDistanceTo(target.position);
-		if(dd2 <= d1*d1){
+		if(position.moveTo(target.position, len, target.radius)){
 			// arrived, deal damage to destination
 			target.hp -= getPlanetDamage();
 			target.damageRandomBuilding(getBuildingDamage(), 0);
 			return true;
-		} else {
-			// not arrived, move
-			Point p = target.position.clone();
-			p.subtract(position);
-			p.multiply(len / p.length());
-			position.add(p);
-			return false;
 		}
+		return false;
 	}
 	
 }

@@ -63,4 +63,27 @@ public class Point {
 		y *= value;
 	}
 	
+	public void set(Point p){
+		x = p.x;
+		y = p.y;
+	}
+	
+	public boolean moveTo(Point p, double length, double targetRadius){
+		double l = length + targetRadius;
+		if(squaredDistanceTo(p) <= l*l){
+			double d = distanceTo(p);
+			Point p2 = p.clone();
+			p2.subtract(this);
+			p2.multiply((d-targetRadius) / d);
+			add(p2);
+			return true;
+		} else {
+			Point p2 = p.clone();
+			p2.subtract(this);
+			p2.multiply(length / p2.length());
+			add(p2);
+			return false;
+		}
+	}
+	
 }

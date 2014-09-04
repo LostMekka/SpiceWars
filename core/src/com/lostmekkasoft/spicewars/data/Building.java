@@ -81,7 +81,7 @@ public final class Building {
 		if(type == BuildingType.artillery && isFinishedBuilding){
 			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
 			if(progress >= 1 && target != null){
-				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.artilleryShell);
+				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.artilleryShell, team);
 				getGame().addProjectile(p);
 				progress = 0;
 			}
@@ -89,7 +89,7 @@ public final class Building {
 		if(type == BuildingType.deathlaser && isFinishedBuilding){
 			progress = Math.min(1, progress + time/DEATHLASER_SHOTDELAY);
 			if(progress >= 1 && target != null){
-				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.deathLaser);
+				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.deathLaser, team);
 				getGame().addProjectile(p);
 				progress = 0;
 			}

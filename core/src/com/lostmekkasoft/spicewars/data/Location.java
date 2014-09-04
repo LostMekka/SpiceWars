@@ -72,6 +72,7 @@ public class Location {
 		if(a == null) return false;
 		a.target = target;
 		a.position = position.clone();
+		a.position.moveTo(target.position, radius, target.radius);
 		game.addMovingArmy(a);
 		return true;
 	}

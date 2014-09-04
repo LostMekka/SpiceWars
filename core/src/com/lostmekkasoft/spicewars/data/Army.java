@@ -89,21 +89,13 @@ public class Army {
 		if(ships[2] > 0) len = speedMod[2];
 		if(ships[3] > 0) len = speedMod[3];
 		len *= speedBase * time;
-		double d1 = len + target.radius;
-		double dd2 = position.squaredDistanceTo(target.position);
-		if(dd2 <= d1*d1){
+		if(position.moveTo(target.position, len, target.radius)){
 			// arrived, add to destination
 			target.receiveArmy(this);
 			target = null;
 			return true;
-		} else {
-			// not arrived, move
-			Point p = target.position.clone();
-			p.subtract(position);
-			p.multiply(len / p.length());
-			position.add(p);
-			return false;
 		}
+		return false;
 	}
 	
 	public void bombardPlanet(Planet p, double time){
