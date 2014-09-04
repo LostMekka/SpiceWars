@@ -9,7 +9,7 @@ import com.lostmekkasoft.spicewars.data.Planet;
  * @author Kilian Koeltzsch
  */
 
-public class PlanetActor extends SWActor {
+public class PlanetActor extends GenericActor {
 
 	public PlanetActor(Planet actee, TextureRegion textureRegion, float actorX, float actorY) {
 		super(actee, textureRegion, actorX, actorY);
