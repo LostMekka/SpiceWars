@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
+import com.lostmekkasoft.spicewars.actors.SelectionActor;
 import com.lostmekkasoft.spicewars.data.*;
 
 import java.util.ArrayList;
@@ -47,8 +48,11 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamPlayer;
 	public Team teamAI;
 
+	public SelectionActor selectionActor;
+
 	TextureAtlas textureAtlas;
 	TextureRegion planetTexture;
+	TextureRegion planetSelection;
 
 	@Override
 	public void create () {
@@ -75,7 +79,8 @@ public class SpiceWars implements ApplicationListener {
 
 		// Get and assign all three possible planet textures
 		textureAtlas = new TextureAtlas("sprites/planets.txt");
-		planetTexture = textureAtlas.findRegion("grey");
+		planetTexture = textureAtlas.findRegion("planet");
+		planetSelection = textureAtlas.findRegion("planetSelection");
 
 		newLevel();
 	}
@@ -267,6 +272,10 @@ public class SpiceWars implements ApplicationListener {
 				planetActor.setTouchable(Touchable.enabled);
 			}
 		}
+
+		// Set the players planet to be select per default
+		selectionActor = new SelectionActor(planetSelection, planets.get(0));
+		stage.addActor(selectionActor);
 	}
 
 	private void placePlanet() {

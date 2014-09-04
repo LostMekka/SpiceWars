@@ -20,7 +20,8 @@ public class SelectionActor extends Actor {
 	boolean visible = false;
 	Planet selectedPlanet;
 
-	public SelectionActor(Planet selectedPlanet) {
+	public SelectionActor(TextureRegion textureRegion, Planet selectedPlanet) {
+		this.textureRegion = textureRegion;
 		this.selectedPlanet = selectedPlanet;
 	}
 
