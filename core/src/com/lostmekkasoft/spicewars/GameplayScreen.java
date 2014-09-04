@@ -218,6 +218,15 @@ public final class GameplayScreen implements Screen {
 			}
 		}
 	}
+	
+	public Team getWinningTeam(){
+		LinkedList<Team> l = new LinkedList<>();
+		for(Planet p : planets){
+			if(!p.team.isNeutral() && !l.contains(p.team)) l.add(p.team);
+		}
+		if(l.size() == 1) return l.getFirst();
+		return null;
+	}
 
 	@Override
 	public void render(float delta) {
