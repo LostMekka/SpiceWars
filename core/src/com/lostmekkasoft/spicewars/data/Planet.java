@@ -75,7 +75,7 @@ public class Planet extends Location {
 		if(armies.size() == 1){
 			// there is one army here. bombard planet?
 			Army a = armies.getFirst();
-			if(a.team != team) a.bombardPlanet(this, time);
+			if(a.team != team && hasHQ) a.bombardPlanet(this, time);
 		}
 		super.update(time);
 		// regenerate planet hp
