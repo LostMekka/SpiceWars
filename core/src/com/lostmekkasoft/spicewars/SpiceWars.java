@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.data.Army;
 import com.lostmekkasoft.spicewars.data.Planet;
 import com.lostmekkasoft.spicewars.data.Point;
@@ -108,7 +109,7 @@ public class SpiceWars implements ApplicationListener {
 		batch.begin();
 		for (Planet planet : planets) {
 			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			drawCenteredString14(planetSlots, Color.GREEN, (float)planet.position.x, (float)planet.position.y);
+			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
 		}
 		batch.end();
 
