@@ -4,7 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
-import com.lostmekkasoft.spicewars.GameplayScreen;
+import com.lostmekkasoft.spicewars.SpiceWars;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -17,15 +18,15 @@ public class Location {
 	public Point position;
 	public int radius = 20;
 	public LinkedList<Army> armies = new LinkedList<>();
-	private GameplayScreen parent;
+	private SpiceWars game;
 
-	public Location(Point position, GameplayScreen parentScreen) {
+	public Location(Point position, SpiceWars parent) {
 		this.position = position;
-		parent = parentScreen;
+		this.game = parent;
 	}
 
-	public GameplayScreen getParent() {
-		return parent;
+	public SpiceWars getGame() {
+		return game;
 	}
 	
 	public void update(double time){
@@ -58,7 +59,7 @@ public class Location {
 	}
 	
 	public boolean sendArmy(Team team, double[] ratios, Point targetPoint){
-		Location l = new Location(position, parent);
+		Location l = new Location(position, game);
 		return sendArmy(team, ratios, l);
 	}
 	
@@ -67,7 +68,7 @@ public class Location {
 		Army a = split(team, ratios);
 		if(a == null) return false;
 		a.target = target;
-		parent.addMovingArmy(a);
+		game.addMovingArmy(a);
 		return true;
 	}
 	
@@ -95,8 +96,8 @@ public class Location {
 	public boolean buildStation(Team team){
 		Army army = getArmy(team);
 		if(army.ships[0] == 0)return false;
-		Planet planet = new Planet(Planet.STATION_RADIUS, team, Planet.STATION_NORMAL_SLOTS, 0,position, Planet.PlanetType.station, parent);
-		parent.addPlanet(planet);
+		Planet planet = new Planet(Planet.STATION_RADIUS, team, Planet.STATION_NORMAL_SLOTS, 0,position, Planet.PlanetType.station, game);
+		game.addPlanet(planet);
 		return true;
 	}
 }

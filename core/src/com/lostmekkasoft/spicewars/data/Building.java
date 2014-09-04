@@ -4,7 +4,8 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
-import com.lostmekkasoft.spicewars.GameplayScreen;
+
+import com.lostmekkasoft.spicewars.SpiceWars;
 
 /**
  *
@@ -50,8 +51,8 @@ public final class Building {
 		return parent;
 	}
 	
-	public GameplayScreen getParentScreen() {
-		return parent.getParent();
+	public SpiceWars getGame() {
+		return parent.getGame();
 	}
 	
 	public int getMaxHp(){
@@ -81,7 +82,7 @@ public final class Building {
 			progress = Math.min(1, progress + time/ARTILLERY_SHOTDELAY);
 			if(progress >= 1 && target != null){
 				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.artilleryShell);
-				getParentScreen().addProjectile(p);
+				getGame().addProjectile(p);
 				progress = 0;
 			}
 		}
@@ -89,7 +90,7 @@ public final class Building {
 			progress = Math.min(1, progress + time/DEATHLASER_SHOTDELAY);
 			if(progress >= 1 && target != null){
 				Projectile p = new Projectile(parent, target, Projectile.ProjectileType.deathLaser);
-				getParentScreen().addProjectile(p);
+				getGame().addProjectile(p);
 				progress = 0;
 			}
 		}

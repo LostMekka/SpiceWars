@@ -14,12 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
-import com.lostmekkasoft.spicewars.data.Army;
-import com.lostmekkasoft.spicewars.data.Planet;
-import com.lostmekkasoft.spicewars.data.Point;
-import com.lostmekkasoft.spicewars.data.Team;
+import com.lostmekkasoft.spicewars.data.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class SpiceWars implements ApplicationListener {
@@ -40,6 +39,9 @@ public class SpiceWars implements ApplicationListener {
 	public int numPlanets;
 	public ArrayList<Planet> planets = new ArrayList<>();
 	public ArrayList<Army> armies = new ArrayList<>();
+	public LinkedList<Team> teams = new LinkedList<>();
+	public LinkedList<Projectile> projectiles = new LinkedList<>();
+	public LinkedList<Location> locations = new LinkedList<>();
 
 	public static Team teamNeutral;
 	public Team teamPlayer;
@@ -83,7 +85,116 @@ public class SpiceWars implements ApplicationListener {
 	}
 
 	public void update(float delta) {
+		double time = delta;
+		// manage economy: build and repair buildings
+		for(Team t : teams){
+			double spiceUsage = 0, energyUsage = 0;
+			for(Planet p : planets){
+				int w = p.getWorkingWorkers(t);
+				int f = p.getWorkingFactories(t);
+				spiceUsage += f * Building.FACTORY_SPICE_USAGE * time;
+				spiceUsage += w * Building.WORKER_SPICE_USAGE * time;
+				energyUsage += f * Building.FACTORY_ENERGY_USAGE * time;
+				energyUsage += w * Building.WORKER_ENERGY_USAGE * time;
+			}
+			double spiceDelta = t.spiceIncome * time - spiceUsage;
+			double energyDelta = t.energyIncome * time - energyUsage;
+			double effSp = Math.min(1, (t.spiceStored + t.spiceIncome * time) / spiceUsage);
+			double effEn = Math.min(1, (t.energyStored + t.energyIncome * time) / energyUsage);
+			double efficiency = Math.min(effSp, effEn);
+			t.lastEfficiency = efficiency;
+			for(Planet p : planets) p.buildStuff(t, efficiency, time);
+			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
+			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
+		}
+		// move armies and projectiles
+		ListIterator<Army> armyIter = armies.listIterator();
+		while(armyIter.hasNext()){
+			if(armyIter.next().update(time)) armyIter.remove();
+		}
+		ListIterator<Projectile> projectileIter = projectiles.listIterator();
+		while(projectileIter.hasNext()){
+			if(projectileIter.next().update(time)) projectileIter.remove();
+		}
+		// update planets and remove destroyed ones
+		ListIterator<Planet> planetIter = planets.listIterator();
+		while(planetIter.hasNext()){
+			Planet p = planetIter.next();
+			p.update(time);
+			if(p.hp <= 0){
+				planetIter.remove();
+				p.onDestroy();
+				Location l = null;
+				if(p.hasArmies()){
+					l = new Location(p.position, this);
+					p.transferAllArmiesTo(l);
+				}
+				for(Army a : armies) if(a.target == p){
+					if(l == null) l = new Location(p.position, this);
+					a.target = l;
+				}
+				if(l != null) addLocation(l);
+			}
+		}
+		// remove orphan locations
+		ListIterator<Location> locIter = locations.listIterator();
+		while(locIter.hasNext()){
+			Location l = locIter.next();
+			if(l.hasArmies()) continue;
+			for(Army a : armies) if(a.target == l) continue;
+			locIter.remove();
+		}
+	}
 
+	public Location getCollidingLocation(Location l){
+		for(Location l2 : planets) if(l != l2 && l.overlapsWith(l2)) return l2;
+		for(Location l2 : locations) if(l != l2 && l.overlapsWith(l2)) return l2;
+		return null;
+	}
+
+	public void addProjectile(Projectile p){
+		projectiles.add(p);
+	}
+
+	public void addLocation(Location l){
+		if(l instanceof Planet) throw new IllegalArgumentException();
+		locations.add(l);
+	}
+
+	public void addMovingArmy(Army a){
+		armies.add(a);
+		Location l = getCollidingLocation(a.target);
+		if(l != null && l instanceof Planet){
+			a.target = l;
+		} else {
+			if(!(a.target instanceof Planet)) addLocation(a.target);
+		}
+	}
+
+	public void addPlanet(Planet p){
+		planets.add(p);
+		ListIterator<Location> i = locations.listIterator();
+		while(i.hasNext()){
+			Location l = i.next();
+			if(l.overlapsWith(p)){
+				// planet overlaps with a previously set location!
+				// transfer all standing armies of that location to the planet
+				l.transferAllArmiesTo(p);
+				// redirect all armies on route to the location to the planet
+				for(Army a : armies) if(a.target == l) a.target = p;
+				// remove location
+				i.remove();
+			}
+		}
+	}
+
+	public Team getWinningTeam(){
+		LinkedList<Team> l = new LinkedList<>();
+		for(Planet p : planets){
+			if(!p.team.isNeutral() && !l.contains(p.team)) l.add(p.team);
+		}
+		if(l.size() == 1) return l.getFirst();
+		return null;
 	}
 
 	@Override
@@ -171,14 +282,14 @@ public class SpiceWars implements ApplicationListener {
 			// Place the first planet in the lower left corner.
 			// It's always the same for a new game.
 			Point point = new Point(100, 100);
-			Planet planet = new Planet(firstRadius, teamPlayer, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal);
+			Planet planet = new Planet(firstRadius, teamPlayer, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
 			return;
 		} else if (planets.size() == 1) {
 			// Place the second planet in the upper right corner.
 			// This one is identical to the first one and the same for every game.
 			Point point = new Point(WIDTH - 100, HEIGHT - 100);
-			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal);
+			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
 			return;
 		}
@@ -205,7 +316,7 @@ public class SpiceWars implements ApplicationListener {
 			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
 			int maxNormalSlots = randomRadius / 8 + jitter*2;
 			int maxMineSlots = randomRadius / 8 + jitter;
-			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal));
+			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal, this));
 		}
 	}
 

@@ -43,8 +43,8 @@ public class Planet extends Location {
 	private Planet superWeaponTarget = null;
 	public double progress = 1;
 
-	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
-		super(position, parentScreen);
+	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, SpiceWars game) {
+		super(position, game);
 		if(type == PlanetType.station) {
 			maxMineSlots = 0;
 			progress = 0;
@@ -112,7 +112,7 @@ public class Planet extends Location {
 	public int getWorkingFactories(Team t){
 		int i = 0;
 		for(Building b : normalSlots){
-			if(b.isActive == true) i++;
+			if(b.isActive) i++;
 		}
 		return i;
 	}
