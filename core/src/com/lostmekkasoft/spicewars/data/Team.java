@@ -20,10 +20,18 @@ public class Team {
 	public double energyStored = 0;
 	public double energyIncome = 0;
 	public double lastEfficiency = 1;
+	public boolean isComputerControlled;
+
+	public Team(int id, Color color, boolean isComputerControlled) {
+		this.id = id;
+		this.color = color;
+		this.isComputerControlled = isComputerControlled;
+	}
 	
 	public Team(int id, Color color) {
 		this.id = id;
 		this.color = color;
+		isComputerControlled = true;
 	}
 	
 	public boolean isNeutral(){
