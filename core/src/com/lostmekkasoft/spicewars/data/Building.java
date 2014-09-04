@@ -59,7 +59,20 @@ public final class Building {
 	}
 	
 	public int getCost(){
-		return 100;
+		switch(type){
+			case hq: return 150;
+			case workerFactory: 
+			case fighterFactory:
+			case frigateFactory:
+			case destroyerFactory: return 180;
+			case generator: 
+			case spiceSilo:
+			case battery: return 130;
+			case spiceMine: return 60;
+			case artillery: return 500;
+			case deathlaser: return 2000;
+			default: throw new RuntimeException();		
+		}
 	}
 	
 	public void update(double time){
