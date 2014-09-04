@@ -12,6 +12,8 @@ import com.lostmekkasoft.spicewars.data.Army;
 
 public class ArmyActor extends Actor {
 
+	public static final float ICON_SCALE = 0.3f;
+	
 	TextureRegion textureRegion;
 	public float actorX;
 	public float actorY;
@@ -27,8 +29,12 @@ public class ArmyActor extends Actor {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		actorX = (float)army.position.x;
+		actorY = (float)army.position.y;
+		float w = textureRegion.getRegionWidth() * ICON_SCALE;
+		float h = textureRegion.getRegionWidth() * ICON_SCALE;
 		batch.setColor(army.team.color);
-		batch.draw(textureRegion, actorX, actorY, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+		batch.draw(textureRegion, actorX - w/2, actorY - h/2, w, h);
 	}
 
 	@Override
