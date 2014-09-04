@@ -119,11 +119,19 @@ public class SpiceWars implements ApplicationListener {
 		// move armies and projectiles
 		ListIterator<Army> armyIter = armies.listIterator();
 		while(armyIter.hasNext()){
-			if(armyIter.next().update(time)) armyIter.remove();
+			Army a = armyIter.next();
+			if(a.update(time)){
+				armyIter.remove();
+				onArmyArrive(a);
+			}
 		}
 		ListIterator<Projectile> projectileIter = projectiles.listIterator();
 		while(projectileIter.hasNext()){
-			if(projectileIter.next().update(time)) projectileIter.remove();
+			Projectile p = projectileIter.next();
+			if(p.update(time)){
+				projectileIter.remove();
+				onProjectileArrive(p);
+			}
 		}
 		// update planets and remove destroyed ones
 		ListIterator<Planet> planetIter = planets.listIterator();
@@ -225,6 +233,14 @@ public class SpiceWars implements ApplicationListener {
 				i.remove();
 			}
 		}
+	}
+	
+	public void onArmyArrive(Army a){
+		
+	}
+	
+	public void onProjectileArrive(Projectile p){
+		
 	}
 
 	public Team getWinningTeam(){

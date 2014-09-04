@@ -17,7 +17,6 @@ public class Projectile {
 	public Point position;
 	public Planet target;
 	public ProjectileType type;
-	public boolean arrived = false;
 
 	public Projectile(Planet source, Planet target, ProjectileType type) {
 		this.target = target;
@@ -49,13 +48,11 @@ public class Projectile {
 	}
 	
 	public boolean update(double time){
-		if(arrived) return true;
 		double len = getSpeed() * time;
 		double d1 = len + target.radius;
 		double dd2 = position.squaredDistanceTo(target.position);
 		if(dd2 <= d1*d1){
 			// arrived, deal damage to destination
-			arrived = true;
 			target.hp -= getPlanetDamage();
 			target.damageRandomBuilding(getBuildingDamage(), 0);
 			return true;
