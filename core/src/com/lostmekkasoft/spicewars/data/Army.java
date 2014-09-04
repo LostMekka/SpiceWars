@@ -13,6 +13,10 @@ import java.util.LinkedList;
 public class Army {
 	
 	// order in arrays: worker, fighter, frigate, destroyer
+	public static final double speedBase = 50;
+	public static final double[] speedMod = new double[]{
+		1.0, 1.5, 0.9, 0.5
+	};
 	public static final double[] accuracy = new double[]{
 		0.0, 0.8, 0.5, 0.2
 	};
@@ -41,6 +45,8 @@ public class Army {
 	
 	public double[] ships = new double[4];
 	public Team team;
+	public Point position = null;
+	public Location target = null;
 	
 	public static void fight(LinkedList<Army> armies, double time){
 		int s = armies.size();
@@ -71,10 +77,64 @@ public class Army {
 		for(int i=0; i<s; i++) oldArmies[i].ships = newArmies[i];
 	}
 	
+	public boolean update(double time){
+		if(target == null) return false; // nothing to do here
+		// get length traveled (army moves at speed of slowest ship)
+		double len = speedMod[1];
+		if(ships[0] > 0) len = speedMod[0];
+		if(ships[2] > 0) len = speedMod[2];
+		if(ships[3] > 0) len = speedMod[3];
+		len *= speedBase * time;
+		double d1 = len + target.radius;
+		double dd2 = position.squaredDistanceTo(target.position);
+		if(dd2 <= d1*d1){
+			// arrived, add to destination
+			target.receiveArmy(this);
+			target = null;
+			return true;
+		} else {
+			// not arrived, move
+			Point p = target.position.clone();
+			p.subtract(position);
+			p.multiply(len / p.length());
+			position.add(p);
+			return false;
+		}
+	}
+	
 	public void bombardPlanet(Planet p, double time){
 		for(int i=1; i<4; i++) if(!p.team.isNeutral()){
 			p.damageRandomBuilding(Math.ceil(ships[i]) * dps[i] * time, accuracy[i]);
+			p.hp -= dps[i] * (1 - accuracy[i]) * 0.1;
 		}
+	}
+	
+	public boolean add(Army a){
+		if(team != a.team) return false;
+		for(int i=0; i<4; i++){
+			double s1 = Math.ceil(ships[i]);
+			double s2 = Math.ceil(a.ships[i]);
+			ships[i] += a.ships[i];
+			if(Math.ceil(ships[i]) < s1+s2) ships[i] = Math.ceil(ships[i])+0.01;
+			a.ships[i] = 0;
+		}
+		return true;
+	}
+	
+	public Army split(double[] ratio){
+		Army a = new Army(team);
+		boolean b = false;
+		for(int i=0; i<4; i++){
+			double s = Math.ceil(ships[i] * ratio[i]);
+			a.ships[i] = s;
+			ships[i] -= s;
+			if(s > 0) b = true;
+		}
+		return b ? a : null;
+	}
+	
+	public boolean isEmpty(){
+		return ships[0] <= 0 && ships[1] <= 0 && ships[2] <= 0 && ships[3] <= 0;
 	}
 	
 }

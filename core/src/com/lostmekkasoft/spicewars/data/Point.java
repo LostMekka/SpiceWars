@@ -14,7 +14,7 @@ public class Point {
 	public double x = 0;
 	public double y = 0;
 	
-	public Point(int x, int y){
+	public Point(double x, double y){
 		this.x = x;
 		this.y = y;
 	}
@@ -42,4 +42,25 @@ public class Point {
 	public double squareLength(){
 		return this.x*this.x + this.y*this.y;
 	}
+	
+	@Override
+	public Point clone(){
+		return new Point(x, y);
+	}
+	
+	public void add(Point p){
+		x += p.x;
+		y += p.y;
+	}
+	
+	public void subtract(Point p){
+		x -= p.x;
+		y -= p.y;
+	}
+	
+	public void multiply(double value){
+		x *= value;
+		y *= value;
+	}
+	
 }
