@@ -242,7 +242,7 @@ public class SpiceWars implements ApplicationListener {
 	}
 	
 	public void onArmyArrive(Army a){
-		
+		a.actor.remove();
 	}
 	
 	public void onProjectileArrive(Projectile p){

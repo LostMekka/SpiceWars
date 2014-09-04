@@ -68,6 +68,7 @@ public class Location {
 		Army a = split(team, ratios);
 		if(a == null) return false;
 		a.target = target;
+		a.position = position.clone();
 		game.addMovingArmy(a);
 		return true;
 	}
