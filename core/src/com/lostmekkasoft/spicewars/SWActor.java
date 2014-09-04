@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @author Kilian Koeltzsch
  */
 
-public class SWActor extends Actor {
+abstract class SWActor extends Actor {
 	TextureRegion textureRegion;
 	float actorX;
 	float actorY;
@@ -21,7 +21,7 @@ public class SWActor extends Actor {
 		this.textureRegion = textureRegion;
 		this.actorX = actorX;
 		this.actorY = actorY;
-		setBounds(actorX, actorY, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+//		setBounds(actorX, actorY, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 	}
 
 	@Override
@@ -29,8 +29,4 @@ public class SWActor extends Actor {
 		batch.draw(textureRegion, actorX, actorY, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 	}
 
-	@Override
-	public void act (float delta) {
-		// DO STUFF!
-	}
 }

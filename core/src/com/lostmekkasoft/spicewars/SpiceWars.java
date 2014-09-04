@@ -133,17 +133,17 @@ public class SpiceWars implements ApplicationListener {
 			float posX = (float)planet.position.x - planet.radius;
 			float posY = (float)planet.position.y - planet.radius;
 
-			SWActor planetActor = null;
+			PlanetActor planetActor = null;
 
 			switch (planet.team.id) {
 				case -1:
-					planetActor = new SWActor(planet, planetNeutralTexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetNeutralTexture, posX, posY);
 					break;
 				case 1:
-					planetActor = new SWActor(planet, planetPlayerTexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetPlayerTexture, posX, posY);
 					break;
 				case 2:
-					planetActor = new SWActor(planet, planetAITexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetAITexture, posX, posY);
 					break;
 			}
 
