@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.lostmekkasoft.spicewars.actors.ArmyActor;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
@@ -25,18 +26,20 @@ import java.util.Random;
 
 public class SpiceWars implements ApplicationListener {
 
-	SpriteBatch batch;
+	public SpriteBatch batch;
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
-	BitmapFont font14;
-	BitmapFont font48;
+	public BitmapFont font14;
+	public BitmapFont font22;
+	public BitmapFont font48;
 	public static Random random = new Random();
 
-	int WIDTH;
-	int HEIGHT;
+	public int WIDTH;
+	public int HEIGHT;
 	public static float planetTextureFactor = 0.595703125f;
 
-	private Stage stage;
+	public Stage stage;
+	public Sidebar sidebar;
 
 	float timeForInput = 0;
 
@@ -68,10 +71,12 @@ public class SpiceWars implements ApplicationListener {
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
 		fontParameter.size = 14;
 		font14 = fontGenerator.generateFont(fontParameter);
+		fontParameter.size = 22;
+		font22 = fontGenerator.generateFont(fontParameter);
 		fontParameter.size = 48;
 		font48 = fontGenerator.generateFont(fontParameter);
 
-		WIDTH = Gdx.graphics.getWidth();
+		WIDTH = Gdx.graphics.getWidth() - 300;
 		HEIGHT = Gdx.graphics.getHeight();
 
 		// Create Teams
@@ -93,6 +98,9 @@ public class SpiceWars implements ApplicationListener {
 		armyTexture = textureAtlas.findRegion("armies");
 
 		newLevel();
+
+		// Initialize the sidebar and add its UI elements to the stage
+		sidebar = new Sidebar(this);
 	}
 
 	public void update(float delta) {
@@ -267,11 +275,17 @@ public class SpiceWars implements ApplicationListener {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		// let all the actors do their stuff
 		stage.act(Gdx.graphics.getDeltaTime());
 
+		// set the selectionRing to highlight the currently selected planet
 		selectionActor.selectedPlanet = selectedPlanet;
 
+		// draw everything on the stage
 		stage.draw();
+
+		// draw the sidebar
+		sidebar.draw();
 
 		//DEBUG: Press R to generate a new playing field or ESC to exit the game
 		timeForInput += Gdx.graphics.getDeltaTime();
@@ -282,13 +296,22 @@ public class SpiceWars implements ApplicationListener {
 			Gdx.app.exit();
 		}
 
-		//DEBUG: Write the amount of slots on each planet
+		// Write the amount of armies each planet has on a planet
 		batch.begin();
 		for (Planet planet : planets) {
-			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
+			for (Army army : planet.armies) {
+				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y);
+			}
 		}
 		batch.end();
+
+		//DEBUG: Write the amount of slots on each planet
+//		batch.begin();
+//		for (Planet planet : planets) {
+//			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
+//			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
+//		}
+//		batch.end();
 
 		//DEBUG: Visualize certain points on the map
 //		batch.begin();
@@ -296,7 +319,7 @@ public class SpiceWars implements ApplicationListener {
 //		drawCenteredString14("X", Color.CYAN, 120, 120);    // edge point of the player's starting planet
 //		batch.end();
 
-		//DEBUG: Draw rectamgles to visualize the planet bounds
+		//DEBUG: Draw rectangles to visualize the planet bounds
 //		float x = planets.getLast().actor.actorX;
 //		float y = planets.getLast().actor.actorY;
 //		float s = planets.getLast().actor.planetSize;
@@ -410,6 +433,7 @@ public class SpiceWars implements ApplicationListener {
 	public void drawCenteredString14(String string, Color color, float posX, float posY) {
 		font14.setColor(color);
 		font14.draw(batch, string, posX - font14.getBounds(string).width/2, posY + font14.getBounds(string).height/2);
+		font14.setColor(Color.WHITE);
 	}
 
 	@Override
