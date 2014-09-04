@@ -40,6 +40,7 @@ public class PlanetActor extends Actor {
 
 	@Override
 	public void draw(Batch batch, float alpha) {
+		batch.setColor(planet.team.color);
 		batch.draw(textureRegion, actorX, actorY, planet.radius * textureFactor, planet.radius * textureFactor);
 	}
 

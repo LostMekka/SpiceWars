@@ -47,10 +47,8 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamPlayer;
 	public Team teamAI;
 
-	TextureAtlas planetAtlas;
-	TextureRegion planetPlayerTexture;
-	TextureRegion planetAITexture;
-	TextureRegion planetNeutralTexture;
+	TextureAtlas textureAtlas;
+	TextureRegion planetTexture;
 
 	@Override
 	public void create () {
@@ -67,7 +65,7 @@ public class SpiceWars implements ApplicationListener {
 		HEIGHT = Gdx.graphics.getHeight();
 
 		// Create Teams
-		teamNeutral = new Team(-1, Color.DARK_GRAY);
+		teamNeutral = new Team(-1, Color.WHITE);
 		teamPlayer = new Team(1, Color.GREEN);
 		teamAI = new Team(2, Color.RED);
 
@@ -76,10 +74,8 @@ public class SpiceWars implements ApplicationListener {
 		Gdx.input.setInputProcessor(stage);
 
 		// Get and assign all three possible planet textures
-		planetAtlas = new TextureAtlas("sprites/planets.txt");
-		planetPlayerTexture  = planetAtlas.findRegion("green");
-		planetAITexture      = planetAtlas.findRegion("red");
-		planetNeutralTexture = planetAtlas.findRegion("grey");
+		textureAtlas = new TextureAtlas("sprites/planets.txt");
+		planetTexture = textureAtlas.findRegion("grey");
 
 		newLevel();
 	}
@@ -253,13 +249,13 @@ public class SpiceWars implements ApplicationListener {
 
 			switch (planet.team.id) {
 				case -1:
-					planetActor = new PlanetActor(planet, planetNeutralTexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
 					break;
 				case 1:
-					planetActor = new PlanetActor(planet, planetPlayerTexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
 					break;
 				case 2:
-					planetActor = new PlanetActor(planet, planetAITexture, posX, posY);
+					planetActor = new PlanetActor(planet, planetTexture, posX, posY);
 					break;
 			}
 
@@ -346,6 +342,6 @@ public class SpiceWars implements ApplicationListener {
 	public void dispose() {
 		batch.dispose();
 		fontGenerator.dispose();
-		planetAtlas.dispose();
+		textureAtlas.dispose();
 	}
 }
