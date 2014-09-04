@@ -25,8 +25,8 @@ public class SpiceWars implements ApplicationListener {
 
 	SpriteBatch batch;
 	FreeTypeFontGenerator fontGenerator;
-	BitmapFont font;
-	BitmapFont fontLarge;
+	BitmapFont font14;
+	BitmapFont font48;
 	public static Random random = new Random();
 
 	int WIDTH;
@@ -57,9 +57,9 @@ public class SpiceWars implements ApplicationListener {
 		FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
 		fontParameter.size = 14;
-		font = fontGenerator.generateFont(fontParameter);
+		font14 = fontGenerator.generateFont(fontParameter);
 		fontParameter.size = 48;
-		fontLarge = fontGenerator.generateFont(fontParameter);
+		font48 = fontGenerator.generateFont(fontParameter);
 
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
@@ -106,11 +106,11 @@ public class SpiceWars implements ApplicationListener {
 
 		//DEBUG: Write the amount of slots on each planet
 		batch.begin();
-		font.setColor(Color.GREEN);
-		font.setScale(1f);
+		font14.setColor(Color.GREEN);
+		font14.setScale(1f);
 		for (Planet planet : planets) {
 			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			font.draw(batch, planetSlots, (float)planet.position.x - font.getBounds(planetSlots).width, (float)planet.position.y+5);
+			font14.draw(batch, planetSlots, (float)planet.position.x - font14.getBounds(planetSlots).width, (float)planet.position.y+5);
 		}
 		batch.end();
 	}
