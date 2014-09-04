@@ -22,6 +22,8 @@ public class Planet extends Location {
 	
 	public static double MAX_HP = 1000;
 	public static double HP_REGENERATION = 0.5;
+	public static double STATION_COST = 5000;
+	public static int MAX_STATION_WORKER = 20;
 
 	public Team team;
 	public String name;
@@ -33,10 +35,14 @@ public class Planet extends Location {
 	private boolean hasHQ = false;
 	public PlanetType type;
 	private Planet superWeaponTarget = null;
+	public double progress = 1;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
 		super(position, parentScreen);
-		if(type == PlanetType.station) maxMineSlots = 0;
+		if(type == PlanetType.station) {
+			maxMineSlots = 0;
+			progress = 0;
+		}
 		this.radius = radius;
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
