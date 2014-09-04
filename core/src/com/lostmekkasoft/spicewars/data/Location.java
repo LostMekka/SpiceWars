@@ -55,7 +55,10 @@ public class Location {
 			a = a2;
 			break;
 		}
-		return a == null ? null : a.split(ratios);
+		if(a == null) return null;
+		Army a2 = a.split(ratios);
+		if(a.isEmpty()) armies.remove(a);
+		return a2;
 	}
 	
 	public boolean sendArmy(Team team, double[] ratios, Point targetPoint){
