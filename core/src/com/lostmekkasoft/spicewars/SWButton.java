@@ -39,6 +39,10 @@ public class SWButton extends Actor {
 		label = newLabel;
 	}
 
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// This is done manually in the sidebar

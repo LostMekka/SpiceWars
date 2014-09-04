@@ -299,9 +299,13 @@ public class SpiceWars implements ApplicationListener {
 		// Write the amount of armies each planet has on a planet
 		batch.begin();
 		for (Planet planet : planets) {
+			int counter = 0;
 			for (Army army : planet.armies) {
-				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y);
+				font14.setColor(army.team.color);
+				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y - 14*counter);
+				counter++;
 			}
+			font14.setColor(Color.WHITE);
 		}
 		batch.end();
 
@@ -311,12 +315,6 @@ public class SpiceWars implements ApplicationListener {
 //			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
 //			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
 //		}
-//		batch.end();
-
-		//DEBUG: Visualize certain points on the map
-//		batch.begin();
-//		drawCenteredString14("X", Color.MAGENTA, 100, 100); // middle point of the player's starting planet
-//		drawCenteredString14("X", Color.CYAN, 120, 120);    // edge point of the player's starting planet
 //		batch.end();
 
 		//DEBUG: Draw rectangles to visualize the planet bounds
@@ -426,14 +424,6 @@ public class SpiceWars implements ApplicationListener {
 			int maxMineSlots = randomRadius / 8 + jitter;
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal, this));
 		}
-	}
-
-	// draws a given string centered to the given position
-	// must be called from inside the batch
-	public void drawCenteredString14(String string, Color color, float posX, float posY) {
-		font14.setColor(color);
-		font14.draw(batch, string, posX - font14.getBounds(string).width/2, posY + font14.getBounds(string).height/2);
-		font14.setColor(Color.WHITE);
 	}
 
 	@Override
