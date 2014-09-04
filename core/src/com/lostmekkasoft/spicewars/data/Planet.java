@@ -20,8 +20,12 @@ public class Planet extends Location {
 		normal, station
 	}
 	
-	public static double MAX_HP = 1000;
+	public static double MAX_PLANET_HP = 4000;
+	public static double MAX_STATION_HP = 2000;
 	public static double HP_REGENERATION = 0.5;
+	public static double STATION_COST = 5000;
+	public static int MAX_STATION_WORKERS = 20;
+	
 
 	public Team team;
 	public String name;
@@ -29,14 +33,18 @@ public class Planet extends Location {
 	public int maxMineSlots;
 	public LinkedList<Building> normalSlots;
 	public LinkedList<Building> mineSlots;
-	public double hp = MAX_HP;
+	public double hp = MAX_PLANET_HP;
 	private boolean hasHQ = false;
 	public PlanetType type;
 	private Planet superWeaponTarget = null;
+	public double progress = 1;
 
 	public Planet(int radius, Team team, int maxNormalSlots, int maxMineSlots, Point position, PlanetType type, GameplayScreen parentScreen) {
 		super(position, parentScreen);
-		if(type == PlanetType.station) maxMineSlots = 0;
+		if(type == PlanetType.station) {
+			maxMineSlots = 0;
+			progress = 0;
+		}
 		this.radius = radius;
 		this.team = team;
 		this.maxNormalSlots = maxNormalSlots;
@@ -64,25 +72,33 @@ public class Planet extends Location {
 		}
 		super.update(time);
 		// regenerate planet hp
-		hp = Math.min(hp + HP_REGENERATION*time, MAX_HP);
+		hp = Math.min(hp + HP_REGENERATION*time, MAX_PLANET_HP);
 		// update buildings
 		for(Building b : normalSlots) b.update(time);
 	}
 
 	public int getWorkingWorkers(Team t){
-		int workers=0;
-		int buildings=0;
-		for(Army a:armies){
-			if(a.team == t) workers = (int)Math.ceil(a.ships[0]);	
-		}
+		int workers = 0;
+		int workersNeeded = 0;
+		Army army = getArmy(t);
+		if(army!=null) workers = (int)Math.ceil(army.ships[0]);
 		if(workers == 0) return 0;
-		for(Building b:normalSlots){
-			if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) buildings++;
+		if(type == PlanetType.station && progress < 1){
+			workersNeeded = MAX_STATION_WORKERS;
+		} else {
+			for(Building b:normalSlots){
+				if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) workersNeeded++;
+			}
+			for(Building b:mineSlots){
+				if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) workersNeeded++;
+			}
+			workersNeeded *= Building.MAX_WORKERS_PER_BUILDING;
+			if(type == PlanetType.station && hp < MAX_STATION_HP){
+				workersNeeded += MAX_STATION_WORKERS;
+			} 
 		}
-		for(Building b:mineSlots){
-			if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) buildings++;
-		}
-		return Math.min(buildings*Building.MAX_WORKERS_PER_BUILDING, workers);
+		
+		return Math.min(workersNeeded, workers);
 	}
 	
 	public int getWorkingFactories(Team t){
