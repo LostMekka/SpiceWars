@@ -5,6 +5,8 @@
 package com.lostmekkasoft.spicewars.data;
 
 import com.badlogic.gdx.graphics.Color;
+import com.lostmekkasoft.spicewars.AIPlayer;
+import com.lostmekkasoft.spicewars.SpiceWars;
 
 /**
  *
@@ -20,18 +22,21 @@ public class Team {
 	public double energyStored = 0;
 	public double energyIncome = 0;
 	public double lastEfficiency = 1;
-	public boolean isComputerControlled;
+	public AIPlayer ai = null;
 
-	public Team(int id, Color color, boolean isComputerControlled) {
-		this.id = id;
-		this.color = color;
-		this.isComputerControlled = isComputerControlled;
+	public static Team createAITeam(int id, Color c, SpiceWars game){
+		Team t = new Team(id, c);
+		t.ai = new AIPlayer(game, t);
+		return t;
 	}
 	
 	public Team(int id, Color color) {
 		this.id = id;
 		this.color = color;
-		isComputerControlled = true;
+	}
+	
+	public boolean isAITeam(){
+		return ai != null;
 	}
 	
 	public boolean isNeutral(){

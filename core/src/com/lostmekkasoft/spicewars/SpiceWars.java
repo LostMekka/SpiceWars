@@ -74,7 +74,10 @@ public class SpiceWars implements ApplicationListener {
 		// Create Teams
 		teamNeutral = new Team(-1, new Color(0.6f, 0.6f, 0.6f, 1f));
 		teamPlayer = new Team(1, new Color(0f, 0.8f, 0f, 1f));
-		teamAI = new Team(2, new Color(1f, 0.1f, 0.1f, 1f));
+		teamAI = Team.createAITeam(2, new Color(1f, 0.1f, 0.1f, 1f), this);
+		teams.add(teamNeutral);
+		teams.add(teamPlayer);
+		teams.add(teamAI);
 
 		// Set up stage and prepare for inputs
 		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -90,6 +93,8 @@ public class SpiceWars implements ApplicationListener {
 
 	public void update(float delta) {
 		double time = delta;
+		// tick ai players
+		for(Team t : teams) if(t.isAITeam()) t.ai.update(time);
 		// manage economy: build and repair buildings
 		for(Team t : teams){
 			double spiceUsage = 0, energyUsage = 0;
@@ -148,6 +153,36 @@ public class SpiceWars implements ApplicationListener {
 			for(Army a : armies) if(a.target == l) continue;
 			locIter.remove();
 		}
+	}
+	
+	public LinkedList<Army> getOwnMovingArmies(Team team){
+		LinkedList<Army> ans = new LinkedList<>();
+		for(Army a : armies) if(a.team == team) ans.add(a);
+		return ans;
+	}
+	
+	public LinkedList<Army> getEnemyMovingArmies(Team team){
+		LinkedList<Army> ans = new LinkedList<>();
+		for(Army a : armies) if(a.team != team && a.team != teamNeutral) ans.add(a);
+		return ans;
+	}
+	
+	public LinkedList<Planet> getOwnPlanets(Team team){
+		LinkedList<Planet> ans = new LinkedList<>();
+		for(Planet p : planets) if(p.team == team) ans.add(p);
+		return ans;
+	}
+
+	public LinkedList<Planet> getNeutralPlanets(){
+		LinkedList<Planet> ans = new LinkedList<>();
+		for(Planet p : planets) if(p.team == teamNeutral) ans.add(p);
+		return ans;
+	}
+
+	public LinkedList<Planet> getEnemyPlanets(Team team){
+		LinkedList<Planet> ans = new LinkedList<>();
+		for(Planet p : planets) if(p.team != team && p.team != teamNeutral) ans.add(p);
+		return ans;
 	}
 
 	public Location getCollidingLocation(Location l){
@@ -297,6 +332,9 @@ public class SpiceWars implements ApplicationListener {
 			Point point = new Point(WIDTH - 100, HEIGHT - 100);
 			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
+			Army a = new Army(teamAI);
+			a.ships[1] = 1000;
+			planet.receiveArmy(a);
 			return;
 		}
 
