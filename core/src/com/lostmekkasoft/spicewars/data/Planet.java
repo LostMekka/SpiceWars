@@ -169,18 +169,22 @@ public class Planet extends Location {
 		}
 	}
 	
-	public boolean canAddBuilding(Building.BuildingType t) {
-		if (t == Building.BuildingType.spiceMine) {
+	public boolean canAddBuilding(Building.BuildingType type, Team team) {
+		Army army = getArmy(team);
+		if(army != null && army.ships[0] <= 0) return false;
+		if(this.type == PlanetType.station && progress < 1) return false;
+		if (type == Building.BuildingType.spiceMine) {
 			return maxMineSlots > mineSlots.size();
 		} else {
-			return (!hasHQ || t != Building.BuildingType.hq) &&
+			if(type == Building.BuildingType.deathlaser) return this.type == PlanetType.station;
+			return (!hasHQ || type != Building.BuildingType.hq) &&
 					maxNormalSlots > normalSlots.size();
 		}
 	}
 
-	public boolean addBuilding(Building.BuildingType t) {
-		if (!canAddBuilding(t)) return false;
-		addBuildingInternal(new Building(t, team, this), t == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
+	public boolean addBuilding(Building.BuildingType type, Team team) {
+		if (!canAddBuilding(type, team)) return false;
+		addBuildingInternal(new Building(type, team, this), type == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
 		return true;
 	}
 
