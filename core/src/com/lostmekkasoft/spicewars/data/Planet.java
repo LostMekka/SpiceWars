@@ -25,6 +25,8 @@ public class Planet extends Location {
 	public static double HP_REGENERATION = 0.5;
 	public static double STATION_COST = 5000;
 	public static int MAX_STATION_WORKERS = 20;
+	public static int STATION_RADIUS = 40;
+	public static int STATION_NORMAL_SLOTS = 5;
 	
 
 	public Team team;
@@ -44,6 +46,9 @@ public class Planet extends Location {
 		if(type == PlanetType.station) {
 			maxMineSlots = 0;
 			progress = 0;
+			hp = 1;
+			normalSlots.add(new Building(Building.BuildingType.hq, team, this));
+			hasHQ = true;
 		}
 		this.radius = radius;
 		this.team = team;
