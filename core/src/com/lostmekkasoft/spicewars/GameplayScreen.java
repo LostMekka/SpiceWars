@@ -169,6 +169,12 @@ public final class GameplayScreen implements Screen {
 		}
 	}
 	
+	public Location getCollidingLocation(Location l){
+		for(Location l2 : planets) if(l != l2 && l.overlapsWith(l2)) return l2;
+		for(Location l2 : locations) if(l != l2 && l.overlapsWith(l2)) return l2;
+		return null;
+	}
+	
 	public void addProjectile(Projectile p){
 		projectiles.add(p);
 	}
