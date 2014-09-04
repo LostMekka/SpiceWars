@@ -174,10 +174,8 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>planets/cyan.png</filename>
-            <filename>planets/green.png</filename>
-            <filename>planets/grey.png</filename>
-            <filename>planets/red.png</filename>
+            <filename>planets/planet.png</filename>
+            <filename>planets/planetSelection.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
