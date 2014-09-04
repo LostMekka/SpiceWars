@@ -84,6 +84,7 @@ public class Planet extends Location {
 		if(army!=null) workers = (int)Math.ceil(army.ships[0]);
 		if(workers == 0) return 0;
 		if(type == PlanetType.station && progress < 1){
+			if(!canBuildStation(t)) return 0;
 			workersNeeded = MAX_STATION_WORKERS;
 		} else {
 			for(Building b:normalSlots){
@@ -109,10 +110,18 @@ public class Planet extends Location {
 		return i;
 	}
 	
+	private boolean canBuildStation(Team t){
+		if(normalSlots.isEmpty()){
+			return armies.size() <= 1;
+		} else {
+			return normalSlots.getFirst().team == t;
+		}
+	}
+	
 	public void buildStuff(Team t, double efficiency, double time){
 		if(t == SpiceWars.teamNeutral) return;
 		// build units out of factories (only when this planet belongs to the team)
-		if(t == team) for(Building b : normalSlots){
+		if(t == team && progress >= 1) for(Building b : normalSlots){
 			int i;
 			switch(b.type){
 				case workerFactory : i = 0; break;
@@ -133,28 +142,47 @@ public class Planet extends Location {
 				b.progress -= n;
 			}
 		}
-		// build buildings with workers
 		int workerCount = getWorkingWorkers(t);
-		LinkedList<Building> l = (LinkedList<Building>)normalSlots.clone();
-		l.addAll(mineSlots);
-		for(Building b : l) if(b.team == t && !b.isFinishedBuilding){
-			if(workerCount <= 0) break;
-			int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
-			workerCount -= w;
-			double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
-			if(rate + b.progress > 1) rate = 1 - b.progress;
-			b.progress += rate;
-			b.hp += rate * (b.getMaxHp() - 1);
-			if(b.progress >= 1) buildingFinished(b);
-		}
-		// repair buildings with the remaining workers
-		for(Building b : l) if(b.team == t && b.isFinishedBuilding && b.hp < b.getMaxHp()){
-			if(workerCount <= 0) break;
-			int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
-			workerCount -= w;
-			int max = b.getMaxHp();
-			double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
-			b.hp = Math.min(hp + rate * max, max);
+		// need to build station?
+		if(type == PlanetType.station && progress < 1){
+			if(canBuildStation(t) && workerCount > 0){
+				int w = Math.min(workerCount, MAX_STATION_WORKERS);
+				double rate = w * Building.WORKER_SPICE_USAGE / STATION_COST * efficiency * time;
+				if(rate + progress > 1) rate = 1 - progress;
+				progress += rate;
+				hp += rate * (MAX_STATION_HP - 1);
+				if(progress > 1) progress = 1;
+			}
+		} else {
+			// repair station with workers
+			if(canBuildStation(t) && workerCount > 0){
+				int w = Math.min(workerCount, MAX_STATION_WORKERS);
+				workerCount -= w;
+				double rate = w * Building.WORKER_SPICE_USAGE / STATION_COST * efficiency * time;
+				hp = Math.min(hp + rate * MAX_STATION_HP, MAX_STATION_HP);
+			}
+			// build buildings with the remaining workers
+			LinkedList<Building> l = (LinkedList<Building>)normalSlots.clone();
+			l.addAll(mineSlots);
+			for(Building b : l) if(b.team == t && !b.isFinishedBuilding){
+				if(workerCount <= 0) break;
+				int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
+				workerCount -= w;
+				double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
+				if(rate + b.progress > 1) rate = 1 - b.progress;
+				b.progress += rate;
+				b.hp += rate * (b.getMaxHp() - 1);
+				if(b.progress >= 1) buildingFinished(b);
+			}
+			// repair buildings with the remaining workers
+			for(Building b : l) if(b.team == t && b.isFinishedBuilding && b.hp < b.getMaxHp()){
+				if(workerCount <= 0) break;
+				int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
+				workerCount -= w;
+				int max = b.getMaxHp();
+				double rate = w * Building.WORKER_SPICE_USAGE / b.getCost() * efficiency * time;
+				b.hp = Math.min(hp + rate * max, max);
+			}
 		}
 	}
 	
@@ -183,6 +211,7 @@ public class Planet extends Location {
 			}
 			changeTeam(b.team);
 		}
+		b.onFinishBuilding();
 	}
 	
 	public boolean canAddBuilding(Building.BuildingType type, Team team) {
