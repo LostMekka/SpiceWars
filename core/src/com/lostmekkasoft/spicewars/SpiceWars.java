@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.lostmekkasoft.spicewars.actors.ArmyActor;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.actors.SelectionActor;
 import com.lostmekkasoft.spicewars.data.*;
@@ -51,10 +52,12 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamAI;
 
 	public SelectionActor selectionActor;
+	public Planet selectedPlanet;
 
 	TextureAtlas textureAtlas;
 	TextureRegion planetTexture;
-	TextureRegion planetSelection;
+	TextureRegion planetSelectionTexture;
+	TextureRegion armyTexture;
 
 	@Override
 	public void create () {
@@ -84,9 +87,10 @@ public class SpiceWars implements ApplicationListener {
 		Gdx.input.setInputProcessor(stage);
 
 		// Get and assign all three possible planet textures
-		textureAtlas = new TextureAtlas("sprites/planets.txt");
+		textureAtlas = new TextureAtlas("spritesheet.txt");
 		planetTexture = textureAtlas.findRegion("planet");
-		planetSelection = textureAtlas.findRegion("planetSelection");
+		planetSelectionTexture = textureAtlas.findRegion("planetSelection");
+		armyTexture = textureAtlas.findRegion("armies");
 
 		newLevel();
 	}
@@ -216,6 +220,8 @@ public class SpiceWars implements ApplicationListener {
 		} else {
 			if(!(a.target instanceof Planet)) addLocation(a.target);
 		}
+		a.actor = new ArmyActor(a, armyTexture, (float)a.position.x, (float)a.position.y);
+		stage.addActor(a.actor);
 	}
 
 	public void addPlanet(Planet p){
@@ -260,6 +266,9 @@ public class SpiceWars implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.act(Gdx.graphics.getDeltaTime());
+
+		selectionActor.selectedPlanet = selectedPlanet;
+
 		stage.draw();
 
 		//DEBUG: Press R to generate a new playing field or ESC to exit the game
@@ -326,7 +335,8 @@ public class SpiceWars implements ApplicationListener {
 		}
 
 		// Set the players planet to be select per default
-		selectionActor = new SelectionActor(planetSelection, planets.getLast());
+		selectedPlanet = planets.getFirst();
+		selectionActor = new SelectionActor(planetSelectionTexture, selectedPlanet);
 		stage.addActor(selectionActor);
 	}
 

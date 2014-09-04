@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.lostmekkasoft.spicewars.SpiceWars;
 import com.lostmekkasoft.spicewars.data.Planet;
+import com.lostmekkasoft.spicewars.data.Point;
 
 
 /**
@@ -23,9 +24,8 @@ public class PlanetActor extends Actor {
 	public float planetSize;
 
 	public Planet planet;
-	public boolean selected = false;
 
-	public PlanetActor(Planet planet, TextureRegion textureRegion, float actorX, float actorY) {
+	public PlanetActor(final Planet planet, TextureRegion textureRegion, float actorX, float actorY) {
 		this.planet = planet;
 		this.textureRegion = textureRegion;
 		this.actorX = actorX - planet.radius / SpiceWars.planetTextureFactor;
@@ -33,10 +33,14 @@ public class PlanetActor extends Actor {
 
 		planetSize = (planet.radius * 2) / SpiceWars.planetTextureFactor;
 
-		setBounds(actorX, actorY, planet.radius*2, planet.radius*2);
+		setBounds(this.actorX, this.actorY, planetSize, planetSize);
 		addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				((PlanetActor)event.getTarget()).selected = true;
+				Point pointMouse = new Point(x, y);
+				Point pointPlanet = new Point(planetSize/2, planetSize/2);
+				if (pointPlanet.squaredDistanceTo(pointMouse) < planet.radius*planet.radius) {
+					((PlanetActor)event.getTarget()).planet.getGame().selectedPlanet = planet;
+				}
 				return true;
 			}
 		});

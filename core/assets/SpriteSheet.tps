@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>/Users/kilian/develop/SpiceWars/core/assets/SpriteSheet.tps</string>
+        <string>/Users/kilian/develop/SpiceWars/core/assets/spritesheet.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -38,7 +38,7 @@
         <key>dataFormat</key>
         <string>libgdx</string>
         <key>textureFileName</key>
-        <filename>sprites/planets.png</filename>
+        <filename>spritesheet.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -131,7 +131,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>sprites/planets.txt</filename>
+                <filename>spritesheet.txt</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -166,7 +166,7 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Trim</enum>
+            <enum type="SpriteSettings::TrimMode">None</enum>
             <key>heuristicMask</key>
             <false/>
             <key>pivotPoint</key>
@@ -174,8 +174,9 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>planets/planetSelection.png</filename>
             <filename>planets/planet.png</filename>
+            <filename>planets/planetSelection.png</filename>
+            <filename>armies/armies.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
