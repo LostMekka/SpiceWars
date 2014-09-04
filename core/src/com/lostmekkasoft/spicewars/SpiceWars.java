@@ -51,6 +51,7 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamAI;
 
 	public SelectionActor selectionActor;
+	public Planet selectedPlanet;
 
 	TextureAtlas textureAtlas;
 	TextureRegion planetTexture;
@@ -209,6 +210,9 @@ public class SpiceWars implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.act(Gdx.graphics.getDeltaTime());
+
+		selectionActor.selectedPlanet = selectedPlanet;
+
 		stage.draw();
 
 		//DEBUG: Press R to generate a new playing field or ESC to exit the game
@@ -275,7 +279,8 @@ public class SpiceWars implements ApplicationListener {
 		}
 
 		// Set the players planet to be select per default
-		selectionActor = new SelectionActor(planetSelection, planets.getLast());
+		selectedPlanet = planets.getFirst();
+		selectionActor = new SelectionActor(planetSelection, selectedPlanet);
 		stage.addActor(selectionActor);
 	}
 
