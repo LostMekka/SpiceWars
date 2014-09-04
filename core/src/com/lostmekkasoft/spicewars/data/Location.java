@@ -86,4 +86,17 @@ public class Location {
 		armies.clear();
 	}
 	
+	public Army getArmy(Team t){
+		for(Army a : armies) if(a.team == t) return a;
+		return null;
+	}
+	
+
+	public boolean buildStation(Team team){
+		Army army = getArmy(team);
+		if(army.ships[0] == 0)return false;
+		Planet planet = new Planet(Planet.STATION_RADIUS, team, Planet.STATION_NORMAL_SLOTS, 0,position, Planet.PlanetType.station, parent);
+		parent.addPlanet(planet);
+		return true;
+	}
 }
