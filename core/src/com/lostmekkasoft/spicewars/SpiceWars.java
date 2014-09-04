@@ -114,8 +114,8 @@ public class SpiceWars implements ApplicationListener {
 
 		//DEBUG: Visualize certain points on the map
 		batch.begin();
-		drawCenteredString14("X", Color.MAGENTA, 100, 100);
-		drawCenteredString14("X", Color.MAGENTA, WIDTH-100, HEIGHT-100);
+		drawCenteredString14("X", Color.MAGENTA, 100, 100); // middle point of the player's starting planet
+		drawCenteredString14("X", Color.CYAN, 120, 120);    // edge point of the player's starting planet
 		batch.end();
 	}
 

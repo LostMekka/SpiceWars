@@ -15,7 +15,7 @@ public class PlanetActor extends Actor {
 	TextureRegion textureRegion;
 	float actorX;
 	float actorY;
-	int textureFactor = 2;
+	float textureFactor = 2f;
 
 	public Planet planet;
 
