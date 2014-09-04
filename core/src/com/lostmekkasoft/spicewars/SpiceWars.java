@@ -106,12 +106,16 @@ public class SpiceWars implements ApplicationListener {
 
 		//DEBUG: Write the amount of slots on each planet
 		batch.begin();
-		font14.setColor(Color.GREEN);
-		font14.setScale(1f);
 		for (Planet planet : planets) {
 			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			font14.draw(batch, planetSlots, (float)planet.position.x - font14.getBounds(planetSlots).width, (float)planet.position.y+5);
+			drawCenteredString14(planetSlots, Color.GREEN, (float)planet.position.x, (float)planet.position.y);
 		}
+		batch.end();
+
+		//DEBUG: Visualize certain points on the map
+		batch.begin();
+		drawCenteredString14("X", Color.MAGENTA, 100, 100);
+		drawCenteredString14("X", Color.MAGENTA, WIDTH-100, HEIGHT-100);
 		batch.end();
 	}
 
@@ -202,6 +206,13 @@ public class SpiceWars implements ApplicationListener {
 			int maxMineSlots = randomRadius / 8 + jitter;
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal));
 		}
+	}
+
+	// draws a given string centered to the given position
+	// must be called from inside the batch
+	public void drawCenteredString14(String string, Color color, float posX, float posY) {
+		font14.setColor(color);
+		font14.draw(batch, string, posX - font14.getBounds(string).width/2, posY + font14.getBounds(string).height/2);
 	}
 
 	@Override

@@ -15,6 +15,7 @@ public class PlanetActor extends Actor {
 	TextureRegion textureRegion;
 	float actorX;
 	float actorY;
+	int textureFactor = 2;
 
 	public Planet planet;
 
@@ -27,7 +28,7 @@ public class PlanetActor extends Actor {
 
 	@Override
 	public void draw(Batch batch, float alpha) {
-		batch.draw(textureRegion, actorX, actorY, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+		batch.draw(textureRegion, actorX, actorY, planet.radius * textureFactor, planet.radius * textureFactor);
 	}
 
 	@Override
