@@ -355,6 +355,12 @@ public class SpiceWars implements ApplicationListener {
 			Point point = new Point(100, 100);
 			Planet planet = new Planet(firstRadius, teamPlayer, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
+			Army a = new Army(teamPlayer);
+			a.ships[0] = 1;
+			planet.receiveArmy(a);
+			planet.forceAddBuilding(Building.BuildingType.hq);
+			planet.forceAddBuilding(Building.BuildingType.spiceMine);
+			planet.forceAddBuilding(Building.BuildingType.generator);
 			return;
 		} else if (planets.size() == 1) {
 			// Place the second planet in the upper right corner.
@@ -363,8 +369,11 @@ public class SpiceWars implements ApplicationListener {
 			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
 			Army a = new Army(teamAI);
-			a.ships[1] = 1000;
+			a.ships[0] = 1;
 			planet.receiveArmy(a);
+			planet.forceAddBuilding(Building.BuildingType.hq);
+			planet.forceAddBuilding(Building.BuildingType.spiceMine);
+			planet.forceAddBuilding(Building.BuildingType.generator);
 			return;
 		}
 

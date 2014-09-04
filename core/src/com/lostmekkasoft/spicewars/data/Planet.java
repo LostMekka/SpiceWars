@@ -229,6 +229,17 @@ public class Planet extends Location {
 		}
 	}
 
+	public void forceAddBuilding(Building.BuildingType type) {
+		Building b = new Building(type, team, this);
+		b.isFinishedBuilding = true;
+		b.onFinishBuilding();
+		if(type == Building.BuildingType.spiceMine){
+			mineSlots.add(b);
+		} else {
+			normalSlots.add(b);
+		}
+	}
+	
 	public boolean addBuilding(Building.BuildingType type, Team team) {
 		if (!canAddBuilding(type, team)) return false;
 		addBuildingInternal(new Building(type, team, this), type == Building.BuildingType.spiceMine ? mineSlots : normalSlots);
