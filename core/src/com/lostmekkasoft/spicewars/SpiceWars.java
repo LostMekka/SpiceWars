@@ -69,9 +69,9 @@ public class SpiceWars implements ApplicationListener {
 		HEIGHT = Gdx.graphics.getHeight();
 
 		// Create Teams
-		teamNeutral = new Team(-1, Color.WHITE);
-		teamPlayer = new Team(1, Color.GREEN);
-		teamAI = new Team(2, Color.RED);
+		teamNeutral = new Team(-1, new Color(0.6f, 0.6f, 0.6f, 1f));
+		teamPlayer = new Team(1, new Color(0f, 0.8f, 0f, 1f));
+		teamAI = new Team(2, new Color(1f, 0.1f, 0.1f, 1f));
 
 		// Set up stage and prepare for inputs
 		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
