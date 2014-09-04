@@ -98,6 +98,13 @@ public class Army {
 		return false;
 	}
 	
+	@Override
+	public String toString(){
+		return String.format("%d, %d, %d, %d", 
+				(int)Math.ceil(ships[0]), (int)Math.ceil(ships[1]), 
+				(int)Math.ceil(ships[2]), (int)Math.ceil(ships[3]));
+	}
+	
 	public void bombardPlanet(Planet p, double time){
 		for(int i=1; i<4; i++) if(!p.team.isNeutral()){
 			p.damageRandomBuilding(Math.ceil(ships[i]) * dps[i] * time, accuracy[i]);
