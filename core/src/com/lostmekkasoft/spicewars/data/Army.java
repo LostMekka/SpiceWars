@@ -105,6 +105,7 @@ public class Army {
 	public void bombardPlanet(Planet p, double time){
 		for(int i=1; i<4; i++) if(!p.team.isNeutral()){
 			p.damageRandomBuilding(Math.ceil(ships[i]) * dps[i] * time, accuracy[i]);
+			p.hp -= dps[i] * (1 - accuracy[i]) * 0.1;
 		}
 	}
 	
