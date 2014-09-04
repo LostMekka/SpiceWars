@@ -4,7 +4,7 @@
  */
 package com.lostmekkasoft.spicewars.data;
 
-import com.lostmekkasoft.spicewars.PlanetActor;
+import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.SpiceWars;
 import java.util.LinkedList;
 import java.util.ListIterator;
