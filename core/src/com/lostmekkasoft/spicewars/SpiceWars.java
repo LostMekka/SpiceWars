@@ -115,6 +115,8 @@ public class SpiceWars implements ApplicationListener {
 			double effSp = Math.min(1, (t.spiceStored + t.spiceIncome * time) / spiceUsage);
 			double effEn = Math.min(1, (t.energyStored + t.energyIncome * time) / energyUsage);
 			double efficiency = Math.min(effSp, effEn);
+			t.lastSpiceEfficiency = effSp;
+			t.lastEnergyEfficiency = effEn;
 			t.lastEfficiency = efficiency;
 			for(Planet p : planets) p.buildStuff(t, efficiency, time);
 			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
