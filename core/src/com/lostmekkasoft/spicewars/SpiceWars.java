@@ -30,6 +30,7 @@ public class SpiceWars implements ApplicationListener {
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
 	public BitmapFont font14;
+	public BitmapFont font22;
 	public BitmapFont font48;
 	public static Random random = new Random();
 
@@ -70,6 +71,8 @@ public class SpiceWars implements ApplicationListener {
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
 		fontParameter.size = 14;
 		font14 = fontGenerator.generateFont(fontParameter);
+		fontParameter.size = 22;
+		font22 = fontGenerator.generateFont(fontParameter);
 		fontParameter.size = 48;
 		font48 = fontGenerator.generateFont(fontParameter);
 
@@ -240,13 +243,22 @@ public class SpiceWars implements ApplicationListener {
 			Gdx.app.exit();
 		}
 
-		//DEBUG: Write the amount of slots on each planet
+		// Write the amount of armies each planet has on a planet
 		batch.begin();
 		for (Planet planet : planets) {
-			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
+			for (Army army : planet.armies) {
+				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y);
+			}
 		}
 		batch.end();
+
+		//DEBUG: Write the amount of slots on each planet
+//		batch.begin();
+//		for (Planet planet : planets) {
+//			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
+//			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
+//		}
+//		batch.end();
 
 		//DEBUG: Visualize certain points on the map
 //		batch.begin();
@@ -352,6 +364,7 @@ public class SpiceWars implements ApplicationListener {
 	public void drawCenteredString14(String string, Color color, float posX, float posY) {
 		font14.setColor(color);
 		font14.draw(batch, string, posX - font14.getBounds(string).width/2, posY + font14.getBounds(string).height/2);
+		font14.setColor(Color.WHITE);
 	}
 
 	@Override

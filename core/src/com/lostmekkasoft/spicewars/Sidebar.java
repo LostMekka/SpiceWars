@@ -51,6 +51,11 @@ public class Sidebar {
 
 		// Unfortunately the labels are drawn in a SpriteBatch
 		game.batch.begin();
+
+		// Title for the selected in game item
+		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 10, game.HEIGHT - 50);
+
+		// Loop through the buttons
 		for (SWButton button : buttons) {
 			game.font14.draw(game.batch, button.label, button.posX, button.posY+14);
 		}
