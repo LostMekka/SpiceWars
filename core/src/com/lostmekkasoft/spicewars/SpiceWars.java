@@ -25,6 +25,12 @@ import java.util.Random;
 
 public class SpiceWars implements ApplicationListener {
 
+	public enum State {
+		Running, Paused
+	}
+
+	State state = State.Running;
+
 	public SpriteBatch batch;
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
@@ -275,54 +281,80 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void render () {
-		update(Gdx.graphics.getDeltaTime());
+		switch (state) {
+			case Running:
+				update(Gdx.graphics.getDeltaTime());
 
-		Gdx.gl.glClearColor(0,0,0,1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				Gdx.gl.glClearColor(0,0,0,1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		// let all the actors do their stuff
-		stage.act(Gdx.graphics.getDeltaTime());
+				// let all the actors do their stuff
+				stage.act(Gdx.graphics.getDeltaTime());
 
-		// set the selectionRing to highlight the currently selected planet
-		selectionActor.selectedPlanet = selectedPlanet;
-		selectionActorAlt.selectedPlanet = selectedPlanetAlt;
+				// set the selectionRing to highlight the currently selected planet
+				selectionActor.selectedPlanet = selectedPlanet;
+				selectionActorAlt.selectedPlanet = selectedPlanetAlt;
 
-		// draw everything on the stage
-		stage.draw();
+				// draw everything on the stage
+				stage.draw();
 
-		// draw the UI elements
-		sidebar.draw();
-		topBar.draw();
+				// draw the UI elements
+				sidebar.draw();
+				topBar.draw();
 
-		//DEBUG: Press ESC to exit the game
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			Gdx.app.exit();
+				// allow the state to be paused
+				if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+					if (state.equals(State.Running)) {
+						state = State.Paused;
+					} else {
+						state = State.Running;
+					}
+				}
+
+				//DEBUG: Press ESC to exit the game
+				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
+
+				// Write the amount of armies each planet has on a planet
+				batch.begin();
+				for (Planet planet : planets) {
+					int counter = 0;
+					for (Army army : planet.armies) {
+						font14.setColor(army.team.color);
+						font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y - 14*counter);
+						counter++;
+					}
+					font14.setColor(Color.WHITE);
+				}
+				batch.end();
+				break;
+
+			case Paused:
+
+				batch.begin();
+				font48.draw(batch, "GAME PAUSED", WIDTH/2 - font48.getBounds("GAME PAUSED").width/2, HEIGHT/2);
+
+				batch.end();
+
+				// allow the state to be paused
+				if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+					if (state.equals(State.Running)) {
+						state = State.Paused;
+					} else {
+						state = State.Running;
+					}
+				}
+
+				//DEBUG: Press ESC to exit the game
+				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
+
+				break;
 		}
 
-		// Write the amount of armies each planet has on a planet
-		batch.begin();
-		for (Planet planet : planets) {
-			int counter = 0;
-			for (Army army : planet.armies) {
-				font14.setColor(army.team.color);
-				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y - 14*counter);
-				counter++;
-			}
-			font14.setColor(Color.WHITE);
-		}
-		batch.end();
 
-		//DEBUG: Draw rectangles to visualize the planet bounds
-//		float x = planets.getLast().actor.actorX;
-//		float y = planets.getLast().actor.actorY;
-//		float s = planets.getLast().actor.planetSize;
-//		shapes.begin(ShapeRenderer.ShapeType.Line);
-//		shapes.setColor(Color.WHITE);
-//		shapes.box(x, y, 0, s, s, 0);
-//		shapes.line(x, y, x+s, y+s);
-//		shapes.line(x+s, y, x, y+s);
-//		shapes.circle((float)planets.getLast().position.x, (float)planets.getLast().position.y, planets.getLast().radius);
-//		shapes.end();
 	}
 
 	public void newLevel() {
@@ -372,8 +404,8 @@ public class SpiceWars implements ApplicationListener {
 
 	private void placePlanet() {
 		int firstRadius = 40;
-		int firstNormalSlots = 5;
-		int firstMineSlots = 5;
+		int firstNormalSlots = 6;
+		int firstMineSlots = 4;
 
 		if (planets.isEmpty()) {
 			// Place the first planet in the lower left corner.
@@ -405,7 +437,7 @@ public class SpiceWars implements ApplicationListener {
 
 		// The first two planets have already been set, we can now place random
 		// planets until the screen is filled.
-		int randomRadius = SpiceWars.random.nextInt(80) + 50;
+		int randomRadius = SpiceWars.random.nextInt((130 - 30) + 1) + 30;
 		int posX = SpiceWars.random.nextInt(WIDTH - randomRadius*2) + randomRadius;
 		int posY = SpiceWars.random.nextInt(HEIGHT - randomRadius*2) + randomRadius;
 		Point randomPoint = new Point(posX, posY);
@@ -422,17 +454,27 @@ public class SpiceWars implements ApplicationListener {
 
 		// Only instantiate and add the new planet if the position is found to be valid
 		if (isGood == planets.size()) {
-			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
-			//FIXME: This can produce planets with zero slots, that shouldn't happen. Someting between 1-8 or so should suffice.
-			int maxNormalSlots = randomRadius / 8 + jitter*2;
-			int maxMineSlots = randomRadius / 8 + jitter;
+			int maxNormalSlots;
+			int maxMineSlots;
+			if (randomRadius < 50) {
+				maxNormalSlots = random.nextInt((6 - 4) + 1) + 4;
+				maxMineSlots = random.nextInt((3 - 2) + 1) + 2;
+			} else if (randomRadius < 80) {
+				maxNormalSlots = random.nextInt((8 - 5) + 1) + 5;
+				maxMineSlots = random.nextInt((4 - 3) + 1) + 3;
+			} else {
+				maxNormalSlots = random.nextInt((10 - 6) + 1) + 6;
+				maxMineSlots = random.nextInt((5 - 4) + 1) + 4;
+			}
+
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal, this));
 		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		//FIXME plz :( More like IMPLEMENT_ME, but still
+		// FIXME plz :( More like IMPLEMENT_ME, but still
+		// check here https://github.com/libgdx/libgdx/wiki/Viewports
 	}
 
 	@Override

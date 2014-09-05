@@ -6,6 +6,7 @@ package com.lostmekkasoft.spicewars.data;
 
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.SpiceWars;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -59,6 +60,7 @@ public class Planet extends Location {
 		this.type = type;
 		normalSlots = new LinkedList<>();
 		mineSlots = new LinkedList<>();
+		generateName();
 	}
 
 	public Planet getSuperWeaponTarget() {
@@ -341,5 +343,67 @@ public class Planet extends Location {
 		for(Building b : normalSlots) if(b.type != Building.BuildingType.hq){
 			destroyBuilding(b);
 		}
+	}
+
+	public void generateName() {
+		String[] names = new String[]{
+				"Pluto",
+				"Planet of the Apes",
+				"Alderaan",
+				"Dagobah",
+				"Tatooine",
+				"Naboo",
+				"Kashyyyk",
+				"Kamino",
+				"Mustafar",
+				"Coruscant",
+				"Bespin",
+				"Yavin 4",
+				"LostMekka",
+				"Daelmo",
+				"Koe",
+				"Ascii",
+				"Betelgeuse",
+				"Magrathea",
+				"Ursa Minor Beta",
+				"Deep Thought",
+				"Vogsphere",
+				"Raxacoricofallapatorius",
+				"Gallifrey",
+				"Skaro",
+				"Char",
+				"Aiur",
+				"Shakuras",
+				"Korhal",
+				"Krypton",
+				"Acheron",
+				"Caprica",
+				"Kobol",
+				"Aquarion",
+				"Aerilon",
+				"Canceron",
+				"Gemenon",
+				"Leonis",
+				"Libran",
+				"Picon",
+				"Sagittaron",
+				"Scorpia",
+				"Tauron",
+				"Virgon",
+				"Wolfram",
+				"Higgin's Moon",
+				"Fhloston",
+				"Rigel 7",
+				"Arrakis",
+				"Caladan",
+				"Giedi Prime",
+				"Ix",
+				"Kaitain",
+				"Salusa Secundus",
+				"Tleilax",
+				"Solaris"
+		};
+
+		this.name = names[SpiceWars.random.nextInt(names.length)];
 	}
 }
