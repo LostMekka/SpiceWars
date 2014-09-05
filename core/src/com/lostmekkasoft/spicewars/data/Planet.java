@@ -243,9 +243,12 @@ public class Planet extends Location {
 		if (type == Building.BuildingType.spiceMine) {
 			return maxMineSlots > mineSlots.size();
 		} else {
-			if(type == Building.BuildingType.deathlaser) return this.type == PlanetType.station;
-			return (!hasHQ || type != Building.BuildingType.hq) &&
-					maxNormalSlots > normalSlots.size();
+			if(type == Building.BuildingType.deathlaser && this.type != PlanetType.station) return false;
+			if(type == Building.BuildingType.hq){
+				if(hasHQ) return false;
+				for(Building b : normalSlots) if(b.team == team && b.type == Building.BuildingType.hq) return false;
+			}
+			return maxNormalSlots > normalSlots.size();
 		}
 	}
 
