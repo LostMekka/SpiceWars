@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.lostmekkasoft.spicewars.actors.ArmyActor;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
@@ -41,6 +40,7 @@ public class SpiceWars implements ApplicationListener {
 
 	public Stage stage;
 	public Sidebar sidebar;
+	public TopBar topBar;
 
 	public int numPlanets;
 	public LinkedList<Planet> planets = new LinkedList<>();
@@ -80,7 +80,7 @@ public class SpiceWars implements ApplicationListener {
 		font48 = fontGenerator.generateFont(fontParameter);
 
 		WIDTH = Gdx.graphics.getWidth() - 300;
-		HEIGHT = Gdx.graphics.getHeight();
+		HEIGHT = Gdx.graphics.getHeight() - 50;
 
 		// Create Teams
 		teamNeutral = new Team(-1, new Color(0.6f, 0.6f, 0.6f, 1f));
@@ -99,8 +99,9 @@ public class SpiceWars implements ApplicationListener {
 
 		newLevel();
 
-		// Initialize the sidebar and add its UI elements to the stage
+		// Initialize the UI elements
 		sidebar = new Sidebar(this);
+		topBar = new TopBar(this);
 	}
 
 	public void update(float delta) {
@@ -289,8 +290,9 @@ public class SpiceWars implements ApplicationListener {
 		// draw everything on the stage
 		stage.draw();
 
-		// draw the sidebar
+		// draw the UI elements
 		sidebar.draw();
+		topBar.draw();
 
 		//DEBUG: Press ESC to exit the game
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

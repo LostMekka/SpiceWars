@@ -17,6 +17,7 @@ public class Sidebar {
 
 	SpiceWars game;
 
+	LinkedList<SWButton> neutralBuildButtons = new LinkedList<>();
 	LinkedList<SWButton> buildButtons = new LinkedList<>();
 	LinkedList<SWButton> attackButtons = new LinkedList<>();
 
@@ -32,7 +33,18 @@ public class Sidebar {
 		// If you love hardcoded position values and only die a little inside
 		// CLAP YOUR HANDS!
 		// It might also be a little to late for correct lyrics...
-		SWButton buttonWorkerFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - 250, 260, 22, "Worker Factory", Color.DARK_GRAY, this);
+		int buttonPosY = 250;
+		SWButton buttonHQ = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "HQ", Color.DARK_GRAY, this);
+		neutralBuildButtons.add(buttonHQ);
+		buttonHQ.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				System.out.println("Build HQ");
+				game.selectedPlanet.addBuilding(Building.BuildingType.hq, game.teamPlayer);
+				return true;
+			}
+		});
+		buttonPosY += 24;
+		SWButton buttonWorkerFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Worker Factory", Color.DARK_GRAY, this);
 		buildButtons.add(buttonWorkerFactory);
 		buttonWorkerFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -40,7 +52,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonFighterFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - 274, 260, 22, "Fighter Factory", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonFighterFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Fighter Factory", Color.DARK_GRAY, this);
 		buildButtons.add(buttonFighterFactory);
 		buttonFighterFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -48,7 +61,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonFrigateFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - 298, 260, 22, "Frigate Factory", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonFrigateFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Frigate Factory", Color.DARK_GRAY, this);
 		buildButtons.add(buttonFrigateFactory);
 		buttonFrigateFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -56,7 +70,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonDestroyerFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - 322, 260, 22, "Destroyer Factory", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonDestroyerFactory = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Destroyer Factory", Color.DARK_GRAY, this);
 		buildButtons.add(buttonDestroyerFactory);
 		buttonDestroyerFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -64,7 +79,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonGenerator = new SWButton(game.WIDTH + 20, game.HEIGHT - 346, 260, 22, "Generator", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonGenerator = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Generator", Color.DARK_GRAY, this);
 		buildButtons.add(buttonGenerator);
 		buttonGenerator.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -72,7 +88,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonSpiceSilo = new SWButton(game.WIDTH + 20, game.HEIGHT - 370, 260, 22, "Spice Silo", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonSpiceSilo = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Spice Silo", Color.DARK_GRAY, this);
 		buildButtons.add(buttonSpiceSilo);
 		buttonSpiceSilo.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -80,7 +97,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonBattery = new SWButton(game.WIDTH + 20, game.HEIGHT - 394, 260, 22, "Battery", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonBattery = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Battery", Color.DARK_GRAY, this);
 		buildButtons.add(buttonBattery);
 		buttonBattery.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -88,7 +106,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonSpiceMine = new SWButton(game.WIDTH + 20, game.HEIGHT - 418, 260, 22, "Spice Mine", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonSpiceMine = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Spice Mine", Color.DARK_GRAY, this);
 		buildButtons.add(buttonSpiceMine);
 		buttonSpiceMine.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -96,7 +115,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonArtillery = new SWButton(game.WIDTH + 20, game.HEIGHT - 442, 260, 22, "Artillery", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonArtillery = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Artillery", Color.DARK_GRAY, this);
 		buildButtons.add(buttonArtillery);
 		buttonArtillery.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -104,7 +124,8 @@ public class Sidebar {
 				return true;
 			}
 		});
-		SWButton buttonDeathLaser = new SWButton(game.WIDTH + 20, game.HEIGHT - 466, 260, 22, "Death Laser", Color.DARK_GRAY, this);
+		buttonPosY += 24;
+		SWButton buttonDeathLaser = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "Death Laser", Color.DARK_GRAY, this);
 		buildButtons.add(buttonDeathLaser);
 		buttonDeathLaser.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -127,6 +148,9 @@ public class Sidebar {
 		});
 
 		// Events won't work if the buttons aren't staged
+		for (SWButton button : neutralBuildButtons) {
+			game.stage.addActor(button);
+		}
 		for (SWButton button : buildButtons) {
 			game.stage.addActor(button);
 		}
@@ -159,6 +183,13 @@ public class Sidebar {
 			game.shapes.setColor(Color.RED);
 			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (116 + 24*counter4) + counter4, 0, (float)(building.hp/building.getMaxHp() * 80), 2, 0);
 			counter4++;
+		}
+
+		if (game.selectedPlanet.team.isNeutral()) {
+			for (SWButton button : neutralBuildButtons) {
+				game.shapes.setColor(button.color);
+				game.shapes.box(button.posX, button.posY, 0, button.width, button.height, 0);
+			}
 		}
 
 		if (game.selectedPlanet.team.id == 1) {
@@ -200,6 +231,12 @@ public class Sidebar {
 		game.font22.setColor(game.selectedPlanet.team.color);
 		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 50);
 		game.font22.setColor(Color.WHITE);
+
+		if (game.selectedPlanet.team.isNeutral()) {
+			for (SWButton button : neutralBuildButtons) {
+				game.font14.draw(game.batch, button.label, button.posX + 5, button.posY+14);
+			}
+		}
 
 		if (game.selectedPlanet.team.id == 1) {
 			// Loop through the buildButtons to draw their labels
