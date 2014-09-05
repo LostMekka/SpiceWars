@@ -78,9 +78,6 @@ public class SpiceWars implements ApplicationListener {
 		teamNeutral = new Team(-1, new Color(0.6f, 0.6f, 0.6f, 1f));
 		teamPlayer = new Team(1, new Color(0f, 0.8f, 0f, 1f));
 		teamAI = Team.createAITeam(2, new Color(1f, 0.1f, 0.1f, 1f), this);
-		teams.add(teamNeutral);
-		teams.add(teamPlayer);
-		teams.add(teamAI);
 
 		// Set up stage and prepare for inputs
 		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -316,6 +313,11 @@ public class SpiceWars implements ApplicationListener {
 		projectiles.clear();
 		teams.clear();
 		stage.clear();
+		
+		teams.add(teamNeutral);
+		teams.add(teamPlayer);
+		teams.add(teamAI);
+		
 		numPlanets = SpiceWars.random.nextInt(10) + 10;
 		int counter = 0;
 		while (planets.size() < numPlanets) {

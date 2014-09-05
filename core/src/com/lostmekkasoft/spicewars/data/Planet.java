@@ -252,6 +252,7 @@ public class Planet extends Location {
 	public void forceAddBuilding(Building.BuildingType type) {
 		Building b = new Building(type, team, this);
 		b.isFinishedBuilding = true;
+		b.hp = b.getMaxHp();
 		b.onFinishBuilding();
 		if(type == Building.BuildingType.spiceMine){
 			mineSlots.add(b);
