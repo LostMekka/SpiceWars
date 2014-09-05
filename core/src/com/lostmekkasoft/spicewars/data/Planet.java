@@ -166,6 +166,8 @@ public class Planet extends Location {
 					a = new Army(t);
 					a.ships[i] += n;
 					armies.add(a);
+				} else {
+					a.ships[i] += n;
 				}
 				b.progress -= n;
 			}
