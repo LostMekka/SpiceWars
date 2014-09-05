@@ -1,5 +1,6 @@
 package com.lostmekkasoft.spicewars.actors;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -39,7 +40,11 @@ public class PlanetActor extends Actor {
 				Point pointMouse = new Point(x, y);
 				Point pointPlanet = new Point(planetSize/2, planetSize/2);
 				if (pointPlanet.squaredDistanceTo(pointMouse) < planet.radius*planet.radius) {
-					((PlanetActor)event.getTarget()).planet.getGame().selectedPlanet = planet;
+					if (event.getButton() == Input.Buttons.LEFT) {
+						((PlanetActor)event.getTarget()).planet.getGame().selectedPlanet = planet;
+					} else if (event.getButton() == Input.Buttons.RIGHT) {
+						((PlanetActor)event.getTarget()).planet.getGame().selectedPlanetAlt = planet;
+					}
 				}
 				return true;
 			}

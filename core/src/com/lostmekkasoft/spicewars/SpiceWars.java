@@ -55,7 +55,9 @@ public class SpiceWars implements ApplicationListener {
 	public Team teamAI;
 
 	public SelectionActor selectionActor;
+	public SelectionActor selectionActorAlt;
 	public Planet selectedPlanet;
+	public Planet selectedPlanetAlt;
 
 	TextureAtlas textureAtlas;
 	TextureRegion planetTexture;
@@ -280,6 +282,7 @@ public class SpiceWars implements ApplicationListener {
 
 		// set the selectionRing to highlight the currently selected planet
 		selectionActor.selectedPlanet = selectedPlanet;
+		selectionActorAlt.selectedPlanet = selectedPlanetAlt;
 
 		// draw everything on the stage
 		stage.draw();
@@ -363,8 +366,11 @@ public class SpiceWars implements ApplicationListener {
 
 		// Set the players planet to be select per default
 		selectedPlanet = planets.getFirst();
-		selectionActor = new SelectionActor(planetSelectionTexture, selectedPlanet);
+		selectedPlanetAlt = planets.getLast();
+		selectionActor    = new SelectionActor(planetSelectionTexture, selectedPlanet, SelectionActor.SelectionType.normal);
+		selectionActorAlt = new SelectionActor(planetSelectionTexture, selectedPlanetAlt, SelectionActor.SelectionType.alternative);
 		stage.addActor(selectionActor);
+		stage.addActor(selectionActorAlt);
 	}
 
 	private void placePlanet() {

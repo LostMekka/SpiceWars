@@ -18,6 +18,7 @@ public class Sidebar {
 	SpiceWars game;
 
 	LinkedList<SWButton> buildButtons = new LinkedList<>();
+	LinkedList<SWButton> attackButtons = new LinkedList<>();
 
 	public Sidebar(final SpiceWars game) {
 		this.game = game;
@@ -43,17 +44,29 @@ public class Sidebar {
 		SWButton buttonDeathLaser = new SWButton(game.WIDTH + 20, game.HEIGHT - 250, 260, 22, "Death Laser", Color.DARK_GRAY, this);
 		buildButtons.add(buttonDeathLaser);
 
+		SWButton buttonSendAll = new SWButton(game.WIDTH + 20, game.HEIGHT - 750, 260, 200, "SEND FUCKING EVERYTHING!", Color.DARK_GRAY, this);
+		attackButtons.add(buttonSendAll);
+
 		// Events won't work if the buttons aren't staged
 		for (SWButton button : buildButtons) {
+			game.stage.addActor(button);
+		}
+		for (SWButton button : attackButtons) {
 			game.stage.addActor(button);
 		}
 
 		//FIXME: This event listener isn't firing when clicking the button - Why?
 		buttonWorkerFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				((SWButton)event.getTarget()).setText("DONE!");
 				game.selectedPlanet.addBuilding(Building.BuildingType.workerFactory, game.teamPlayer);
 				System.out.println("Adding a worker factory");
+				return true;
+			}
+		});
+
+		buttonSendAll.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				game.selectedPlanet.sendArmy(game.teamPlayer, new double[]{1, 1, 1, 1}, game.selectedPlanetAlt);
 				return true;
 			}
 		});
@@ -74,8 +87,13 @@ public class Sidebar {
 				game.shapes.box(button.posX, button.posY - (24 * buildButtonsCounter), 0, button.width, button.height, 0);
 				buildButtonsCounter++;
 			}
+		}
 
-
+		if (game.selectedPlanet.getArmy(game.teamPlayer) != null) {
+			for (SWButton button : attackButtons) {
+				game.shapes.setColor(button.color);
+				game.shapes.box(button.posX, button.posY, 0, button.width, button.height, 0);
+			}
 		}
 
 		game.shapes.end();
@@ -116,6 +134,13 @@ public class Sidebar {
 				buildButtonsCounterFont++;
 			}
 		}
+
+		if (game.selectedPlanet.getArmy(game.teamPlayer) != null) {
+			for (SWButton button : attackButtons) {
+				game.font14.draw(game.batch, button.label, button.posX + 5, button.posY+14);
+			}
+		}
+
 		game.batch.end();
 	}
 
