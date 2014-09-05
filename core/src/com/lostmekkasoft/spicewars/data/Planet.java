@@ -138,6 +138,7 @@ public class Planet extends Location {
 	}
 	
 	private boolean canBuildStation(Team t){
+		if(type != PlanetType.station) return false;
 		if(normalSlots.isEmpty()){
 			return armies.size() <= 1;
 		} else {
