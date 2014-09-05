@@ -21,8 +21,11 @@ public class Sidebar {
 	LinkedList<SWButton> buildButtons = new LinkedList<>();
 	LinkedList<SWButton> attackButtons = new LinkedList<>();
 
+	public double[] armyToSend;
+
 	public Sidebar(final SpiceWars game) {
 		this.game = game;
+		armyToSend = new double[4];
 
 		/**
 		Building Stuff
@@ -33,7 +36,7 @@ public class Sidebar {
 		// If you love hardcoded position values and only die a little inside
 		// CLAP YOUR HANDS!
 		// It might also be a little to late for correct lyrics...
-		int buttonPosY = 250;
+		int buttonPosY = 350;
 		SWButton buttonHQ = new SWButton(game.WIDTH + 20, game.HEIGHT - buttonPosY, 260, 22, "HQ", Color.DARK_GRAY, this);
 		neutralBuildButtons.add(buttonHQ);
 		buttonHQ.addListener(new InputListener() {
@@ -138,11 +141,44 @@ public class Sidebar {
 		Attack Stuff
 		**/
 
-		SWButton buttonSendAll = new SWButton(game.WIDTH + 20, game.HEIGHT - 750, 260, 60, "Attack!", Color.DARK_GRAY, this);
+		SWButton buttonSendAll = new SWButton(game.WIDTH + 20, 20, 260, 60, "Attack!", Color.DARK_GRAY, this);
 		attackButtons.add(buttonSendAll);
 		buttonSendAll.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				game.selectedPlanet.sendArmy(game.teamPlayer, new double[]{1, 1, 1, 1}, game.selectedPlanetAlt);
+				game.selectedPlanet.sendArmy(game.teamPlayer, armyToSend, game.selectedPlanetAlt);
+				return true;
+			}
+		});
+
+		SWButton buttonSelectWorkers = new SWButton(game.WIDTH + 28, 100, 54, 180, "", Color.DARK_GRAY, this);
+		attackButtons.add(buttonSelectWorkers);
+		buttonSelectWorkers.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				armyToSend[0] = y / 180;
+				return true;
+			}
+		});
+		SWButton buttonSelectFighters = new SWButton(game.WIDTH + 92, 100, 54, 180, "", Color.DARK_GRAY, this);
+		attackButtons.add(buttonSelectFighters);
+		buttonSelectFighters.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				armyToSend[1] = y / 180;
+				return true;
+			}
+		});
+		SWButton buttonSelectFrigates = new SWButton(game.WIDTH + 155, 100, 54, 180, "", Color.DARK_GRAY, this);
+		attackButtons.add(buttonSelectFrigates);
+		buttonSelectFrigates.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				armyToSend[2] = y / 180;
+				return true;
+			}
+		});
+		SWButton buttonSelectDestroyers = new SWButton(game.WIDTH + 220, 100, 54, 180, "", Color.DARK_GRAY, this);
+		attackButtons.add(buttonSelectDestroyers);
+		buttonSelectDestroyers.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				armyToSend[3] = y / 180;
 				return true;
 			}
 		});
@@ -203,10 +239,19 @@ public class Sidebar {
 		}
 
 		if (game.selectedPlanet.getArmy(game.teamPlayer) != null) {
+			// Planet has an army belonging to the player => Display the army stuff
 			for (SWButton button : attackButtons) {
 				game.shapes.setColor(button.color);
 				game.shapes.box(button.posX, button.posY, 0, button.width, button.height, 0);
 			}
+
+			// army selection
+
+			game.shapes.setColor(Color.GRAY);
+			game.shapes.box(game.WIDTH + 28,  100, 0, 54, (float)(armyToSend[0]*180), 0); // selection bar workers
+			game.shapes.box(game.WIDTH + 92,  100, 0, 54, (float)(armyToSend[1]*180), 0); // selection bar fighters
+			game.shapes.box(game.WIDTH + 155, 100, 0, 54, (float)(armyToSend[2]*180), 0); // selection bar frigates
+			game.shapes.box(game.WIDTH + 220, 100, 0, 54, (float)(armyToSend[3]*180), 0); // selection bar destroyers
 		}
 
 		game.shapes.end();
@@ -231,7 +276,7 @@ public class Sidebar {
 
 		// Title for the selected in game item
 		game.font22.setColor(game.selectedPlanet.team.color);
-		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 10);
+		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int) game.selectedPlanet.position.x, (int) game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 10);
 		game.font22.setColor(Color.WHITE);
 		game.font12.setColor(game.selectedPlanet.team.color);
 		game.font12.draw(game.batch, String.format("Normal Slots: %d, Mine Slots: %d", game.selectedPlanet.maxNormalSlots, game.selectedPlanet.maxMineSlots), game.WIDTH + 30, game.HEIGHT - 30);
@@ -251,9 +296,19 @@ public class Sidebar {
 		}
 
 		if (game.selectedPlanet.getArmy(game.teamPlayer) != null) {
+			// Planet has an army belonging to the player => Display the army stuff
 			for (SWButton button : attackButtons) {
 				game.font14.draw(game.batch, button.label, button.posX + 5, button.posY+14);
 			}
+			game.font14.draw(game.batch, String.format("WO: %.0f%%", armyToSend[0]*100), game.WIDTH + 30, 300);
+			game.font14.draw(game.batch, String.format("FI: %.0f%%", armyToSend[1]*100), game.WIDTH + 95, 300);
+			game.font14.draw(game.batch, String.format("FR: %.0f%%", armyToSend[2]*100), game.WIDTH + 155, 300);
+			game.font14.draw(game.batch, String.format("DE: %.0f%%", armyToSend[3]*100), game.WIDTH + 220, 300);
+
+			game.font14.draw(game.batch, String.format("%.0f", Math.ceil(game.selectedPlanet.getArmy(game.teamPlayer).ships[0] * armyToSend[0])), game.WIDTH + 28, 110);
+			game.font14.draw(game.batch, String.format("%.0f", Math.ceil(game.selectedPlanet.getArmy(game.teamPlayer).ships[1] * armyToSend[1])), game.WIDTH + 92, 110);
+			game.font14.draw(game.batch, String.format("%.0f", Math.ceil(game.selectedPlanet.getArmy(game.teamPlayer).ships[2] * armyToSend[2])), game.WIDTH + 155, 110);
+			game.font14.draw(game.batch, String.format("%.0f", Math.ceil(game.selectedPlanet.getArmy(game.teamPlayer).ships[3] * armyToSend[3])), game.WIDTH + 220, 110);
 		}
 
 		game.batch.end();
