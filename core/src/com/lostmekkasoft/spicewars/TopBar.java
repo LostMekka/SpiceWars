@@ -43,12 +43,12 @@ public class TopBar {
 		game.font22.draw(game.batch, "SpiceWars", 20, game.HEIGHT + 30);
 
 		// display numerical values for spice and energy stored
-		game.font14.draw(game.batch, String.format("Spice: %.0f/%d", game.teamPlayer.spiceStored, game.teamPlayer.maxSpiceStorage), 204, game.HEIGHT + 24);
-		game.font14.draw(game.batch, String.format("Energy: %.0f/%d", game.teamPlayer.energyStored, game.teamPlayer.maxEnergyStorage), 804, game.HEIGHT + 24);
+		game.font14.draw(game.batch, String.format("Spice: %.0f/%d", game.teamPlayer.spiceStored, game.teamPlayer.maxSpiceStorage), 204, game.HEIGHT + 36);
+		game.font14.draw(game.batch, String.format("Energy: %.0f/%d", game.teamPlayer.energyStored, game.teamPlayer.maxEnergyStorage), 804, game.HEIGHT + 36);
 
 		// display numerical values for spice and energy income
-		game.font14.draw(game.batch, String.format("Income: %.0f", game.teamPlayer.spiceIncome), 204, game.HEIGHT + 36);
-		game.font14.draw(game.batch, String.format("Income: %.0f", game.teamPlayer.energyIncome), 804, game.HEIGHT + 36);
+		game.font14.draw(game.batch, String.format("   +%.1f  -%.1f  =  %.1f", game.teamPlayer.spiceIncome, game.teamPlayer.lastSpiceUsage, game.teamPlayer.lastSpiceDelta), 204, game.HEIGHT + 23);
+		game.font14.draw(game.batch, String.format("   +%.1f  -%.1f  =  %.1f", game.teamPlayer.energyIncome, game.teamPlayer.lastEnergyUsage, game.teamPlayer.lastEnergyDelta), 804, game.HEIGHT + 23);
 
 		// display efficiencies
 		game.font14.setColor(new Color(0xb4521eFF));
