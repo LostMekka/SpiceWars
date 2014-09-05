@@ -312,14 +312,6 @@ public class SpiceWars implements ApplicationListener {
 		}
 		batch.end();
 
-		//DEBUG: Write the amount of slots on each planet
-//		batch.begin();
-//		for (Planet planet : planets) {
-//			String planetSlots = String.format("R: %d - N:%d, M:%d", planet.radius, planet.maxNormalSlots, planet.maxMineSlots);
-//			drawCenteredString14(planetSlots, Color.GREEN, (float) planet.position.x, (float) planet.position.y);
-//		}
-//		batch.end();
-
 		//DEBUG: Draw rectangles to visualize the planet bounds
 //		float x = planets.getLast().actor.actorX;
 //		float y = planets.getLast().actor.actorY;

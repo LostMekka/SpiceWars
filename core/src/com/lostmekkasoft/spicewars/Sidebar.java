@@ -154,7 +154,11 @@ public class Sidebar {
 		attackButtons.add(buttonSelectWorkers);
 		buttonSelectWorkers.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				armyToSend[0] = y / 180;
+				if (y < 10) {
+					armyToSend[0] = 0;
+				} else {
+					armyToSend[0] = y / 180;
+				}
 				return true;
 			}
 		});
@@ -162,7 +166,11 @@ public class Sidebar {
 		attackButtons.add(buttonSelectFighters);
 		buttonSelectFighters.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				armyToSend[1] = y / 180;
+				if (y < 10) {
+					armyToSend[1] = 0;
+				} else {
+					armyToSend[1] = y / 180;
+				}
 				return true;
 			}
 		});
@@ -170,7 +178,11 @@ public class Sidebar {
 		attackButtons.add(buttonSelectFrigates);
 		buttonSelectFrigates.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				armyToSend[2] = y / 180;
+				if (y < 10) {
+					armyToSend[2] = 0;
+				} else {
+					armyToSend[2] = y / 180;
+				}
 				return true;
 			}
 		});
@@ -178,7 +190,11 @@ public class Sidebar {
 		attackButtons.add(buttonSelectDestroyers);
 		buttonSelectDestroyers.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				armyToSend[3] = y / 180;
+				if (y < 10) {
+					armyToSend[3] = 0;
+				} else {
+					armyToSend[3] = y / 180;
+				}
 				return true;
 			}
 		});
