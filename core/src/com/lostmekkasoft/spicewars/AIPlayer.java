@@ -36,14 +36,17 @@ public class AIPlayer {
 		this.game = game;
 		this.team = team;
 		invadeTimer = 60 + 30*ran.nextDouble();
-		buildTimer = 30 + 15*ran.nextDouble();
+		buildTimer = 20 + 10*ran.nextDouble();
 		invadeTimer = 1;
 	}
 
 	public void update(double time){
 		if(isFirst){
 			isFirst = false;
-			game.getOwnPlanets(team).getFirst().addBuilding(Building.BuildingType.generator, team);
+			Planet home = game.getOwnPlanets(team).getFirst();
+			home.addBuilding(Building.BuildingType.generator, team);
+			home.addBuilding(Building.BuildingType.workerFactory, team);
+			home.addBuilding(Building.BuildingType.fighterFactory, team);
 		}
 		buildTimer -= time;
 		if(buildTimer <= 0){
@@ -52,9 +55,7 @@ public class AIPlayer {
 		}
 		invadeTimer -= time;
 		if(invadeTimer <= 0){
-			invadeTimer = 60 + 30*ran.nextDouble();
-			invadeTimer = 30;
-			System.out.println("AI: invade timer set to " + invadeTimer);
+			invadeTimer = 25 + 15*ran.nextDouble();
 			if(targetPlanet == null){
 				chosePlanetToInvade();
 			} else {
@@ -75,23 +76,26 @@ public class AIPlayer {
 	}
 	
 	public void planBuildings(){
-		Building.BuildingType t = getDesiredBuildingType();
-		LinkedList<Planet> l = new LinkedList<>();
-		for(Planet p : game.getOwnPlanets(team)){
-			boolean b;
-			if(t == Building.BuildingType.spiceMine){
-				b = p.mineSlots.size() < p.maxMineSlots;
-			} else {
-				b = p.normalSlots.size() < p.maxNormalSlots;
+		int n = ran.nextInt(game.getOwnPlanets(team).size())+1;
+		for(int i=0; i<n; i++){
+			Building.BuildingType t = getDesiredBuildingType();
+			LinkedList<Planet> l = new LinkedList<>();
+			for(Planet p : game.getOwnPlanets(team)){
+				boolean b;
+				if(t == Building.BuildingType.spiceMine){
+					b = p.mineSlots.size() < p.maxMineSlots;
+				} else {
+					b = p.normalSlots.size() < p.maxNormalSlots;
+				}
+				if(b){
+					Army a = p.getArmy(team);
+					if(a != null && a.ships[0] > 0) l.add(p);
+				}
 			}
-			if(b){
-				Army a = p.getArmy(team);
-				if(a != null && a.ships[0] > 0) l.add(p);
-			}
+			if(l.isEmpty()) return; // no place to build!
+			Planet p = l.get(ran.nextInt(l.size()));
+			p.addBuilding(t, team);
 		}
-		if(l.isEmpty()) return; // no place to build!
-		Planet p = l.get(ran.nextInt(l.size()));
-		p.addBuilding(t, team);
 	}
 	
 	public Building.BuildingType getDesiredBuildingType(){
@@ -145,6 +149,7 @@ public class AIPlayer {
 			for(Planet p2 : needWorkers.keySet()){ p1 = p2; break; }
 			int w1 = needWorkers.get(p1);
 			Planet p2 = getPlanetClosestTo(p1, haveWorkers.keySet());
+			if(p2 == null) break;
 			int w2 = haveWorkers.get(p2);
 			int w = w1 + w2;
 			if(w >= 0) haveWorkers.remove(p2);
@@ -152,9 +157,13 @@ public class AIPlayer {
 			if(w > 0) needWorkers.put(p1, w);
 			if(w < 0) haveWorkers.put(p2, w);
 			int wsend = Math.min(w1, -w2);
-			double r = wsend / p2.getArmy(team).ships[0];
+			Army a = p2.getArmy(team);
+			if(a == null){
+				haveWorkers.remove(p2);
+				continue;
+			}
+			double r = wsend / a.ships[0];
 			p2.sendArmy(team, new double[]{r, 0, 0, 0}, p1);
-			System.out.println("AI: sending " + wsend + " workers...");
 		}
 		if(!haveWorkers.isEmpty()){
 			// get at least one worker to every planet
@@ -162,7 +171,8 @@ public class AIPlayer {
 			// get list of all own planets without workers on them and without workers traveling to them
 			for(Planet p : game.getOwnPlanets(team)){
 				Army a = p.getArmy(team);
-				if(a != null && a.ships[0] <= 0){
+				if(a == null || a.ships[0] <= 0){
+					System.out.println("redist worker: " + a);
 					boolean add = true;
 					for(Army a2 : game.armies){
 						if(a2.target == p && a2.team == team && a2.ships[0] > 0){
@@ -176,7 +186,7 @@ public class AIPlayer {
 			if(!l.isEmpty()){
 				// distribute the surplus workers
 				for(Planet p1 : haveWorkers.keySet()){
-					int w = haveWorkers.get(p1) - 1;
+					int w = -haveWorkers.get(p1) - 1;
 					for(int i=0; i<w; i++){
 						Planet p2 = l.removeFirst();
 						p1.sendArmy(team, new double[]{1.0/w,0,0,0}, p2);
