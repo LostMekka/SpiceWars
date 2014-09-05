@@ -20,8 +20,8 @@ public final class Building {
 	}
 	
 	public static final int MAX_WORKERS_PER_BUILDING = 5;
-	public static final double MINE_INCOME = 5;
-	public static final double GENERATOR_INCOME = 10;
+	public static final double MINE_INCOME = 3.5;
+	public static final double GENERATOR_INCOME = 12.5;
 	public static final double FACTORY_SPICE_USAGE = 2.5;
 	public static final double FACTORY_ENERGY_USAGE = 5;
 	public static final double WORKER_SPICE_USAGE = 1;
