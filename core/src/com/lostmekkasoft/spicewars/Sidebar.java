@@ -146,18 +146,18 @@ public class Sidebar {
 		int counter3 = 0; // I WILL REFUSE TO TAKE BLAME FOR THIS!
 		for (Building building : game.selectedPlanet.normalSlots) {
 			game.shapes.setColor(Color.BLUE);
-			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (114 + 22*counter3) + counter3, 0, (float)building.progress, 2, 0);
+			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (114 + 22*counter3) + counter3, 0, (float)building.progress * 160, 2, 0);
 			game.shapes.setColor(Color.RED);
-			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (116 + 24*counter3) + counter3, 0, (float)building.hp, 2, 0);
+			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (116 + 24*counter3) + counter3, 0, (float)(building.hp/building.getMaxHp() * 160) , 2, 0);
 			counter3++;
 		}
 
 		int counter4 = 0; // STILL NO SHAME!
 		for (Building building : game.selectedPlanet.mineSlots) {
 			game.shapes.setColor(Color.BLUE);
-			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (114 + 22*counter4) + counter4, 0, (float)building.progress, 2, 0);
+			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (114 + 22*counter4) + counter4, 0, (float)building.progress * 80, 2, 0);
 			game.shapes.setColor(Color.RED);
-			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (116 + 24*counter4) + counter4, 0, (float)building.hp, 2, 0);
+			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (116 + 24*counter4) + counter4, 0, (float)(building.hp/building.getMaxHp() * 80), 2, 0);
 			counter4++;
 		}
 
