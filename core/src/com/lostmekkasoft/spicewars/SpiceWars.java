@@ -431,6 +431,7 @@ public class SpiceWars implements ApplicationListener {
 		// Only instantiate and add the new planet if the position is found to be valid
 		if (isGood == planets.size()) {
 			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
+			//FIXME: This can produce planets with zero slots, that shouldn't happen.
 			int maxNormalSlots = randomRadius / 8 + jitter*2;
 			int maxMineSlots = randomRadius / 8 + jitter;
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal, this));
@@ -439,7 +440,7 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-
+		//FIXME plz :( More like IMPLEMENT_ME, but still
 	}
 
 	@Override
