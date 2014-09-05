@@ -441,7 +441,8 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-		//FIXME plz :( More like IMPLEMENT_ME, but still
+		// FIXME plz :( More like IMPLEMENT_ME, but still
+		// check here https://github.com/libgdx/libgdx/wiki/Viewports
 	}
 
 	@Override
