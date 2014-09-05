@@ -99,6 +99,7 @@ public class Location {
 	
 
 	public boolean buildStation(Team team){
+		if(this instanceof Planet) return false;
 		Army army = getArmy(team);
 		if(army.ships[0] == 0)return false;
 		Planet planet = new Planet(Planet.STATION_RADIUS, team, Planet.STATION_NORMAL_SLOTS, 0,position, Planet.PlanetType.station, game);

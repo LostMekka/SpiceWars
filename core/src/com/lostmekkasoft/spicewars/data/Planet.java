@@ -109,6 +109,26 @@ public class Planet extends Location {
 		return Math.min(workersNeeded, workers);
 	}
 	
+	public int getJobCount(Team t){
+		int workersNeeded = 0;
+		if(type == PlanetType.station && progress < 1){
+			if(!canBuildStation(t)) return 0;
+			return MAX_STATION_WORKERS;
+		} else {
+			for(Building b:normalSlots){
+				if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) workersNeeded++;
+			}
+			for(Building b:mineSlots){
+				if(b.team == t && (!b.isFinishedBuilding || b.hp < b.getMaxHp())) workersNeeded++;
+			}
+			workersNeeded *= Building.MAX_WORKERS_PER_BUILDING;
+			if(type == PlanetType.station && hp < MAX_STATION_HP){
+				workersNeeded += MAX_STATION_WORKERS;
+			} 
+		}
+		return workersNeeded;
+	}
+	
 	public int getWorkingFactories(Team t){
 		int i = 0;
 		for(Building b : normalSlots){
@@ -218,7 +238,7 @@ public class Planet extends Location {
 	
 	public boolean canAddBuilding(Building.BuildingType type, Team team) {
 		Army army = getArmy(team);
-		if(army != null && army.ships[0] <= 0) return false;
+		if(army == null || army.ships[0] <= 0) return false;
 		if(this.type == PlanetType.station && progress < 1) return false;
 		if (type == Building.BuildingType.spiceMine) {
 			return maxMineSlots > mineSlots.size();
