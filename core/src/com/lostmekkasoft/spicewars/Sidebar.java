@@ -143,6 +143,24 @@ public class Sidebar {
 		game.shapes.setColor(new Color(0x111111FF));
 		game.shapes.box(game.WIDTH, 0, 0, game.WIDTH + 300, game.HEIGHT, 0);
 
+		int counter3 = 0; // I WILL REFUSE TO TAKE BLAME FOR THIS!
+		for (Building building : game.selectedPlanet.normalSlots) {
+			game.shapes.setColor(Color.BLUE);
+			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (114 + 22*counter3) + counter3, 0, (float)building.progress, 2, 0);
+			game.shapes.setColor(Color.RED);
+			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (116 + 24*counter3) + counter3, 0, (float)building.hp, 2, 0);
+			counter3++;
+		}
+
+		int counter4 = 0; // STILL NO SHAME!
+		for (Building building : game.selectedPlanet.mineSlots) {
+			game.shapes.setColor(Color.BLUE);
+			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (114 + 22*counter4) + counter4, 0, (float)building.progress, 2, 0);
+			game.shapes.setColor(Color.RED);
+			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (116 + 24*counter4) + counter4, 0, (float)building.hp, 2, 0);
+			counter4++;
+		}
+
 		if (game.selectedPlanet.team.id == 1) {
 			// Loop through the buildButtons to draw them
 			for (SWButton button : buildButtons) {
@@ -162,14 +180,20 @@ public class Sidebar {
 
 
 		// Unfortunately the labels are drawn in a SpriteBatch
+		// "Unfortunately" is an enormous understatement by the way
+		// this splitting this shit up into two different renderers is inefficient and annoying
 		game.batch.begin();
 
-		// Loop through buildings for a planet, also create their buttons
+		// Loop through building slots for a planet, also create their buttons
 		int counter = 0;
 		for (Building building : game.selectedPlanet.normalSlots) {
-			game.font14.draw(game.batch, building.type.name(), game.WIDTH + 20, game.HEIGHT - (100 + 16*counter));
-			game.font14.draw(game.batch, String.format("%f", building.progress), game.WIDTH + 200, game.HEIGHT - (100 + 16*counter));
+			game.font12.draw(game.batch, building.type.name(), game.WIDTH + 20, game.HEIGHT - (100 + 22*counter));
 			counter++;
+		}
+		int counter2 = 0;
+		for (Building building : game.selectedPlanet.mineSlots) {
+			game.font12.draw(game.batch, building.type.name(), game.WIDTH + 200, game.HEIGHT - (100 + 22*counter2));
+			counter2++;
 		}
 
 		// Title for the selected in game item
