@@ -74,11 +74,17 @@ public class Location {
 		a.position = position.clone();
 		a.position.moveTo(target.position, radius, target.radius);
 		game.addMovingArmy(a);
+		printArmies();
 		return true;
 	}
 	
 	public boolean hasArmies(){
 		return !armies.isEmpty();
+	}
+	
+	public void printArmies(){
+		System.out.println("--- armies -------------");
+		for(Army a : armies) System.out.println("A " + (a == null ? "null" : "" + a.team.id + " - " + a.toString() + " - " + a.toDoubleString()));
 	}
 	
 	public boolean overlapsWith(Location l){

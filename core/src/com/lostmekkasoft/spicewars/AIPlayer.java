@@ -158,7 +158,7 @@ public class AIPlayer {
 			if(w < 0) haveWorkers.put(p2, w);
 			int wsend = Math.min(w1, -w2);
 			Army a = p2.getArmy(team);
-			if(a == null){
+			if(a == null || a.ships[0] <= 0){
 				haveWorkers.remove(p2);
 				continue;
 			}
@@ -172,7 +172,6 @@ public class AIPlayer {
 			for(Planet p : game.getOwnPlanets(team)){
 				Army a = p.getArmy(team);
 				if(a == null || a.ships[0] <= 0){
-					System.out.println("redist worker: " + a);
 					boolean add = true;
 					for(Army a2 : game.armies){
 						if(a2.target == p && a2.team == team && a2.ships[0] > 0){
@@ -189,7 +188,7 @@ public class AIPlayer {
 					int w = -haveWorkers.get(p1) - 1;
 					for(int i=0; i<w; i++){
 						Planet p2 = l.removeFirst();
-						p1.sendArmy(team, new double[]{1.0/w,0,0,0}, p2);
+						p1.sendArmy(team, new double[]{1.0/(w+1),0,0,0}, p2);
 						w--;
 						if(l.isEmpty()) break;
 					}
@@ -212,6 +211,7 @@ public class AIPlayer {
 	
 	public void chosePlanetToInvade(){
 		Planet p = getUnownedPlanetClosestToAll();
+		if(p == null) return;
 		double ea = getEnemyArmyValue(p);
 		double own = getTotalArmyValue(team);
 		if(own >= ea*1.5) targetPlanet = p;

@@ -162,7 +162,7 @@ public class Planet extends Location {
 			}
 			b.progress += Building.FACTORY_SPICE_USAGE / Army.cost[i] * efficiency * time;
 			int n = (int)b.progress;
-			if(n >= 0){
+			if(n > 0){
 				Army a = getArmy(t);
 				if(a == null){
 					a = new Army(t);

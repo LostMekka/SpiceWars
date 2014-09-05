@@ -107,6 +107,10 @@ public class Army {
 				(int)Math.ceil(ships[2]), (int)Math.ceil(ships[3]));
 	}
 	
+	public String toDoubleString(){
+		return String.format("%f, %f, %f, %f", ships[0], ships[1], ships[2], ships[3]);
+	}
+	
 	public void bombardPlanet(Planet p, double time){
 		for(int i=1; i<4; i++) if(!p.team.isNeutral()){
 			p.damageRandomBuilding(Math.ceil(ships[i]) * dps[i] * time, accuracy[i]);
@@ -130,10 +134,17 @@ public class Army {
 		Army a = new Army(team);
 		boolean b = false;
 		for(int i=0; i<4; i++){
-			double s = Math.ceil(ships[i] * ratio[i]);
-			a.ships[i] = s;
-			ships[i] -= s;
-			if(s > 0) b = true;
+			double n = Math.round(Math.ceil(ships[i]) * ratio[i]);
+			if(n == 0){
+				a.ships[i] = 0;
+			} else if(a.ships[i] == 1){
+				a.ships[i] = ships[i];
+				ships[i] = 0;
+			} else {
+				a.ships[i] = n;
+				ships[i] = Math.ceil(ships[i]) - n;
+			}
+			if(n > 0) b = true;
 		}
 		return b ? a : null;
 	}

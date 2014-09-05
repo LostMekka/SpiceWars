@@ -118,7 +118,7 @@ public class SpiceWars implements ApplicationListener {
 	}
 
 	public void update(float delta) {
-		double time = delta;
+		double time = delta*1.5;
 		// tick ai players
 		for(Team t : teams) if(t.isAITeam()) t.ai.update(time);
 		// manage economy: build and repair buildings
