@@ -170,6 +170,7 @@ public class Sidebar {
 		int counter3 = 0; // I WILL REFUSE TO TAKE BLAME FOR THIS!
 		for (Building building : game.selectedPlanet.normalSlots) {
 			game.shapes.setColor(Color.CYAN);
+			//FIXME: adding the counter to the height explicitly is stoopid. And it fails to fix the problem entirely as well.
 			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (114 + 22*counter3) + counter3, 0, (float)building.progress * 160, 2, 0);
 			game.shapes.setColor(Color.RED);
 			game.shapes.box(game.WIDTH + 20, game.HEIGHT - (116 + 24*counter3) + counter3, 0, (float)(building.hp/building.getMaxHp() * 160) , 2, 0);
@@ -179,6 +180,7 @@ public class Sidebar {
 		int counter4 = 0; // STILL NO SHAME!
 		for (Building building : game.selectedPlanet.mineSlots) {
 			game.shapes.setColor(Color.CYAN);
+			//FIXME: See above.
 			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (114 + 22*counter4) + counter4, 0, (float)building.progress * 80, 2, 0);
 			game.shapes.setColor(Color.RED);
 			game.shapes.box(game.WIDTH + 200, game.HEIGHT - (116 + 24*counter4) + counter4, 0, (float)(building.hp/building.getMaxHp() * 80), 2, 0);
@@ -229,8 +231,11 @@ public class Sidebar {
 
 		// Title for the selected in game item
 		game.font22.setColor(game.selectedPlanet.team.color);
-		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 50);
+		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 10);
 		game.font22.setColor(Color.WHITE);
+		game.font12.setColor(game.selectedPlanet.team.color);
+		game.font12.draw(game.batch, String.format("Normal Slots: %d, Mine Slots: %d", game.selectedPlanet.maxNormalSlots, game.selectedPlanet.maxMineSlots), game.WIDTH + 30, game.HEIGHT - 30);
+		game.font12.setColor(Color.WHITE);
 
 		if (game.selectedPlanet.team.isNeutral()) {
 			for (SWButton button : neutralBuildButtons) {
