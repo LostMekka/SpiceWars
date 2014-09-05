@@ -152,4 +152,11 @@ public final class Building {
 		if(isFinishedBuilding) addTeamEffect(team);
 	}
 	
+	public boolean isFactory(){
+		return type == BuildingType.workerFactory ||
+				type == BuildingType.fighterFactory ||
+				type == BuildingType.frigateFactory ||
+				type == BuildingType.destroyerFactory;
+	}
+	
 }
