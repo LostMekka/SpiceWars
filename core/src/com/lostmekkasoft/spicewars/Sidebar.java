@@ -229,8 +229,11 @@ public class Sidebar {
 
 		// Title for the selected in game item
 		game.font22.setColor(game.selectedPlanet.team.color);
-		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 50);
+		game.font22.draw(game.batch, String.format("Planet X:%d Y:%d", (int)game.selectedPlanet.position.x, (int)game.selectedPlanet.position.y), game.WIDTH + 20, game.HEIGHT - 10);
 		game.font22.setColor(Color.WHITE);
+		game.font12.setColor(game.selectedPlanet.team.color);
+		game.font12.draw(game.batch, String.format("Normal Slots: %d, Mine Slots: %d", game.selectedPlanet.maxNormalSlots, game.selectedPlanet.maxMineSlots), game.WIDTH + 30, game.HEIGHT - 30);
+		game.font12.setColor(Color.WHITE);
 
 		if (game.selectedPlanet.team.isNeutral()) {
 			for (SWButton button : neutralBuildButtons) {

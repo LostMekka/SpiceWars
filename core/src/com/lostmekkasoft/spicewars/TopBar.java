@@ -26,16 +26,16 @@ public class TopBar {
 		// bar for the spice
 		game.shapes.setColor(Color.GRAY);
 		game.shapes.box(200, game.HEIGHT + 10, 0, 250, 30, 0);
-		game.shapes.setColor(Color.MAROON);
+		game.shapes.setColor(new Color(0xb4521eFF)); // Spice color stolen directly from Dune screenshots btw
 		game.shapes.box(200, game.HEIGHT + 10, 0, (float)(game.teamPlayer.spiceStored / game.teamPlayer.maxSpiceStorage * 250), 30, 0);
-		game.shapes.box(200, game.HEIGHT - 10, 0, (float)(game.teamAI.spiceStored / game.teamAI.maxSpiceStorage * 250), 10, 0); //DEBUG
+//		game.shapes.box(200, game.HEIGHT - 10, 0, (float)(game.teamAI.spiceStored / game.teamAI.maxSpiceStorage * 250), 10, 0); //DEBUG
 
 		// bar for the energy
 		game.shapes.setColor(Color.GRAY);
 		game.shapes.box(500, game.HEIGHT + 10, 0, 250, 30, 0);
 		game.shapes.setColor(Color.BLUE);
 		game.shapes.box(500, game.HEIGHT + 10, 0, (float)(game.teamPlayer.energyStored / game.teamPlayer.maxEnergyStorage * 250), 30, 0);
-		game.shapes.box(500, game.HEIGHT - 10, 0, (float)(game.teamAI.energyStored / game.teamAI.maxEnergyStorage * 250), 10, 0); //DEBUG
+//		game.shapes.box(500, game.HEIGHT - 10, 0, (float)(game.teamAI.energyStored / game.teamAI.maxEnergyStorage * 250), 10, 0); //DEBUG
 
 		game.shapes.end();
 
@@ -54,8 +54,11 @@ public class TopBar {
 
 		// display efficiencies
 		game.font14.draw(game.batch, "Efficiencies:", 800, game.HEIGHT + 30);
+		game.font14.setColor(new Color(0xb4521eFF));
 		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastSpiceEfficiency), 940, game.HEIGHT + 30);
+		game.font14.setColor(Color.WHITE);
 		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastEfficiency), 1000, game.HEIGHT + 30);
+		game.font14.setColor(Color.BLUE);
 		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastEnergyEfficiency), 1060, game.HEIGHT + 30);
 
 		game.batch.end();
