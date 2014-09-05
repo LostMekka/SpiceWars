@@ -427,7 +427,7 @@ public class SpiceWars implements ApplicationListener {
 			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
 			Army a = new Army(teamAI);
-			a.ships[0] = 10;
+			a.ships[0] = 5;
 			planet.receiveArmy(a);
 			planet.forceAddBuilding(Building.BuildingType.hq);
 			planet.forceAddBuilding(Building.BuildingType.spiceMine);
