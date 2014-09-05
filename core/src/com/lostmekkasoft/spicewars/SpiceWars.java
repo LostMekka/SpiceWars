@@ -290,12 +290,8 @@ public class SpiceWars implements ApplicationListener {
 		// draw the sidebar
 		sidebar.draw();
 
-		//DEBUG: Press R to generate a new playing field or ESC to exit the game
-		timeForInput += Gdx.graphics.getDeltaTime();
-		if (Gdx.input.isKeyPressed(Input.Keys.R) && timeForInput > 0.1) {
-			newLevel();
-			timeForInput = 0;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+		//DEBUG: Press ESC to exit the game
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
 
