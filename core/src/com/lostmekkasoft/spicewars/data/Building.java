@@ -14,8 +14,8 @@ import com.lostmekkasoft.spicewars.SpiceWars;
 public final class Building {
 	
 	public static enum BuildingType{ hq, 
+		spiceMine, generator, spiceSilo, battery, 
 		workerFactory, fighterFactory, frigateFactory, destroyerFactory,
-		spiceMine, spiceSilo, generator, battery, 
 		artillery, deathlaser
 	}
 	
