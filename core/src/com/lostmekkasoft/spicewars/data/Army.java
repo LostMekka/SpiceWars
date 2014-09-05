@@ -25,7 +25,7 @@ public class Army {
 		0.0, 0.8, 0.5, 0.2
 	};
 	public static final double[] cost = new double[]{
-		20.0, 5.0, 40.0, 100.0
+		20.0, 5.0, 40.0, 90.0
 	};
 	public static final double[] dps = new double[]{
 		0.0, cost[1]*0.02, cost[2]*0.024, cost[3]*0.028
