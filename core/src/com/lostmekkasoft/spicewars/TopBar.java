@@ -28,14 +28,14 @@ public class TopBar {
 		game.shapes.box(200, game.HEIGHT + 10, 0, 250, 30, 0);
 		game.shapes.setColor(Color.MAROON);
 		game.shapes.box(200, game.HEIGHT + 10, 0, (float)(game.teamPlayer.spiceStored / game.teamPlayer.maxSpiceStorage * 250), 30, 0);
-		game.shapes.box(200, game.HEIGHT - 20, 0, (float)(game.teamAI.spiceStored / game.teamAI.maxSpiceStorage * 250), 20, 0); //DEBUG
+		game.shapes.box(200, game.HEIGHT - 10, 0, (float)(game.teamAI.spiceStored / game.teamAI.maxSpiceStorage * 250), 10, 0); //DEBUG
 
 		// bar for the energy
 		game.shapes.setColor(Color.GRAY);
 		game.shapes.box(500, game.HEIGHT + 10, 0, 250, 30, 0);
 		game.shapes.setColor(Color.BLUE);
 		game.shapes.box(500, game.HEIGHT + 10, 0, (float)(game.teamPlayer.energyStored / game.teamPlayer.maxEnergyStorage * 250), 30, 0);
-		game.shapes.box(500, game.HEIGHT - 20, 0, (float)(game.teamAI.energyStored / game.teamAI.maxEnergyStorage * 250), 20, 0); //DEBUG
+		game.shapes.box(500, game.HEIGHT - 10, 0, (float)(game.teamAI.energyStored / game.teamAI.maxEnergyStorage * 250), 10, 0); //DEBUG
 
 		game.shapes.end();
 
@@ -51,6 +51,12 @@ public class TopBar {
 		// display numerical values for spice and energy income
 		game.font14.draw(game.batch, String.format("Income: %.0f", game.teamPlayer.spiceIncome), 200, game.HEIGHT + 38);
 		game.font14.draw(game.batch, String.format("Income: %.0f", game.teamPlayer.energyIncome), 500, game.HEIGHT + 38);
+
+		// display efficiencies
+		game.font14.draw(game.batch, "Efficiencies:", 800, game.HEIGHT + 30);
+		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastSpiceEfficiency), 940, game.HEIGHT + 30);
+		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastEfficiency), 1000, game.HEIGHT + 30);
+		game.font14.draw(game.batch, String.format("%.2f", game.teamPlayer.lastEnergyEfficiency), 1060, game.HEIGHT + 30);
 
 		game.batch.end();
 	}
