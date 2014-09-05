@@ -28,7 +28,7 @@ public class Army {
 		20.0, 5.0, 40.0, 100.0
 	};
 	public static final double[] dps = new double[]{
-		0.0, cost[1]*1.0, cost[2]*1.2, cost[3]*1.4
+		0.0, cost[1]*0.02, cost[2]*0.024, cost[3]*0.028
 	};
 	public static final double[][] dpsMods = new double[][]{
 		{0.0, 0.0, 0.0, 0.0},
@@ -62,10 +62,12 @@ public class Army {
 		for(int srcI=1; srcI<4; srcI++){
 			for(int army=0; army<s; army++){
 				double dmg = Math.ceil(oldArmies[army].ships[srcI]) * dps[srcI] * time;
+				if(dmg == 0) continue;
 				for(int trgtI : priorities[srcI]){
 					double modDmg = dmg * dpsMods[srcI][trgtI];
 					double totalhp = 0;
 					for(int i=0; i<s; i++) if(i != army) totalhp = oldArmies[i].ships[trgtI];
+					if(totalhp == 0) continue;
 					if(modDmg > totalhp){
 						for(int i=0; i<s; i++) if(i != army) newArmies[i][trgtI] = 0;
 						dmg -= totalhp / dpsMods[srcI][trgtI];
