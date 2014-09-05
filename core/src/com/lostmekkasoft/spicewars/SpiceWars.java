@@ -25,6 +25,12 @@ import java.util.Random;
 
 public class SpiceWars implements ApplicationListener {
 
+	public enum State {
+		Running, Paused
+	}
+
+	State state = State.Running;
+
 	public SpriteBatch batch;
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
@@ -275,54 +281,80 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void render () {
-		update(Gdx.graphics.getDeltaTime());
+		switch (state) {
+			case Running:
+				update(Gdx.graphics.getDeltaTime());
 
-		Gdx.gl.glClearColor(0,0,0,1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				Gdx.gl.glClearColor(0,0,0,1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		// let all the actors do their stuff
-		stage.act(Gdx.graphics.getDeltaTime());
+				// let all the actors do their stuff
+				stage.act(Gdx.graphics.getDeltaTime());
 
-		// set the selectionRing to highlight the currently selected planet
-		selectionActor.selectedPlanet = selectedPlanet;
-		selectionActorAlt.selectedPlanet = selectedPlanetAlt;
+				// set the selectionRing to highlight the currently selected planet
+				selectionActor.selectedPlanet = selectedPlanet;
+				selectionActorAlt.selectedPlanet = selectedPlanetAlt;
 
-		// draw everything on the stage
-		stage.draw();
+				// draw everything on the stage
+				stage.draw();
 
-		// draw the UI elements
-		sidebar.draw();
-		topBar.draw();
+				// draw the UI elements
+				sidebar.draw();
+				topBar.draw();
 
-		//DEBUG: Press ESC to exit the game
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			Gdx.app.exit();
+				// allow the state to be paused
+				if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+					if (state.equals(State.Running)) {
+						state = State.Paused;
+					} else {
+						state = State.Running;
+					}
+				}
+
+				//DEBUG: Press ESC to exit the game
+				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
+
+				// Write the amount of armies each planet has on a planet
+				batch.begin();
+				for (Planet planet : planets) {
+					int counter = 0;
+					for (Army army : planet.armies) {
+						font14.setColor(army.team.color);
+						font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y - 14*counter);
+						counter++;
+					}
+					font14.setColor(Color.WHITE);
+				}
+				batch.end();
+				break;
+
+			case Paused:
+
+				batch.begin();
+				font48.draw(batch, "GAME PAUSED", WIDTH/2 - font48.getBounds("GAME PAUSED").width/2, HEIGHT/2);
+
+				batch.end();
+
+				// allow the state to be paused
+				if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+					if (state.equals(State.Running)) {
+						state = State.Paused;
+					} else {
+						state = State.Running;
+					}
+				}
+
+				//DEBUG: Press ESC to exit the game
+				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
+
+				break;
 		}
 
-		// Write the amount of armies each planet has on a planet
-		batch.begin();
-		for (Planet planet : planets) {
-			int counter = 0;
-			for (Army army : planet.armies) {
-				font14.setColor(army.team.color);
-				font14.draw(batch, army.toString(), (float)planet.position.x, (float)planet.position.y - 14*counter);
-				counter++;
-			}
-			font14.setColor(Color.WHITE);
-		}
-		batch.end();
 
-		//DEBUG: Draw rectangles to visualize the planet bounds
-//		float x = planets.getLast().actor.actorX;
-//		float y = planets.getLast().actor.actorY;
-//		float s = planets.getLast().actor.planetSize;
-//		shapes.begin(ShapeRenderer.ShapeType.Line);
-//		shapes.setColor(Color.WHITE);
-//		shapes.box(x, y, 0, s, s, 0);
-//		shapes.line(x, y, x+s, y+s);
-//		shapes.line(x+s, y, x, y+s);
-//		shapes.circle((float)planets.getLast().position.x, (float)planets.getLast().position.y, planets.getLast().radius);
-//		shapes.end();
 	}
 
 	public void newLevel() {
