@@ -22,10 +22,10 @@ public final class Building {
 	public static final int MAX_WORKERS_PER_BUILDING = 5;
 	public static final double MINE_INCOME = 5;
 	public static final double GENERATOR_INCOME = 10;
-	public static final double FACTORY_SPICE_USAGE = 2;
-	public static final double FACTORY_ENERGY_USAGE = 6;
+	public static final double FACTORY_SPICE_USAGE = 2.5;
+	public static final double FACTORY_ENERGY_USAGE = 5;
 	public static final double WORKER_SPICE_USAGE = 1;
-	public static final double WORKER_ENERGY_USAGE = 8;
+	public static final double WORKER_ENERGY_USAGE = 4;
 	public static final int SILO_STORAGE = 100;
 	public static final int BATTERY_STORAGE = 500;
 	public static final int DEFAULT_SPICE_STORAGE = 50;
@@ -63,13 +63,13 @@ public final class Building {
 		switch(type){
 			case hq: return 150;
 			case workerFactory: 
-			case fighterFactory:
-			case frigateFactory:
-			case destroyerFactory: return 180;
+			case fighterFactory: return 100;
+			case frigateFactory: return 150;
+			case destroyerFactory: return 200;
 			case generator: 
 			case spiceSilo:
-			case battery: return 130;
-			case spiceMine: return 60;
+			case battery: return 100;
+			case spiceMine: return 50;
 			case artillery: return 500;
 			case deathlaser: return 2000;
 			default: throw new RuntimeException();		
