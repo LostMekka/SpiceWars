@@ -276,7 +276,7 @@ public class Planet extends Location {
 		ListIterator<Building> i = l.listIterator();
 		while (i.hasNext()) {
 			Building b2 = i.next();
-			if (b.type.ordinal() > b2.type.ordinal()) {
+			if (b.type.ordinal() >= b2.type.ordinal()) {
 				continue;
 			}
 			i.previous();
