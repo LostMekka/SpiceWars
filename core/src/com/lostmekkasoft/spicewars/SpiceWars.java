@@ -126,10 +126,10 @@ public class SpiceWars implements ApplicationListener {
 			t.lastSpiceEfficiency = effSp;
 			t.lastEnergyEfficiency = effEn;
 			t.lastEfficiency = efficiency;
-			t.lastSpiceUsage = spiceUsage;
-			t.lastSpiceDelta = spiceDelta;
-			t.lastEnergyUsage = energyUsage;
-			t.lastEnergyDelta = energyDelta;
+			t.lastSpiceUsage = spiceUsage / time;
+			t.lastSpiceDelta = spiceDelta / time;
+			t.lastEnergyUsage = energyUsage / time;
+			t.lastEnergyDelta = energyDelta / time;
 			for(Planet p : planets) p.buildStuff(t, efficiency, time);
 			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
 			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
