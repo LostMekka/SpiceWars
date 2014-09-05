@@ -29,6 +29,7 @@ public class SpiceWars implements ApplicationListener {
 	public SpriteBatch batch;
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
+	public BitmapFont font12;
 	public BitmapFont font14;
 	public BitmapFont font22;
 	public BitmapFont font48;
@@ -40,8 +41,6 @@ public class SpiceWars implements ApplicationListener {
 
 	public Stage stage;
 	public Sidebar sidebar;
-
-	float timeForInput = 0;
 
 	public int numPlanets;
 	public LinkedList<Planet> planets = new LinkedList<>();
@@ -71,6 +70,8 @@ public class SpiceWars implements ApplicationListener {
 
 		FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/imagine_font/imagine_font.ttf"));
+		fontParameter.size = 12;
+		font12 = fontGenerator.generateFont(fontParameter);
 		fontParameter.size = 14;
 		font14 = fontGenerator.generateFont(fontParameter);
 		fontParameter.size = 22;
@@ -287,12 +288,8 @@ public class SpiceWars implements ApplicationListener {
 		// draw the sidebar
 		sidebar.draw();
 
-		//DEBUG: Press R to generate a new playing field or ESC to exit the game
-		timeForInput += Gdx.graphics.getDeltaTime();
-		if (Gdx.input.isKeyPressed(Input.Keys.R) && timeForInput > 0.1) {
-			newLevel();
-			timeForInput = 0;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+		//DEBUG: Press ESC to exit the game
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
 
