@@ -258,6 +258,7 @@ public class Planet extends Location {
 		b.isFinishedBuilding = true;
 		b.hp = b.getMaxHp();
 		b.onFinishBuilding();
+		if(type == Building.BuildingType.hq) hasHQ = true;
 		if(type == Building.BuildingType.spiceMine){
 			mineSlots.add(b);
 		} else {
