@@ -134,7 +134,7 @@ public class Planet extends Location {
 	public int getWorkingFactories(Team t){
 		int i = 0;
 		for(Building b : normalSlots){
-			if(b.isFactory() && b.isActive && b.isFinishedBuilding) i++;
+			if(b.team == t && b.isFactory() && b.isActive && b.isFinishedBuilding) i++;
 		}
 		return i;
 	}
