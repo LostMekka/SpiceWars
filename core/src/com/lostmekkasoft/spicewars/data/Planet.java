@@ -192,8 +192,8 @@ public class Planet extends Location {
 				hp = Math.min(hp + rate * MAX_STATION_HP, MAX_STATION_HP);
 			}
 			// build buildings with the remaining workers
-			LinkedList<Building> l = (LinkedList<Building>)normalSlots.clone();
-			l.addAll(mineSlots);
+			LinkedList<Building> l = (LinkedList<Building>)mineSlots.clone();
+			l.addAll(normalSlots);
 			for(Building b : l) if(b.team == t && !b.isFinishedBuilding){
 				if(workerCount <= 0) break;
 				int w = Math.min(workerCount, Building.MAX_WORKERS_PER_BUILDING);
