@@ -372,8 +372,8 @@ public class SpiceWars implements ApplicationListener {
 
 	private void placePlanet() {
 		int firstRadius = 40;
-		int firstNormalSlots = 5;
-		int firstMineSlots = 5;
+		int firstNormalSlots = 6;
+		int firstMineSlots = 4;
 
 		if (planets.isEmpty()) {
 			// Place the first planet in the lower left corner.
@@ -405,7 +405,7 @@ public class SpiceWars implements ApplicationListener {
 
 		// The first two planets have already been set, we can now place random
 		// planets until the screen is filled.
-		int randomRadius = SpiceWars.random.nextInt(80) + 50;
+		int randomRadius = SpiceWars.random.nextInt((130 - 30) + 1) + 30;
 		int posX = SpiceWars.random.nextInt(WIDTH - randomRadius*2) + randomRadius;
 		int posY = SpiceWars.random.nextInt(HEIGHT - randomRadius*2) + randomRadius;
 		Point randomPoint = new Point(posX, posY);
@@ -422,10 +422,19 @@ public class SpiceWars implements ApplicationListener {
 
 		// Only instantiate and add the new planet if the position is found to be valid
 		if (isGood == planets.size()) {
-			int jitter = SpiceWars.random.nextInt(2) - SpiceWars.random.nextInt(4); // there's probably an easier way to get a random number between -2 and 2
-			//FIXME: This can produce planets with zero slots, that shouldn't happen. Someting between 1-8 or so should suffice.
-			int maxNormalSlots = randomRadius / 8 + jitter*2;
-			int maxMineSlots = randomRadius / 8 + jitter;
+			int maxNormalSlots;
+			int maxMineSlots;
+			if (randomRadius < 50) {
+				maxNormalSlots = random.nextInt((6 - 4) + 1) + 4;
+				maxMineSlots = random.nextInt((3 - 2) + 1) + 2;
+			} else if (randomRadius < 80) {
+				maxNormalSlots = random.nextInt((8 - 5) + 1) + 5;
+				maxMineSlots = random.nextInt((4 - 3) + 1) + 3;
+			} else {
+				maxNormalSlots = random.nextInt((10 - 6) + 1) + 6;
+				maxMineSlots = random.nextInt((5 - 4) + 1) + 4;
+			}
+
 			planets.add(new Planet(randomRadius, SpiceWars.teamNeutral, maxNormalSlots, maxMineSlots, randomPoint, Planet.PlanetType.normal, this));
 		}
 	}
