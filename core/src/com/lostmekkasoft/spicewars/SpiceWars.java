@@ -3,6 +3,7 @@ package com.lostmekkasoft.spicewars;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -69,6 +70,9 @@ public class SpiceWars implements ApplicationListener {
 	TextureRegion planetSelectionTexture;
 	TextureRegion armyTexture;
 
+	public static Sound clickSound;
+	public static Sound backgroundSound;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -87,6 +91,9 @@ public class SpiceWars implements ApplicationListener {
 
 		WIDTH = Gdx.graphics.getWidth() - 300;
 		HEIGHT = Gdx.graphics.getHeight() - 50;
+
+		clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/click.ogg"));
+		backgroundSound = Gdx.audio.newSound(Gdx.files.internal("audio/alienshipidle.ogg"));
 
 		// Create Teams
 		teamNeutral = new Team(-1, new Color(0.6f, 0.6f, 0.6f, 1f));
@@ -492,5 +499,7 @@ public class SpiceWars implements ApplicationListener {
 		batch.dispose();
 		fontGenerator.dispose();
 		textureAtlas.dispose();
+		clickSound.dispose();
+		backgroundSound.dispose();
 	}
 }
