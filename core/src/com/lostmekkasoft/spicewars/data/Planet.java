@@ -149,7 +149,7 @@ public class Planet extends Location {
 	public void buildStuff(Team t, double efficiency, double time){
 		if(t == SpiceWars.teamNeutral) return;
 		// build units out of factories (only when this planet belongs to the team)
-		if(t == team && progress >= 1) for(Building b : normalSlots){
+		if(t == team && progress >= 1) for(Building b : normalSlots) if(b.isActive && b.isFinishedBuilding){
 			int i;
 			switch(b.type){
 				case workerFactory : i = 0; break;
@@ -164,11 +164,9 @@ public class Planet extends Location {
 				Army a = getArmy(t);
 				if(a == null){
 					a = new Army(t);
-					a.ships[i] += n;
 					armies.add(a);
-				} else {
-					a.ships[i] += n;
 				}
+				a.ships[i] += n;
 				b.progress -= n;
 			}
 		}
