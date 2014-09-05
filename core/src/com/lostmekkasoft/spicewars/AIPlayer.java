@@ -30,18 +30,24 @@ public class AIPlayer {
 	private boolean targetHasHQ = false;
 	private Random ran = new Random();
 	private double buildTimer = 0, invadeTimer;
+	private boolean isFirst = true;
 
 	public AIPlayer(SpiceWars game, Team team) {
 		this.game = game;
 		this.team = team;
 		invadeTimer = 60 + 30*ran.nextDouble();
+		buildTimer = 30 + 15*ran.nextDouble();
 		invadeTimer = 1;
 	}
 
 	public void update(double time){
+		if(isFirst){
+			isFirst = false;
+			game.getOwnPlanets(team).getFirst().addBuilding(Building.BuildingType.generator, team);
+		}
 		buildTimer -= time;
 		if(buildTimer <= 0){
-			buildTimer = 10 + ran.nextDouble();
+			buildTimer = 30 + 15*ran.nextDouble();
 			planBuildings();
 		}
 		invadeTimer -= time;
@@ -69,7 +75,42 @@ public class AIPlayer {
 	}
 	
 	public void planBuildings(){
-		
+		Building.BuildingType t = getDesiredBuildingType();
+		LinkedList<Planet> l = new LinkedList<>();
+		for(Planet p : game.getOwnPlanets(team)){
+			boolean b;
+			if(t == Building.BuildingType.spiceMine){
+				b = p.mineSlots.size() < p.maxMineSlots;
+			} else {
+				b = p.normalSlots.size() < p.maxNormalSlots;
+			}
+			if(b){
+				Army a = p.getArmy(team);
+				if(a != null && a.ships[0] > 0) l.add(p);
+			}
+		}
+		if(l.isEmpty()) return; // no place to build!
+		Planet p = l.get(ran.nextInt(l.size()));
+		p.addBuilding(t, team);
+	}
+	
+	public Building.BuildingType getDesiredBuildingType(){
+		LinkedList<Building.BuildingType> l = new LinkedList<>();
+		// first see if we need eco
+		if(team.lastEnergyEfficiency < 1) l.add(Building.BuildingType.generator);
+		if(team.lastSpiceEfficiency < 1) l.add(Building.BuildingType.spiceMine);
+		if(!l.isEmpty()) return l.get(ran.nextInt(l.size()));
+		// no eco needed, build random other stuff
+		if(workersNeeded > 0) l.add(Building.BuildingType.workerFactory);
+		l.add(Building.BuildingType.battery);
+		l.add(Building.BuildingType.spiceSilo);
+		l.add(Building.BuildingType.fighterFactory); // *3
+		l.add(Building.BuildingType.fighterFactory);
+		l.add(Building.BuildingType.fighterFactory);
+		l.add(Building.BuildingType.frigateFactory); // *2
+		l.add(Building.BuildingType.frigateFactory);
+		l.add(Building.BuildingType.destroyerFactory); // *1
+		return l.get(ran.nextInt(l.size()));
 	}
 	
 	public void redistributeUnits(){
@@ -86,15 +127,16 @@ public class AIPlayer {
 		}
 	}
 	
+	private int workersNeeded = 0;
 	public void redistributeWorkers(){
 		HashMap<Planet, Integer> needWorkers = new HashMap<>();
 		HashMap<Planet, Integer> haveWorkers = new HashMap<>();
 		LinkedList<Planet> l = game.getOwnPlanets(team);
 		if(targetPlanet != null) l.add(targetPlanet);
-		int sum = 0;
+		int workersNeeded = 0;
 		for(Planet p : l){
 			int w = getWorkersNeeded(p);
-			sum += w;
+			workersNeeded += w;
 			if(w > 0) needWorkers.put(p, w);
 			if(w < 0) haveWorkers.put(p, w);
 		}
@@ -113,6 +155,37 @@ public class AIPlayer {
 			double r = wsend / p2.getArmy(team).ships[0];
 			p2.sendArmy(team, new double[]{r, 0, 0, 0}, p1);
 			System.out.println("AI: sending " + wsend + " workers...");
+		}
+		if(!haveWorkers.isEmpty()){
+			// get at least one worker to every planet
+			l.clear();
+			// get list of all own planets without workers on them and without workers traveling to them
+			for(Planet p : game.getOwnPlanets(team)){
+				Army a = p.getArmy(team);
+				if(a != null && a.ships[0] <= 0){
+					boolean add = true;
+					for(Army a2 : game.armies){
+						if(a2.target == p && a2.team == team && a2.ships[0] > 0){
+							add = false;
+							break;
+						}
+					}
+					if(add) l.add(p);
+				}
+			}
+			if(!l.isEmpty()){
+				// distribute the surplus workers
+				for(Planet p1 : haveWorkers.keySet()){
+					int w = haveWorkers.get(p1) - 1;
+					for(int i=0; i<w; i++){
+						Planet p2 = l.removeFirst();
+						p1.sendArmy(team, new double[]{1.0/w,0,0,0}, p2);
+						w--;
+						if(l.isEmpty()) break;
+					}
+					if(l.isEmpty()) break;
+				}
+			}
 		}
 	}
 	
