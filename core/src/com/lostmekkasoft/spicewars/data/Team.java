@@ -18,8 +18,8 @@ public class Team {
 	public int maxSpiceStorage = Building.DEFAULT_SPICE_STORAGE;
 	public int maxEnergyStorage = Building.DEFAULT_ENERGY_STORAGE;
 	public double spiceStored = maxSpiceStorage * 0.75;
-	public double spiceIncome = maxEnergyStorage * 0.75;
-	public double energyStored = 0;
+	public double spiceIncome = 0;
+	public double energyStored = maxEnergyStorage * 0.75;
 	public double energyIncome = 0;
 	public double lastEfficiency = 1, lastSpiceEfficiency = 1, lastEnergyEfficiency = 1;
 	public double lastSpiceUsage = 0, lastEnergyUsage = 0;
