@@ -108,7 +108,7 @@ public class SpiceWars implements ApplicationListener {
 		// tick ai players
 		for(Team t : teams) if(t.isAITeam()) t.ai.update(time);
 		// manage economy: build and repair buildings
-		for(Team t : teams){
+		for(Team t : teams) if(t != teamNeutral){
 			double spiceUsage = 0, energyUsage = 0;
 			for(Planet p : planets){
 				int w = p.getWorkingWorkers(t);
@@ -120,12 +120,16 @@ public class SpiceWars implements ApplicationListener {
 			}
 			double spiceDelta = t.spiceIncome * time - spiceUsage;
 			double energyDelta = t.energyIncome * time - energyUsage;
-			double effSp = Math.min(1, (t.spiceStored + t.spiceIncome * time) / spiceUsage);
-			double effEn = Math.min(1, (t.energyStored + t.energyIncome * time) / energyUsage);
+			double effSp = Math.min(1, (t.spiceStored + spiceDelta) / spiceUsage);
+			double effEn = Math.min(1, (t.energyStored + energyDelta) / energyUsage);
 			double efficiency = Math.min(effSp, effEn);
 			t.lastSpiceEfficiency = effSp;
 			t.lastEnergyEfficiency = effEn;
 			t.lastEfficiency = efficiency;
+			t.lastSpiceUsage = spiceUsage;
+			t.lastSpiceDelta = spiceDelta;
+			t.lastEnergyUsage = energyUsage;
+			t.lastEnergyDelta = energyDelta;
 			for(Planet p : planets) p.buildStuff(t, efficiency, time);
 			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
 			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);

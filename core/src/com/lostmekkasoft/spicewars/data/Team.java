@@ -22,6 +22,8 @@ public class Team {
 	public double energyStored = 0;
 	public double energyIncome = 0;
 	public double lastEfficiency = 1, lastSpiceEfficiency = 1, lastEnergyEfficiency = 1;
+	public double lastSpiceUsage = 0, lastEnergyUsage = 0;
+	public double lastSpiceDelta = 0, lastEnergyDelta = 0;
 	public AIPlayer ai = null;
 
 	public static Team createAITeam(int id, Color c, SpiceWars game){
