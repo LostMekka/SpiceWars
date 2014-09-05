@@ -14,20 +14,30 @@ import com.lostmekkasoft.spicewars.data.Planet;
 
 public class SelectionActor extends Actor {
 
+	public static enum SelectionType {
+		normal, alternative
+	}
+
 	TextureRegion textureRegion;
 
-	boolean visible = false;
+	public SelectionType type;
 	public Planet selectedPlanet;
 
-	public SelectionActor(TextureRegion textureRegion, Planet selectedPlanet) {
+	public SelectionActor(TextureRegion textureRegion, Planet selectedPlanet, SelectionType type) {
 		this.textureRegion = textureRegion;
 		this.selectedPlanet = selectedPlanet;
+		this.type = type;
 	}
 
 	@Override
 	public void draw (Batch batch, float alpha) {
-		batch.setColor(Color.WHITE);
+		if (type == SelectionType.normal) {
+			batch.setColor(Color.WHITE);
+		} else {
+			batch.setColor(Color.PURPLE);
+		}
 		batch.draw(textureRegion, selectedPlanet.actor.actorX, selectedPlanet.actor.actorY, (selectedPlanet.radius * 2) / SpiceWars.planetTextureFactor, (selectedPlanet.radius * 2) / SpiceWars.planetTextureFactor);
+		batch.setColor(Color.WHITE);
 	}
 
 }

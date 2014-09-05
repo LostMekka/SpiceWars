@@ -10,7 +10,7 @@ public class DesktopLauncher {
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SpiceWars";
-		config.width = 1280;
+		config.width = 1580;
 		config.height = 960;
 
 		new LwjglApplication(new SpiceWars(), config);
