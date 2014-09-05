@@ -36,7 +36,7 @@ public final class Building {
 	public BuildingType type;
 	public double hp;
 	public double progress = 0;
-	public boolean isActive = false, isFinishedBuilding;
+	public boolean isActive = true, isFinishedBuilding = false;
 	public Team team;
 	private Planet parent;
 
