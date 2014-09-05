@@ -120,8 +120,8 @@ public class SpiceWars implements ApplicationListener {
 			}
 			double spiceDelta = t.spiceIncome * time - spiceUsage;
 			double energyDelta = t.energyIncome * time - energyUsage;
-			double effSp = Math.min(1, (t.spiceStored + spiceDelta) / spiceUsage);
-			double effEn = Math.min(1, (t.energyStored + energyDelta) / energyUsage);
+			double effSp = spiceDelta >= 0 ? 1 : Math.min(1, (t.spiceStored + t.spiceIncome*time) / spiceUsage);
+			double effEn = energyDelta >= 0 ? 1 : Math.min(1, (t.energyStored + t.energyIncome*time) / energyUsage);
 			double efficiency = Math.min(effSp, effEn);
 			t.lastSpiceEfficiency = effSp;
 			t.lastEnergyEfficiency = effEn;
@@ -131,8 +131,8 @@ public class SpiceWars implements ApplicationListener {
 			t.lastEnergyUsage = energyUsage / time;
 			t.lastEnergyDelta = energyDelta / time;
 			for(Planet p : planets) p.buildStuff(t, efficiency, time);
-			t.spiceStored = Math.min(t.spiceStored + spiceDelta*efficiency, t.maxSpiceStorage);
-			t.energyStored = Math.min(t.energyStored + energyDelta*efficiency, t.maxEnergyStorage);
+			t.spiceStored = Math.min(t.spiceStored + t.spiceIncome*time - spiceUsage*efficiency, t.maxSpiceStorage);
+			t.energyStored = Math.min(t.energyStored + t.energyIncome*time - energyUsage*efficiency, t.maxEnergyStorage);
 		}
 		// move armies and projectiles
 		ListIterator<Army> armyIter = armies.listIterator();
