@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,6 +16,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lostmekkasoft.spicewars.actors.ArmyActor;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
 import com.lostmekkasoft.spicewars.actors.SelectionActor;
@@ -32,6 +36,8 @@ public class SpiceWars implements ApplicationListener {
 
 	State state = State.Running;
 
+	public OrthographicCamera camera;
+	public Viewport viewport;
 	public SpriteBatch batch;
 	ShapeRenderer shapes;
 	FreeTypeFontGenerator fontGenerator;
@@ -75,6 +81,8 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void create () {
+		camera = new OrthographicCamera(1580, 960);
+		viewport = new FitViewport(1580, 960, camera);
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
@@ -101,7 +109,7 @@ public class SpiceWars implements ApplicationListener {
 		teamAI = Team.createAITeam(2, new Color(1f, 0.1f, 0.1f, 1f), this);
 
 		// Set up stage and prepare for inputs
-		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 
 		// Get and assign all three possible planet textures
@@ -480,8 +488,7 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-		// FIXME plz :( More like IMPLEMENT_ME, but still
-		// check here https://github.com/libgdx/libgdx/wiki/Viewports
+		stage.getViewport().update(width, height, false);
 	}
 
 	@Override
