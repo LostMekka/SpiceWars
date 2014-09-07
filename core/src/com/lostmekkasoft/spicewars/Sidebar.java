@@ -41,7 +41,7 @@ public class Sidebar {
 		neutralBuildButtons.add(buttonHQ);
 		buttonHQ.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.hq, game.teamPlayer);
 				return true;
 			}
@@ -51,7 +51,7 @@ public class Sidebar {
 		buildButtons.add(buttonWorkerFactory);
 		buttonWorkerFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.workerFactory, game.teamPlayer);
 				return true;
 			}
@@ -61,7 +61,7 @@ public class Sidebar {
 		buildButtons.add(buttonFighterFactory);
 		buttonFighterFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.fighterFactory, game.teamPlayer);
 				return true;
 			}
@@ -71,7 +71,7 @@ public class Sidebar {
 		buildButtons.add(buttonFrigateFactory);
 		buttonFrigateFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.frigateFactory, game.teamPlayer);
 				return true;
 			}
@@ -81,7 +81,7 @@ public class Sidebar {
 		buildButtons.add(buttonDestroyerFactory);
 		buttonDestroyerFactory.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.destroyerFactory, game.teamPlayer);
 				return true;
 			}
@@ -91,7 +91,7 @@ public class Sidebar {
 		buildButtons.add(buttonGenerator);
 		buttonGenerator.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.generator, game.teamPlayer);
 				return true;
 			}
@@ -101,7 +101,7 @@ public class Sidebar {
 		buildButtons.add(buttonSpiceSilo);
 		buttonSpiceSilo.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.spiceSilo, game.teamPlayer);
 				return true;
 			}
@@ -111,7 +111,7 @@ public class Sidebar {
 		buildButtons.add(buttonBattery);
 		buttonBattery.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.battery, game.teamPlayer);
 				return true;
 			}
@@ -121,7 +121,7 @@ public class Sidebar {
 		buildButtons.add(buttonSpiceMine);
 		buttonSpiceMine.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.spiceMine, game.teamPlayer);
 				return true;
 			}
@@ -131,7 +131,7 @@ public class Sidebar {
 		buildButtons.add(buttonArtillery);
 		buttonArtillery.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.artillery, game.teamPlayer);
 				return true;
 			}
@@ -141,7 +141,7 @@ public class Sidebar {
 		buildButtons.add(buttonDeathLaser);
 		buttonDeathLaser.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.addBuilding(Building.BuildingType.deathlaser, game.teamPlayer);
 				return true;
 			}
@@ -151,11 +151,11 @@ public class Sidebar {
 		Attack Stuff
 		**/
 
-		SWButton buttonSendAll = new SWButton(game.WIDTH + 20, 20, 260, 60, "Attack!", Color.DARK_GRAY, this);
+		SWButton buttonSendAll = new SWButton(game.WIDTH + 20, 20, 260, 60, "Send", Color.DARK_GRAY, this);
 		attackButtons.add(buttonSendAll);
 		buttonSendAll.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				game.selectedPlanet.sendArmy(game.teamPlayer, armyToSend, game.selectedPlanetAlt);
 				return true;
 			}
@@ -165,7 +165,7 @@ public class Sidebar {
 		attackButtons.add(buttonSelectWorkers);
 		buttonSelectWorkers.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				if (y < 10) {
 					armyToSend[0] = 0;
 				} else {
@@ -178,7 +178,7 @@ public class Sidebar {
 		attackButtons.add(buttonSelectFighters);
 		buttonSelectFighters.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				if (y < 10) {
 					armyToSend[1] = 0;
 				} else {
@@ -191,7 +191,7 @@ public class Sidebar {
 		attackButtons.add(buttonSelectFrigates);
 		buttonSelectFrigates.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				if (y < 10) {
 					armyToSend[2] = 0;
 				} else {
@@ -204,7 +204,7 @@ public class Sidebar {
 		attackButtons.add(buttonSelectDestroyers);
 		buttonSelectDestroyers.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SpiceWars.clickSound.play();
+//				SpiceWars.clickSound.play();
 				if (y < 10) {
 					armyToSend[3] = 0;
 				} else {
