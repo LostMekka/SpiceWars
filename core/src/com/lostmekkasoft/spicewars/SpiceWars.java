@@ -15,9 +15,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lostmekkasoft.spicewars.actors.ArmyActor;
 import com.lostmekkasoft.spicewars.actors.PlanetActor;
@@ -47,8 +45,8 @@ public class SpiceWars implements ApplicationListener {
 	public BitmapFont font48;
 	public static Random random = new Random();
 
-	public int WIDTH;
-	public int HEIGHT;
+	public int playingFieldWidth;
+	public int playingFieldHeight;
 	public static float planetTextureFactor = 0.595703125f;
 
 	public Stage stage;
@@ -81,8 +79,8 @@ public class SpiceWars implements ApplicationListener {
 
 	@Override
 	public void create () {
-		camera = new OrthographicCamera(1580, 960);
-		viewport = new FitViewport(1580, 960, camera);
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 
@@ -97,8 +95,8 @@ public class SpiceWars implements ApplicationListener {
 		fontParameter.size = 48;
 		font48 = fontGenerator.generateFont(fontParameter);
 
-		WIDTH = Gdx.graphics.getWidth() - 300;
-		HEIGHT = Gdx.graphics.getHeight() - 50;
+		playingFieldWidth = Gdx.graphics.getWidth() - 300;
+		playingFieldHeight = Gdx.graphics.getHeight() - 50;
 
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/click.ogg"));
 		backgroundSound = Gdx.audio.newSound(Gdx.files.internal("audio/alienshipidle.ogg"));
@@ -348,7 +346,7 @@ public class SpiceWars implements ApplicationListener {
 			case Paused:
 
 				batch.begin();
-				font48.draw(batch, "GAME PAUSED", WIDTH/2 - font48.getBounds("GAME PAUSED").width/2, HEIGHT/2);
+				font48.draw(batch, "GAME PAUSED", playingFieldWidth /2 - font48.getBounds("GAME PAUSED").width/2, playingFieldHeight /2);
 
 				batch.end();
 
@@ -438,7 +436,7 @@ public class SpiceWars implements ApplicationListener {
 		} else if (planets.size() == 1) {
 			// Place the second planet in the upper right corner.
 			// This one is identical to the first one and the same for every game.
-			Point point = new Point(WIDTH - 100, HEIGHT - 100);
+			Point point = new Point(playingFieldWidth - 100, playingFieldHeight - 100);
 			Planet planet = new Planet(firstRadius, teamAI, firstNormalSlots, firstMineSlots, point, Planet.PlanetType.normal, this);
 			planets.add(planet);
 			Army a = new Army(teamAI);
@@ -453,8 +451,8 @@ public class SpiceWars implements ApplicationListener {
 		// The first two planets have already been set, we can now place random
 		// planets until the screen is filled.
 		int randomRadius = SpiceWars.random.nextInt((130 - 30) + 1) + 30;
-		int posX = SpiceWars.random.nextInt(WIDTH - randomRadius*2) + randomRadius;
-		int posY = SpiceWars.random.nextInt(HEIGHT - randomRadius*2) + randomRadius;
+		int posX = SpiceWars.random.nextInt(playingFieldWidth - randomRadius*2) + randomRadius;
+		int posY = SpiceWars.random.nextInt(playingFieldHeight - randomRadius*2) + randomRadius;
 		Point randomPoint = new Point(posX, posY);
 
 		int minDistance = 100;
