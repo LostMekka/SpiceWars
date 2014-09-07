@@ -308,8 +308,7 @@ public class Sidebar {
 		game.font22.draw(game.batch, game.selectedPlanet.name, game.WIDTH + 125 - game.font14.getBounds(game.selectedPlanet.name).width/2, game.HEIGHT - 10);
 		game.font22.setColor(Color.WHITE);
 		game.font12.setColor(game.selectedPlanet.team.color);
-		// FIXME: I realize these values are partially wrong... Can't find the actual methods for them, will be back later to fix this.
-		String planetDetails = String.format("Normal Slots: %d/%d, Mine Slots: %d/%d", game.selectedPlanet.getWorkingFactories(game.teamPlayer), game.selectedPlanet.maxNormalSlots, game.selectedPlanet.getWorkingFactories(game.teamPlayer), game.selectedPlanet.maxMineSlots);
+		String planetDetails = String.format("Normal Slots: %d/%d, Mine Slots: %d/%d", game.selectedPlanet.getFilledNormalSlots(), game.selectedPlanet.maxNormalSlots, game.selectedPlanet.getFilledMineSlots(), game.selectedPlanet.maxMineSlots);
 		game.font12.draw(game.batch, planetDetails, game.WIDTH + 150 - game.font12.getBounds(planetDetails).width/2, game.HEIGHT - 30);
 		game.font12.setColor(Color.WHITE);
 

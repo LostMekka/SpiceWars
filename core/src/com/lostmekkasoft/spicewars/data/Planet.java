@@ -30,7 +30,6 @@ public class Planet extends Location {
 	public static int MAX_STATION_WORKERS = 20;
 	public static int STATION_RADIUS = 40;
 	public static int STATION_NORMAL_SLOTS = 5;
-	
 
 	public Team team;
 	public String name;
@@ -137,6 +136,14 @@ public class Planet extends Location {
 			if(b.team == t && b.isFactory() && b.isActive && b.isFinishedBuilding) i++;
 		}
 		return i;
+	}
+
+	public int getFilledNormalSlots() {
+		return normalSlots.size();
+	}
+
+	public int getFilledMineSlots() {
+		return mineSlots.size();
 	}
 	
 	private boolean canBuildStation(Team t){
